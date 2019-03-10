@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/examplegame/mainmenu/image">
+        <file alias="index.jpg">examplegame/mainmenu/image/index.jpg</file>
+    </qresource>
+</RCC>

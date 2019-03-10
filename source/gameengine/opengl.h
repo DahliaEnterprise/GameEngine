@@ -1,0 +1,29 @@
+#ifndef OPENGL_H
+#define OPENGL_H
+
+#include <QObject>
+#include <QOpenGLWidget>
+#include <QDesktopWidget>
+#include <QApplication>
+#include <QPaintEvent>
+#include "gameengine/opengl_canvas.h"
+#include <QPainter>
+
+class opengl : public QOpenGLWidget
+{
+    Q_OBJECT
+public:
+    opengl(opengl_canvas* setCanvas);
+    void start();
+    void gpu_update();
+
+private:
+    //Global Scope
+    opengl_canvas* canvas;
+
+protected:
+    void paintEvent(QPaintEvent* event);
+
+};
+
+#endif // OPENGL_H
