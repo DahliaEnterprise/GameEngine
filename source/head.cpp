@@ -7,16 +7,9 @@ head::head(QObject *parent) : QObject(parent)
 
 void head::start()
 {
-    frameTimer = new QTimer();
-    frameTimer->setInterval(10);
-
     //Game Logic Management.
-    //QThread* threadGameLogic = new QThread();
     game = new gameloop();
     game->start();
-    //game->moveToThread(threadGameLogic);
-    //threadGameLogic->start();
-
 
     //Graphics Processing Unit.
     QThread* threadGpu = new QThread();
@@ -25,10 +18,11 @@ void head::start()
     engine->moveToThread(threadGpu);
     threadGpu->start();
 
+    //Frame Timer
+    frameTimer = new QTimer();
+    frameTimer->setInterval(100);
     QObject::connect(frameTimer, SIGNAL(timeout()), this, SLOT(frameTimeout()));
-
     frameTimer->start();
-
 }
 
 void head::frameTimeout()

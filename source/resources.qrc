@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/examplegame/mainmenu/image">
         <file alias="index.jpg">examplegame/mainmenu/image/index.jpg</file>
+        <file alias="transparent_background.png">examplegame/mainmenu/image/transparent_background.png</file>
     </qresource>
 </RCC>

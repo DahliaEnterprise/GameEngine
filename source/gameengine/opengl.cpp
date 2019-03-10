@@ -32,7 +32,7 @@ void opengl::paintEvent(QPaintEvent* event)
     QPainter painter;
     painter.begin(this);
     painter.setRenderHint(QPainter::HighQualityAntialiasing);
-    painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+    painter.setCompositionMode(QPainter::CompositionMode_Source);
 
     //Render
     canvas->paint(&painter, event);

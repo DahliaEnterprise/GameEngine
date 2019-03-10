@@ -18,7 +18,6 @@ public:
 private:
     opengl* opengGl;
     opengl_canvas* openglCanvas;
-    QTimer* gpuUpdateTrigger;
 
 signals:
 
@@ -26,7 +25,6 @@ public slots:
     void frame(QList<gameobject*> goList);
 
 private slots:
-    void slotUpdateGPU();
 };
 
 #endif // GAMEENGINE_H

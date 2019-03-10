@@ -18,7 +18,4 @@ void gameobject::updateImageSpecifications(double setx, double sety, double setw
     height = setheight;
 }
 
-void gameobject::paint(QPainter* painter)
-{
-    painter->drawImage(QRectF(x, y, width, height), image);
-}
+void gameobject::paint(QPainter* painter){ painter->drawImage(QRectF(x, y, width, height), image); }

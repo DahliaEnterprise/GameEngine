@@ -14,7 +14,9 @@ public:
     QList<gameobject*> frame();
 
 private:
-    gameobject* go;
+    gameobject* transparent_background;
+    gameobject* charazard;
+    double x;
 
 signals:
     void frame(QList<gameobject*>);
