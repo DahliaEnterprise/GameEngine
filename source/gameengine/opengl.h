@@ -8,22 +8,28 @@
 #include <QPaintEvent>
 #include "gameengine/opengl_canvas.h"
 #include <QPainter>
+#include <QDebug>
+#include "examplegame/keyboardMouseInput/keyboardmouseinput.h"
 
 class opengl : public QOpenGLWidget
 {
     Q_OBJECT
 public:
     opengl(opengl_canvas* setCanvas);
-    void start();
+    void start(keyboardMouseInput* setKeyboardMouseInput);
     void gpu_update();
 
 private:
     //Global Scope
     opengl_canvas* canvas;
+    keyboardMouseInput* keyboardmouse_input;
 
 protected:
     void paintEvent(QPaintEvent* event);
+    void keyPressEvent(QKeyEvent* event);
+    void keyReleaseEvent(QKeyEvent* event);
 
+signals:
 };
 
 #endif // OPENGL_H

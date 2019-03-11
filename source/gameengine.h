@@ -6,18 +6,24 @@
 #include "gameengine/opengl_canvas.h"
 #include <QTimer>
 #include "examplegame/gameloop.h"
+#include "examplegame/keyboardMouseInput/keyboardmouseinput.h"
+
 class gameengine : public QObject
 {
     Q_OBJECT
 
 public:
     explicit gameengine(QObject *parent = nullptr);
-    void start();
+    void start(keyboardMouseInput* setKeyboardMouse_input);
     opengl_canvas* canvas();
+    void closeWindow();
 
 private:
     opengl* opengGl;
     opengl_canvas* openglCanvas;
+
+    //Global Scope
+    keyboardMouseInput* keyboardmouse_input;
 
 signals:
 

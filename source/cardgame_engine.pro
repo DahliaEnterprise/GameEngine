@@ -32,7 +32,9 @@ SOURCES += \
     examplegame/gameloop.cpp \
     head.cpp \
     gameengine/gameobject.cpp \
-    examplegame/mainmenu/mainmenu.cpp
+    examplegame/mainmenu/mainmenu.cpp \
+    examplegame/mainmenu/character/charazard.cpp \
+    examplegame/keyboardMouseInput/keyboardmouseinput.cpp
 
 HEADERS += \
     gameengine.h \
@@ -41,7 +43,9 @@ HEADERS += \
     examplegame/gameloop.h \
     head.h \
     gameengine/gameobject.h \
-    examplegame/mainmenu/mainmenu.h
+    examplegame/mainmenu/mainmenu.h \
+    examplegame/mainmenu/character/charazard.h \
+    examplegame/keyboardMouseInput/keyboardmouseinput.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

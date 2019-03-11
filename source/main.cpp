@@ -8,8 +8,8 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    head* h = new head();
-    h->start();
+    head h;
+    h.start();
 
     return a.exec();
 }

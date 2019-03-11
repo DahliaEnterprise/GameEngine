@@ -5,13 +5,15 @@ gameloop::gameloop(QObject *parent) : QObject(parent)
 
 }
 
-void gameloop::start()
+void gameloop::start(keyboardMouseInput* setKeyboardMouseInput)
 {
+    //Keyboard and Mouse Input
+    keyboardmouseInput = setKeyboardMouseInput;
+
+    //Graphical Menus
     gui_mainmenu = new mainmenu();
-    gui_mainmenu->start();
+    QObject::connect(gui_mainmenu, SIGNAL(playerRequestingCloseGame()), this, SIGNAL(playerRequestingCloseGame()));
+    gui_mainmenu->start(keyboardmouseInput);
 }
 
-QList<gameobject*> gameloop::frame()
-{
-    return gui_mainmenu->frame();
-}
+QList<gameobject*> gameloop::frame(){ return gui_mainmenu->frame(); }

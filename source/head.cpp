@@ -7,20 +7,26 @@ head::head(QObject *parent) : QObject(parent)
 
 void head::start()
 {
+    //Keyboard Mouse Input
+    keyboardmouse_input = new keyboardMouseInput();
+    keyboardmouse_input->start();
+
     //Game Logic Management.
     game = new gameloop();
-    game->start();
+    game->start(keyboardmouse_input);
 
     //Graphics Processing Unit.
-    QThread* threadGpu = new QThread();
+    threadGpu = new QThread();
     engine = new gameengine();
-    engine->start();
+    engine->start(keyboardmouse_input);
     engine->moveToThread(threadGpu);
     threadGpu->start();
 
+    QObject::connect(game, SIGNAL(playerRequestingCloseGame()), this, SLOT(slotPlayerRequestingCloseGame()));
+
     //Frame Timer
     frameTimer = new QTimer();
-    frameTimer->setInterval(100);
+    frameTimer->setInterval(10);
     QObject::connect(frameTimer, SIGNAL(timeout()), this, SLOT(frameTimeout()));
     frameTimer->start();
 }
@@ -28,4 +34,15 @@ void head::start()
 void head::frameTimeout()
 {
     engine->frame(game->frame());
+}
+
+
+void head::slotPlayerRequestingCloseGame()
+{
+    engine->closeWindow();
+    frameTimer->stop();
+    threadGpu->exit(0);
+    delete engine;
+    delete game;
+    this->deleteLater();
 }
