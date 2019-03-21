@@ -1,7 +1,10 @@
 <RCC>
-    <qresource prefix="/examplegame/mainmenu/image">
-        <file alias="index.jpg">examplegame/mainmenu/image/index.jpg</file>
-        <file alias="transparent_background.png">examplegame/mainmenu/image/transparent_background.png</file>
-        <file alias="charazard.png">examplegame/mainmenu/image/charazard.png</file>
+    <qresource prefix="/examplegame/quickgame/image">
+        <file alias="charazard.png">examplegame/quickgame/image/charazard.png</file>
+        <file alias="index.jpg">examplegame/quickgame/image/index.jpg</file>
+        <file alias="transparent_background.png">examplegame/quickgame/image/transparent_background.png</file>
+    </qresource>
+    <qresource prefix="/examplegame/quickgame/image/card/creature">
+        <file alias="creature_stallion.png">examplegame/quickgame/image/card/creature/creature-stallion.png</file>
     </qresource>
 </RCC>

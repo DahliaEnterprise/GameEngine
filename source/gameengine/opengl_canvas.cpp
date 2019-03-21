@@ -6,6 +6,11 @@ opengl_canvas::opengl_canvas(QObject *parent) : QObject(parent)
 
 }
 
+void opengl_canvas::stop()
+{
+
+}
+
 void opengl_canvas::start()
 {
     ObjectsToSustainOnScreen = QList<gameobject*>();

@@ -47,5 +47,7 @@ void opengl::paintEvent(QPaintEvent* event)
 
 void opengl::keyPressEvent(QKeyEvent* event){ keyboardmouse_input->incomingPressEvent(event); }
 void opengl::keyReleaseEvent(QKeyEvent* event){ keyboardmouse_input->incomingReleaseEvent(event); }
-
+void opengl::mousePressEvent(QMouseEvent* event){ keyboardmouse_input->incomingMousePressEvent(event); }
+//void opengl::mouseMoveEvent(QMouseEvent* event){ keyboardmouse_input->incomingMouseMoveEvent(event); }
+void opengl::mouseReleaseEvent(QMouseEvent* event){ keyboardmouse_input->incomingMouseReleaseEvent(event); }
 void opengl::gpu_update(){ this->update(); }

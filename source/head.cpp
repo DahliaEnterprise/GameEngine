@@ -21,13 +21,13 @@ void head::start()
     engine->start(keyboardmouse_input);
     engine->moveToThread(threadGpu);
     threadGpu->start();
-
     QObject::connect(game, SIGNAL(playerRequestingCloseGame()), this, SLOT(slotPlayerRequestingCloseGame()));
 
     //Frame Timer
     frameTimer = new QTimer();
     frameTimer->setInterval(10);
     QObject::connect(frameTimer, SIGNAL(timeout()), this, SLOT(frameTimeout()));
+
     frameTimer->start();
 }
 
@@ -39,10 +39,5 @@ void head::frameTimeout()
 
 void head::slotPlayerRequestingCloseGame()
 {
-    engine->closeWindow();
-    frameTimer->stop();
-    threadGpu->exit(0);
-    delete engine;
-    delete game;
     this->deleteLater();
 }

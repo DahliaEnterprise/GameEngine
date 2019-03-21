@@ -5,7 +5,8 @@
 #include <QTimer>
 #include <QKeyEvent>
 #include <QDebug>
-
+#include <QMouseEvent>
+#include <QCursor>
 class keyboardMouseInput : public QObject
 {
     Q_OBJECT
@@ -13,15 +14,23 @@ public:
     explicit keyboardMouseInput(QObject *parent = nullptr);
     void start();
     bool isKeyEscapePressed();
+    int getMouseX();
+    int getMouseY();
 
 private:
     QTimer* pullTimer;
 
     bool keyEscape;
+    int mouseX;
+    int mouseY;
+    bool leftMouseDown;
 
 signals:
 
 public slots:
+    void incomingMousePressEvent(QMouseEvent* event);
+    void incomingMouseReleaseEvent(QMouseEvent* event);
+    void incomingMouseMoveEvent();
     void incomingPressEvent(QKeyEvent* event);
     void incomingReleaseEvent(QKeyEvent* event);
 

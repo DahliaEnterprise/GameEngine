@@ -14,6 +14,8 @@ class gameengine : public QObject
 
 public:
     explicit gameengine(QObject *parent = nullptr);
+    ~gameengine();
+    void stop();
     void start(keyboardMouseInput* setKeyboardMouse_input);
     opengl_canvas* canvas();
     void closeWindow();

@@ -11,6 +11,7 @@ class opengl_canvas : public QObject
     Q_OBJECT
 public:
     explicit opengl_canvas(QObject *parent = nullptr);
+    void stop();
     void start();
     void paint(QPainter* painter, QPaintEvent* event);
     void paintObjects(QList<gameobject*> listOfGameObjects);

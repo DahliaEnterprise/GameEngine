@@ -5,6 +5,16 @@ gameengine::gameengine(QObject *parent) : QObject(parent)
 
 }
 
+gameengine::~gameengine()
+{
+
+}
+
+void gameengine::stop()
+{
+    opengGl->deleteLater();
+    openglCanvas->deleteLater();
+}
 
 void gameengine::start(keyboardMouseInput* setKeyboardMouse_input)
 {
@@ -17,6 +27,7 @@ void gameengine::start(keyboardMouseInput* setKeyboardMouse_input)
     opengGl->start(keyboardmouse_input);
     opengGl->show();
 }
+
 
 opengl_canvas* gameengine::canvas(){ return openglCanvas; }
           void gameengine::frame(QList<gameobject*> goList){ openglCanvas->paintObjects(goList); opengGl->gpu_update(); }

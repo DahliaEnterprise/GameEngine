@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include "gameengine/opengl_canvas.h"
-#include "examplegame/mainmenu/mainmenu.h"
+#include "examplegame/quickgame/quickgame.h"
 #include <QTimer>
 #include <QList>
 #include "gameengine/gameobject.h"
@@ -14,13 +14,15 @@ class gameloop : public QObject
     Q_OBJECT
 public:
     explicit gameloop(QObject *parent = nullptr);
+    ~gameloop();
     void setCanvas(opengl_canvas* incomingCanvas);
     void start(keyboardMouseInput* setKeyboardMouseInput);
     QList<gameobject*> frame();
+    void stop();
 
 private:
     keyboardMouseInput* keyboardmouseInput;
-    mainmenu* gui_mainmenu;
+    quickgame* quickGame;
 
 signals:
     void playerRequestingCloseGame();
