@@ -9,6 +9,9 @@
 #include "examplegame/quickgame/card/card_creature.h"
 #include <QTimer>
 #include "examplegame/keyboardMouseInput/keyboardmouseinput.h"
+#include "examplegame/quickgame/card/card_moduspraecptum.h"
+#include "examplegame/quickgame/module/card/module_card_hightlightable.h"
+#include "examplegame/quickgame/card/card_turnactivatedcard.h"
 class quickgame : public QObject
 {
     Q_OBJECT
@@ -27,6 +30,10 @@ private:
     //charazard* playersCharacter;
 
     card_creature* cardStallion;
+    card_moduspraecptum* cardModusPraecptumStallion;
+    card_turnactivatedcard* cardTurnActivatedAttackStallion;
+
+    module_card_hightlightable* module_highlightable_card;
 
     QList<gameobject*> goList;
 

@@ -5,6 +5,7 @@
 #include <QPainter>
 #include <QImage>
 #include <QPixmap>
+#include <QMap>
 class gameobject : public QObject
 {
     Q_OBJECT
@@ -14,6 +15,7 @@ public:
     void start(QImage setImage);
     void updateImageSpecifications(double x, double y, double width, double height, qreal opacity = 1);
     void paint(QPainter* painter);
+    QMap<QString, double> dimensions();
 
 private:
     double x;

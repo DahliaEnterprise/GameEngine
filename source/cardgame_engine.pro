@@ -32,10 +32,12 @@ SOURCES += \
     examplegame/gameloop.cpp \
     head.cpp \
     gameengine/gameobject.cpp \
-    examplegame/quickgame/character/charazard.cpp \
     examplegame/keyboardMouseInput/keyboardmouseinput.cpp \
     examplegame/quickgame/quickgame.cpp \
-    examplegame/quickgame/card/card_creature.cpp
+    examplegame/quickgame/card/card_creature.cpp \
+    examplegame/quickgame/card/card_moduspraecptum.cpp \
+    examplegame/quickgame/module/card/module_card_hightlightable.cpp \
+    examplegame/quickgame/card/card_turnactivatedcard.cpp
 
 HEADERS += \
     gameengine.h \
@@ -44,10 +46,12 @@ HEADERS += \
     examplegame/gameloop.h \
     head.h \
     gameengine/gameobject.h \
-    examplegame/quickgame/character/charazard.h \
     examplegame/keyboardMouseInput/keyboardmouseinput.h \
     examplegame/quickgame/quickgame.h \
-    examplegame/quickgame/card/card_creature.h
+    examplegame/quickgame/card/card_creature.h \
+    examplegame/quickgame/card/card_moduspraecptum.h \
+    examplegame/quickgame/module/card/module_card_hightlightable.h \
+    examplegame/quickgame/card/card_turnactivatedcard.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

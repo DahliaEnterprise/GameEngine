@@ -30,3 +30,16 @@ void gameobject::paint(QPainter* painter)
     painter->drawImage(QRectF(x, y, width, height), image);
     painter->setOpacity(1);
 }
+
+QMap<QString, double> gameobject::dimensions()
+{
+    QMap<QString, double> output;
+
+    output.insert(QString("x"), x);
+    output.insert(QString("y"), y);
+    output.insert(QString("w"), width);
+    output.insert(QString("h"), height);
+    output.insert(QString("o"), opacity);
+
+    return output;
+}

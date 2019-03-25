@@ -5,7 +5,7 @@ card_creature::card_creature(QObject *parent) : QObject(parent)
 
 }
 
-void card_creature::start(QString imageUrl, QString imageUrlHighlighted)
+void card_creature::start(QString imageUrl)
 {
     isHighlighted = false;
 

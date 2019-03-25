@@ -1,0 +1,11 @@
+#include "card_turnactivatedcard.h"
+
+card_turnactivatedcard::card_turnactivatedcard(QObject *parent) : QObject(parent)
+{
+
+}
+
+void card_turnactivatedcard::start(QString imageUrl, QStringList turnactivatedcard_list)
+{
+    
+}

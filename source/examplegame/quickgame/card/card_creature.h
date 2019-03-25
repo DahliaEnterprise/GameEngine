@@ -10,7 +10,7 @@ class card_creature : public QObject
     Q_OBJECT
 public:
     explicit card_creature(QObject *parent = nullptr);
-    void start(QString imageUrl, QString imageUrlHighlighted);
+    void start(QString imageUrl);
     gameobject* gameObject();
     void highlighted(bool setIsHighlighted);
     void updateImageSpecifications(double x, double y, double width, double height, qreal opacity);
