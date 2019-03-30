@@ -10,4 +10,7 @@
     <qresource prefix="/examplegame/quickgame/image/card/moduspraecptum">
         <file alias="moduspraecptum-stallion.png">examplegame/quickgame/image/card/moduspraecptum/moduspraeceptum-stallion.png</file>
     </qresource>
+    <qresource prefix="/examplegame/quickgame/image/card/turnactivatedcard">
+        <file alias="turnactivatedcard.png">examplegame/quickgame/image/card/turnactivatedcard/turnactivatedcard-stallion.png</file>
+    </qresource>
 </RCC>

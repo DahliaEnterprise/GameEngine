@@ -14,6 +14,7 @@ public:
     gameobject* gameObject();
     void highlighted(bool setIsHighlighted);
     void updateImageSpecifications(double x, double y, double width, double height, qreal opacity);
+    QMap<QString, double> dimensions();
 
 private:
     QImage creatureCardSourceImage;
