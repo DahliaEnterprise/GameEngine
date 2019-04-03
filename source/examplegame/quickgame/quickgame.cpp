@@ -26,15 +26,27 @@ void quickgame::start(keyboardMouseInput* setKeyboardMouseInput)
 
     cardStallion = new card_creature();
     cardStallion->start(QString(":/examplegame/quickgame/image/card/creature/creature_stallion.png"));
-    cardStallion->updateImageSpecifications(710, 170, 200, 270, 1);
+    cardStallion->updateImageSpecifications(630, 10, 275, 370, 1);
 
     cardModusPraecptumStallion = new card_moduspraecptum();
     cardModusPraecptumStallion->start(QString(":/examplegame/quickgame/image/card/moduspraecptum/moduspraecptum-stallion.png"), QStringList());
-    cardModusPraecptumStallion->updateImageSpecification(100, 100, 500, 320, 1);
+    cardModusPraecptumStallion->updateImageSpecification(20, 10, 600, 370, 1);
 
     cardTurnActivatedAttackStallion = new card_turnactivatedcard();
     cardTurnActivatedAttackStallion->start(QString(":/examplegame/quickgame/image/card/turnactivatedcard/turnactivatedcard.png"), QStringList());
-    cardTurnActivatedAttackStallion->updateImageSpecifications(100, 500, 300, 420, 1);
+    cardTurnActivatedAttackStallion->updateImageSpecifications(20, 390, 300, 420, 1);
+
+    cardStallion2 = new card_creature();
+    cardStallion2->start(QString(":/examplegame/quickgame/image/card/creature/creature_stallion.png"));
+    cardStallion2->updateImageSpecifications(1015, 10, 275, 375, 1);
+
+    cardModusPraecptumStallion2 = new card_moduspraecptum();
+    cardModusPraecptumStallion2->start(QString(":/examplegame/quickgame/image/card/moduspraecptum/moduspraecptum-stallion.png"), QStringList());
+    cardModusPraecptumStallion2->updateImageSpecification(1300, 10, 600, 370, 1);
+
+    cardTurnActivatedAttackStallion2 = new card_turnactivatedcard();
+    cardTurnActivatedAttackStallion2->start(QString(":/examplegame/quickgame/image/card/turnactivatedcard/turnactivatedcard.png"), QStringList());
+    cardTurnActivatedAttackStallion2->updateImageSpecifications(1300, 390, 300, 420, 1);
 
     module_highlightable_card = new module_card_hightlightable();
     module_highlightable_card->start(keyboardmouse_input);
@@ -55,6 +67,10 @@ QList<gameobject*> quickgame::frame()
     goList.append(cardModusPraecptumStallion->gameObject());
     goList.append(cardTurnActivatedAttackStallion->gameObject());
 
+    goList.append(cardStallion2->gameObject());
+    goList.append(cardModusPraecptumStallion2->gameObject());
+    goList.append(cardTurnActivatedAttackStallion2->gameObject());
+
     //Return Prepared Frame
     return goList;
 }
@@ -69,6 +85,7 @@ void quickgame::iterate_logic()
 
     //Apply "highlightable" module
     module_highlightable_card->highlightable(cardTurnActivatedAttackStallion);
+    module_highlightable_card->highlightable(cardTurnActivatedAttackStallion2);
 
     //Temporary: move card a pixel to the right
     QMap<QString, double> dimensions = cardStallion->dimensions();
@@ -76,6 +93,6 @@ void quickgame::iterate_logic()
     double y = dimensions.value(QString("y"));
     double width = dimensions.value(QString("w"));
     double height = dimensions.value(QString("h"));
-    x += 1;
+    //x += 1;
     cardStallion->updateImageSpecifications(x, y, width, height, 1);
 }

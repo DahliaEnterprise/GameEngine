@@ -27,11 +27,15 @@ private:
     keyboardMouseInput* keyboardmouse_input;
     QTimer* logicWakeupTimer;
     gameobject* transparent_background;
-    //charazard* playersCharacter;
 
     card_creature* cardStallion;
     card_moduspraecptum* cardModusPraecptumStallion;
     card_turnactivatedcard* cardTurnActivatedAttackStallion;
+
+    card_creature* cardStallion2;
+    card_moduspraecptum* cardModusPraecptumStallion2;
+    card_turnactivatedcard* cardTurnActivatedAttackStallion2;
+
 
     module_card_hightlightable* module_highlightable_card;
 

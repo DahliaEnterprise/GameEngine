@@ -13,7 +13,6 @@ void card_creature::start(QString imageUrl)
     creatureCardImage = QImage(612,792,QImage::Format_ARGB32);
     QPainter painter(&creatureCardImage);
     painter.setRenderHint(QPainter::HighQualityAntialiasing);
-    painter.setOpacity(0.9);
     painter.drawImage(QRectF(0,0,612,792), creatureCardSourceImage, QRectF(0,0,612,792));
 
     creatureCardGameObject = new gameobject();
@@ -24,7 +23,6 @@ void card_creature::start(QString imageUrl)
     QPainter painter2(&creatureCardHighlightedImage);
     painter2.setRenderHint(QPainter::HighQualityAntialiasing);
     painter2.drawImage(QRectF(0,0,612,792), creatureCardSourceImage, QRectF(0,0,612,792));
-    painter2.setOpacity(0.9);
     QPen green;
     green.setColor(QColor(Qt::green));
     green.setStyle(Qt::SolidLine);
