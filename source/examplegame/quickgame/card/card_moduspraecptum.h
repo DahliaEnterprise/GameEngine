@@ -20,6 +20,7 @@ private:
     gameobject* moduspraecptumGO;
     QImage moduspraecptumCardHighlightedImage;
 
+    QStringList moduspraecptum_list;
 
 signals:
 

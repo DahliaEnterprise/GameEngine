@@ -37,7 +37,8 @@ SOURCES += \
     examplegame/quickgame/card/card_creature.cpp \
     examplegame/quickgame/card/card_moduspraecptum.cpp \
     examplegame/quickgame/module/card/module_card_hightlightable.cpp \
-    examplegame/quickgame/card/card_turnactivatedcard.cpp
+    examplegame/quickgame/card/card_turnactivatedcard.cpp \
+    examplegame/quickgame/module/card/module_card_clickable.cpp
 
 HEADERS += \
     gameengine.h \
@@ -51,7 +52,8 @@ HEADERS += \
     examplegame/quickgame/card/card_creature.h \
     examplegame/quickgame/card/card_moduspraecptum.h \
     examplegame/quickgame/module/card/module_card_hightlightable.h \
-    examplegame/quickgame/card/card_turnactivatedcard.h
+    examplegame/quickgame/card/card_turnactivatedcard.h \
+    examplegame/quickgame/module/card/module_card_clickable.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

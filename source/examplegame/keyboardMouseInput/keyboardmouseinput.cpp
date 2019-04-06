@@ -53,3 +53,5 @@ bool keyboardMouseInput::isKeyEscapePressed(){ return keyEscape; }
 int keyboardMouseInput::getMouseX(){ return mouseX; }
 
 int keyboardMouseInput::getMouseY(){ return mouseY; }
+
+bool keyboardMouseInput::getLeftMouseDown(){ return leftMouseDown; }

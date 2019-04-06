@@ -12,6 +12,7 @@
 #include "examplegame/quickgame/card/card_moduspraecptum.h"
 #include "examplegame/quickgame/module/card/module_card_hightlightable.h"
 #include "examplegame/quickgame/card/card_turnactivatedcard.h"
+#include "examplegame/quickgame/module/card/module_card_clickable.h"
 class quickgame : public QObject
 {
     Q_OBJECT
@@ -38,6 +39,7 @@ private:
 
 
     module_card_hightlightable* module_highlightable_card;
+    module_card_clickable* module_clickable_card;
 
     QList<gameobject*> goList;
 

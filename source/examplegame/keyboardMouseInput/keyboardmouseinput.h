@@ -16,6 +16,7 @@ public:
     bool isKeyEscapePressed();
     int getMouseX();
     int getMouseY();
+    bool getLeftMouseDown();
 
 private:
     QTimer* pullTimer;

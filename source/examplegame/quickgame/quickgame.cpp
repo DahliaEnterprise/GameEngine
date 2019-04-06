@@ -29,7 +29,9 @@ void quickgame::start(keyboardMouseInput* setKeyboardMouseInput)
     cardStallion->updateImageSpecifications(630, 10, 275, 370, 1);
 
     cardModusPraecptumStallion = new card_moduspraecptum();
-    cardModusPraecptumStallion->start(QString(":/examplegame/quickgame/image/card/moduspraecptum/moduspraecptum-stallion.png"), QStringList());
+    QStringList moduspraecptum_list;
+    moduspraecptum_list.append(QString("tired points 100"));
+    cardModusPraecptumStallion->start(QString(":/examplegame/quickgame/image/card/moduspraecptum/moduspraecptum-stallion.png"), moduspraecptum_list);
     cardModusPraecptumStallion->updateImageSpecification(20, 10, 600, 370, 1);
 
     cardTurnActivatedAttackStallion = new card_turnactivatedcard();
@@ -50,6 +52,9 @@ void quickgame::start(keyboardMouseInput* setKeyboardMouseInput)
 
     module_highlightable_card = new module_card_hightlightable();
     module_highlightable_card->start(keyboardmouse_input);
+
+    module_clickable_card = new module_card_clickable();
+    module_clickable_card->start(keyboardmouse_input);
 
     logicWakeupTimer = new QTimer();
     logicWakeupTimer->setInterval(5);
@@ -86,6 +91,9 @@ void quickgame::iterate_logic()
     //Apply "highlightable" module
     module_highlightable_card->highlightable(cardTurnActivatedAttackStallion);
     module_highlightable_card->highlightable(cardTurnActivatedAttackStallion2);
+
+    //Apply "clickable" module
+    module_clickable_card->mouseClickedCardArea(cardTurnActivatedAttackStallion->gameObject()->dimensions());
 
     //Temporary: move card a pixel to the right
     QMap<QString, double> dimensions = cardStallion->dimensions();
