@@ -94,13 +94,4 @@ void quickgame::iterate_logic()
 
     //Apply "clickable" module
     module_clickable_card->mouseClickedCardArea(cardTurnActivatedAttackStallion->gameObject()->dimensions());
-
-    //Temporary: move card a pixel to the right
-    QMap<QString, double> dimensions = cardStallion->dimensions();
-    double x = dimensions.value(QString("x"));
-    double y = dimensions.value(QString("y"));
-    double width = dimensions.value(QString("w"));
-    double height = dimensions.value(QString("h"));
-    //x += 1;
-    cardStallion->updateImageSpecifications(x, y, width, height, 1);
 }

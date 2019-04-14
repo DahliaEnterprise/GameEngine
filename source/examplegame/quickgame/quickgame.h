@@ -8,7 +8,7 @@
 //#include "character/charazard.h"
 #include "examplegame/quickgame/card/card_creature.h"
 #include <QTimer>
-#include "examplegame/keyboardMouseInput/keyboardmouseinput.h"
+//sr#include "examplegame/keyboardMouseInput/keyboardmouseinput.h"
 #include "examplegame/quickgame/card/card_moduspraecptum.h"
 #include "examplegame/quickgame/module/card/module_card_hightlightable.h"
 #include "examplegame/quickgame/card/card_turnactivatedcard.h"

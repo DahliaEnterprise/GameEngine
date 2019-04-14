@@ -5,6 +5,8 @@
 #include <QImage>
 #include <QPainter>
 #include "gameengine/gameobject.h"
+#include <QFontDatabase>
+#include <QDebug>
 class card_moduspraecptum : public QObject
 {
     Q_OBJECT
@@ -14,6 +16,7 @@ public:
     gameobject* gameObject();
     void updateImageSpecification(double x, double y, double width, double height, double opacity);
 
+
 private:
     QImage moduspraecptumCardSourceImage;
     QImage moduspraecptumCardImage;
@@ -21,6 +24,10 @@ private:
     QImage moduspraecptumCardHighlightedImage;
 
     QStringList moduspraecptum_list;
+
+    int points_tired;
+
+    void process_moduspraecptum();
 
 signals:
 

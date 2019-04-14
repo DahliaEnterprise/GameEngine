@@ -36,7 +36,6 @@ public slots:
     void incomingReleaseEvent(QKeyEvent* event);
 
 protected:
-
     void keyReleaseEvent(QKeyEvent* event);
 
 };

@@ -13,4 +13,7 @@
     <qresource prefix="/examplegame/quickgame/image/card/turnactivatedcard">
         <file alias="turnactivatedcard.png">examplegame/quickgame/image/card/turnactivatedcard/turnactivatedcard-stallion.png</file>
     </qresource>
+    <qresource prefix="/examplegame/quickgame/fonts">
+        <file alias="Herey Script Free Version.ttf">examplegame/quickgame/fonts/Herey Script Free Version.ttf</file>
+    </qresource>
 </RCC>
