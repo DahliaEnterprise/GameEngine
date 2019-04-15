@@ -27,64 +27,37 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
     gameengine.cpp \
-    gameengine/opengl.cpp \
     gameengine/opengl_canvas.cpp \
     examplegame/gameloop.cpp \
     head.cpp \
     gameengine/gameobject.cpp \
-    examplegame/keyboardMouseInput/keyboardmouseinput.cpp \
     examplegame/quickgame/quickgame.cpp \
     examplegame/quickgame/card/card_creature.cpp \
     examplegame/quickgame/card/card_moduspraecptum.cpp \
     examplegame/quickgame/module/card/module_card_hightlightable.cpp \
     examplegame/quickgame/card/card_turnactivatedcard.cpp \
     examplegame/quickgame/module/card/module_card_clickable.cpp \
-    #examplegame/keyboardMouseInput/keyboardmouseinput.cpp \
+    examplegame/keyboardMouseInput/keyboardmouseinput.cpp \
     examplegame/mainmenu/character/charazard.cpp \
     examplegame/mainmenu/mainmenu.cpp \
-    examplegame/quickgame/card/card_creature.cpp \
-    examplegame/quickgame/card/card_moduspraecptum.cpp \
-    examplegame/quickgame/card/card_turnactivatedcard.cpp \
-    examplegame/quickgame/module/card/module_card_clickable.cpp \
-    examplegame/quickgame/module/card/module_card_hightlightable.cpp \
-    examplegame/quickgame/quickgame.cpp \
-    examplegame/gameloop.cpp \
-    gameengine/gameobject.cpp \
     gameengine/opengl.cpp \
-    gameengine/opengl_canvas.cpp \
-    gameengine.cpp \
-    head.cpp \
-    main.cpp
 
 HEADERS += \
     gameengine.h \
-    gameengine/opengl.h \
-    gameengine/opengl_canvas.h \
-    examplegame/gameloop.h \
     head.h \
     gameengine/gameobject.h \
-    examplegame/keyboardMouseInput/keyboardmouseinput.h \
     examplegame/quickgame/quickgame.h \
     examplegame/quickgame/card/card_creature.h \
     examplegame/quickgame/card/card_moduspraecptum.h \
     examplegame/quickgame/module/card/module_card_hightlightable.h \
     examplegame/quickgame/card/card_turnactivatedcard.h \
-    examplegame/quickgame/module/card/module_card_clickable.h \
-    #examplegame/keyboardMouseInput/keyboardmouseinput.h \
+    examplegame/keyboardMouseInput/keyboardmouseinput.h \
     examplegame/mainmenu/character/charazard.h \
     examplegame/mainmenu/mainmenu.h \
-    examplegame/quickgame/card/card_creature.h \
-    examplegame/quickgame/card/card_moduspraecptum.h \
-    examplegame/quickgame/card/card_turnactivatedcard.h \
     examplegame/quickgame/module/card/module_card_clickable.h \
-    examplegame/quickgame/module/card/module_card_hightlightable.h \
-    examplegame/quickgame/quickgame.h \
     examplegame/gameloop.h \
-    gameengine/gameobject.h \
     gameengine/opengl.h \
-    gameengine/opengl_canvas.h \
-    gameengine.h \
-    head.h
+    gameengine/opengl_canvas.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

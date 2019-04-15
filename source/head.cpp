@@ -11,17 +11,10 @@ void head::start()
     keyboardmouse_input = new keyboardMouseInput();
     keyboardmouse_input->start();
 
-    #if gameToRun == 0
-        //Game Logic Management.
-        game = new gameloop();
-        game->start(keyboardmouse_input);
-    #endif
+    //Game Logic Management.
+    game = new gameloop();
+    game->start(keyboardmouse_input);
 
-    #if gameToRun == 1
-        //Communicatoin Logic Management.
-        communication = new communicationloop();
-        communication->start(keyboardmouse_input):
-    #endif
 
     //Graphics Processing Unit.
     threadGpu = new QThread();
@@ -30,12 +23,8 @@ void head::start()
     engine->moveToThread(threadGpu);
     threadGpu->start();
 
-#if gameToRun == 0
     QObject::connect(game, SIGNAL(playerRequestingCloseGame()), this, SLOT(slotPlayerRequestingCloseGame()));
-#endif
-#if gameToRun == 1
-    QObject::connect(communication, SIGNAL(playerRequestingCloseCommunicationChannel()), this, SLOT(slotPlayerReqestingCloseGame()));
-#endif
+
 
     //Frame Timer
     frameTimer = new QTimer();
@@ -47,17 +36,13 @@ void head::start()
 
 void head::frameTimeout()
 {
-#if gameToRun == 0
     engine->frame(game->frame());
-#endif
-
-#if gameToRun == 1
-
-#endif
 }
 
 
 void head::slotPlayerRequestingCloseGame()
 {
+    frameTimer->stop();
+    delete frameTimer;
     this->deleteLater();
 }

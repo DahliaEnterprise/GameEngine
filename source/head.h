@@ -1,7 +1,6 @@
 #ifndef HEAD_H
 #define HEAD_H
 
-#define gameToRun 0
 
 #include <QObject>
 #include "gameengine.h"
@@ -21,7 +20,6 @@ public:
 private:
     keyboardMouseInput* keyboardmouse_input;
     gameloop* game;
-    //communicationloop* communication;
     gameengine* engine;
     QTimer* frameTimer;
     QThread* threadGpu;
