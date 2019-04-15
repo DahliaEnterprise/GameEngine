@@ -15,7 +15,7 @@ public:
     void start(QString imageUrl, QStringList moduspraecptum_list);
     gameobject* gameObject();
     void updateImageSpecification(double x, double y, double width, double height, double opacity);
-
+    QStringList card_actions();
 
 private:
     QImage moduspraecptumCardSourceImage;

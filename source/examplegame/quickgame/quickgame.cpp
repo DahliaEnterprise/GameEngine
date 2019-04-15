@@ -35,7 +35,9 @@ void quickgame::start(keyboardMouseInput* setKeyboardMouseInput)
     cardModusPraecptumStallion->updateImageSpecification(20, 10, 600, 370, 1);
 
     cardTurnActivatedAttackStallion = new card_turnactivatedcard();
-    cardTurnActivatedAttackStallion->start(QString(":/examplegame/quickgame/image/card/turnactivatedcard/turnactivatedcard.png"), QStringList());
+    QStringList turnactivated_list;
+    turnactivated_list.append(QString("victim reduces 20 tired points"));
+    cardTurnActivatedAttackStallion->start(QString(":/examplegame/quickgame/image/card/turnactivatedcard/turnactivatedcard.png"), turnactivated_list);
     cardTurnActivatedAttackStallion->updateImageSpecifications(20, 390, 300, 420, 1);
 
     cardStallion2 = new card_creature();
@@ -90,8 +92,15 @@ void quickgame::iterate_logic()
 
     //Apply "highlightable" module
     module_highlightable_card->highlightable(cardTurnActivatedAttackStallion);
-    module_highlightable_card->highlightable(cardTurnActivatedAttackStallion2);
+    //module_highlightable_card->highlightable(cardTurnActivatedAttackStallion2);
 
     //Apply "clickable" module
-    module_clickable_card->mouseClickedCardArea(cardTurnActivatedAttackStallion->gameObject()->dimensions());
+    bool clicked = module_clickable_card->mouseClickedCardArea(cardTurnActivatedAttackStallion->gameObject()->dimensions());
+    if(clicked == true)
+    {
+        qWarning() << "turn card activated";
+        QStringList cardActions = cardTurnActivatedAttackStallion->card_actions();
+        QStringList modusPraecptumActions = cardModusPraecptumStallion->card_actions();
+        //this->apply_turn(cardActions, modusPraecptumActions);
+    }
 }

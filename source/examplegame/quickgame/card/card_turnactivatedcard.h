@@ -5,7 +5,7 @@
 #include <QImage>
 #include <QPainter>
 #include "gameengine/gameobject.h"
-
+#include <QDebug>
 class card_turnactivatedcard : public QObject
 {
     Q_OBJECT
@@ -15,6 +15,7 @@ public:
     gameobject* gameObject();
     void highlighted(bool setIsHighlighted);
     void updateImageSpecifications(double x, double y, double width, double height, double opacity);
+    QStringList card_actions();
 
 private:
     QImage turnactivatedcardSourceImage;
@@ -22,6 +23,7 @@ private:
     QImage turnactivatedcardHighlightedImage;
     gameobject* turnactivatedcardGo;
     bool isHighlighted;
+    QStringList turnactivatedcard_list;
 
 signals:
 

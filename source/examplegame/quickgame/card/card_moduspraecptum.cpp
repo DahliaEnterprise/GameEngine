@@ -55,14 +55,14 @@ void card_moduspraecptum::process_moduspraecptum()
 
         //Is tired points?
         if(moduspraecptum_command.mid(0, 1).compare(QString("t")) == 0)
-        { if(moduspraecptum_command.mid(0, 12).compare(QString("tired points")) == 0)
         {
-            points_tired = moduspraecptum_command.mid(13, -1).toInt();
+            if(moduspraecptum_command.mid(0, 12).compare(QString("tired points")) == 0)
+            {
+                points_tired = moduspraecptum_command.mid(13, -1).toInt();
+            }
         }
-        }
-
-
-
         iterator++;
     }
 }
+
+QStringList card_moduspraecptum::card_actions(){ return moduspraecptum_list; }

@@ -6,8 +6,10 @@ card_turnactivatedcard::card_turnactivatedcard(QObject *parent) : QObject(parent
 }
 
 
-void card_turnactivatedcard::start(QString imageUrl, QStringList turnactivatedcard_list)
+void card_turnactivatedcard::start(QString imageUrl, QStringList setturnactivatedcard_list)
 {
+    QStringList::const_iterator iterator = setturnactivatedcard_list.constBegin();
+    while(iterator != setturnactivatedcard_list.constEnd()){ turnactivatedcard_list.append(*iterator); iterator++; }
     isHighlighted = true;
     turnactivatedcardSourceImage = QImage(imageUrl);
     turnactivatedcardImage = QImage(612, 792, QImage::Format_ARGB32);
@@ -43,3 +45,5 @@ void card_turnactivatedcard::highlighted(bool setIsHighlighted)
 }
 
 void card_turnactivatedcard::updateImageSpecifications(double x, double y, double width, double height, double opacity){ turnactivatedcardGo->updateImageSpecifications(x,y,width,height,opacity); }
+
+QStringList card_turnactivatedcard::card_actions(){ return turnactivatedcard_list; }
