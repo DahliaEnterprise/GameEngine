@@ -43,6 +43,8 @@ private:
 
     QList<gameobject*> goList;
 
+    void apply_turn(QStringList cardActions, QStringList modusPraecptumActions);
+
 signals:
     void frame(QList<gameobject*>);
     void playerRequestingCloseGame();

@@ -16,6 +16,8 @@ public:
     gameobject* gameObject();
     void updateImageSpecification(double x, double y, double width, double height, double opacity);
     QStringList card_actions();
+    int getTiredPoints();
+    int getFocusPoints();
 
 private:
     QImage moduspraecptumCardSourceImage;
@@ -26,6 +28,7 @@ private:
     QStringList moduspraecptum_list;
 
     int points_tired;
+    int points_focus;
 
     void process_moduspraecptum();
 

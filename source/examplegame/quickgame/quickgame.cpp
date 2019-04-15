@@ -31,12 +31,14 @@ void quickgame::start(keyboardMouseInput* setKeyboardMouseInput)
     cardModusPraecptumStallion = new card_moduspraecptum();
     QStringList moduspraecptum_list;
     moduspraecptum_list.append(QString("tired points 100"));
+    moduspraecptum_list.append(QString("focus points 100"));
     cardModusPraecptumStallion->start(QString(":/examplegame/quickgame/image/card/moduspraecptum/moduspraecptum-stallion.png"), moduspraecptum_list);
     cardModusPraecptumStallion->updateImageSpecification(20, 10, 600, 370, 1);
 
     cardTurnActivatedAttackStallion = new card_turnactivatedcard();
     QStringList turnactivated_list;
     turnactivated_list.append(QString("victim reduces 20 tired points"));
+    turnactivated_list.append(QString("attacker reduces 5 focus points"));
     cardTurnActivatedAttackStallion->start(QString(":/examplegame/quickgame/image/card/turnactivatedcard/turnactivatedcard.png"), turnactivated_list);
     cardTurnActivatedAttackStallion->updateImageSpecifications(20, 390, 300, 420, 1);
 
@@ -101,6 +103,48 @@ void quickgame::iterate_logic()
         qWarning() << "turn card activated";
         QStringList cardActions = cardTurnActivatedAttackStallion->card_actions();
         QStringList modusPraecptumActions = cardModusPraecptumStallion->card_actions();
-        //this->apply_turn(cardActions, modusPraecptumActions);
+        this->apply_turn(cardActions, modusPraecptumActions);
     }
+}
+
+void quickgame::apply_turn(QStringList cardActions, QStringList modusPraecptumActions)
+{
+    //Initialize managing of factors as variables
+    int attacker_to_victim_tired_points_to_apply = 0;
+    int attacker_to_attacker_focus_points_to_apply = 0;
+
+    //Apply turn activated card factors
+    QStringList::const_iterator iterator = cardActions.constBegin();
+    while(iterator != cardActions.constEnd())
+    {
+        QString action = *iterator;
+
+        if(action.compare("victim reduces 20 tired points") == 0){ attacker_to_victim_tired_points_to_apply -= 20; }
+        if(action.compare("attacker reduces 5 focus points") == 0){ attacker_to_attacker_focus_points_to_apply -= 5; }
+
+        iterator++;
+    }
+
+    //Apply modus praecptum factors
+    QStringList::const_iterator iterator2 = modusPraecptumActions.constBegin();
+    while(iterator2 != modusPraecptumActions.constEnd())
+    {
+        QString moduspAction = *iterator2;
+        if(moduspAction.compare("tired points 100") == 0)
+        {
+            //ignore
+        }
+        if(moduspAction.compare("focus points 100") == 0)
+        {
+          //ignore
+        }
+
+        iterator2++;
+    }
+
+    //Apply factors to creature attributed points
+    int tired = cardModusPraecptumStallion->getTiredPoints();
+    int focus = cardModusPraecptumStallion->getFocusPoints();
+    focus += attacker_to_attacker_focus_points_to_apply;
+    qWarning() << focus;
 }

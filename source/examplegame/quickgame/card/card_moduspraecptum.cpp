@@ -29,6 +29,7 @@ void card_moduspraecptum::start(QString imageUrl, QStringList setModuspraecptum_
     font.setFamily(QString("Arial"));
     painter.setFont(font);
     painter.drawText(QPointF(30, 150), QString("100 Tired Points"));
+    painter.drawText(QPointF(30, 200), QString("100 Focus Points"));
 
     //Attach image resource to game object
     moduspraecptumGO = new gameobject();
@@ -61,8 +62,19 @@ void card_moduspraecptum::process_moduspraecptum()
                 points_tired = moduspraecptum_command.mid(13, -1).toInt();
             }
         }
+
+        //Is focus points
+        if(moduspraecptum_command.mid(0, 1).compare(QString("f")) == 0)
+        {
+            if(moduspraecptum_command.mid(0, 12).compare(QString("focus points")) == 0)
+            {
+                points_focus = moduspraecptum_command.mid(13, -1).toInt();
+            }
+        }
         iterator++;
     }
 }
 
 QStringList card_moduspraecptum::card_actions(){ return moduspraecptum_list; }
+int card_moduspraecptum::getTiredPoints(){ return points_tired; }
+int card_moduspraecptum::getFocusPoints(){ return points_focus; }
