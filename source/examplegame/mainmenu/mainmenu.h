@@ -7,7 +7,7 @@
 #include "gameengine/gameobject.h"
 #include "character/charazard.h"
 #include <QTimer>
-#include "examplegame/keyboardMouseInput/keyboardmouseinput.h"
+#include "modules/keyboardMouseInput/keyboardmouseinput.h"
 
 class mainmenu : public QObject
 {

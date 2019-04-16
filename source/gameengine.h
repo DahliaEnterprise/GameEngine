@@ -6,7 +6,7 @@
 #include "gameengine/opengl_canvas.h"
 #include <QTimer>
 #include "examplegame/gameloop.h"
-#include "examplegame/keyboardMouseInput/keyboardmouseinput.h"
+#include "modules/keyboardMouseInput/keyboardmouseinput.h"
 
 class gameengine : public QObject
 {

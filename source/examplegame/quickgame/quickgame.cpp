@@ -146,5 +146,5 @@ void quickgame::apply_turn(QStringList cardActions, QStringList modusPraecptumAc
     int tired = cardModusPraecptumStallion->getTiredPoints();
     int focus = cardModusPraecptumStallion->getFocusPoints();
     focus += attacker_to_attacker_focus_points_to_apply;
-    qWarning() << focus;
+
 }

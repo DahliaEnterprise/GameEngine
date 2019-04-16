@@ -7,7 +7,7 @@
 #include <QTimer>
 #include <QList>
 #include "gameengine/gameobject.h"
-#include "examplegame/keyboardMouseInput/keyboardmouseinput.h"
+#include "modules/keyboardMouseInput/keyboardmouseinput.h"
 
 class gameloop : public QObject
 {

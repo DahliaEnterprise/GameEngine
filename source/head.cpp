@@ -7,13 +7,22 @@ head::head(QObject *parent) : QObject(parent)
 
 void head::start()
 {
+    startupAppType = 2;
+
     //Keyboard Mouse Input
     keyboardmouse_input = new keyboardMouseInput();
     keyboardmouse_input->start();
 
     //Game Logic Management.
-    game = new gameloop();
-    game->start(keyboardmouse_input);
+    if(startupAppType == 1)
+    {
+        game = new gameloop();
+        game->start(keyboardmouse_input);
+    }else if(startupAppType == 2)
+    {
+        comms = new communication();
+        comms->start();
+    }
 
 
     //Graphics Processing Unit.
@@ -23,7 +32,8 @@ void head::start()
     engine->moveToThread(threadGpu);
     threadGpu->start();
 
-    QObject::connect(game, SIGNAL(playerRequestingCloseGame()), this, SLOT(slotPlayerRequestingCloseGame()));
+    if(startupAppType == 1){ QObject::connect(game, SIGNAL(playerRequestingCloseGame()), this, SLOT(slotPlayerRequestingCloseGame()));
+    }else if(startupAppType == 2){ QObject::connect(comms, SIGNAL(userRequestingCloseApp()), this, SLOT(slotPlayerRequestingCloseGame())); }
 
 
     //Frame Timer
@@ -36,7 +46,8 @@ void head::start()
 
 void head::frameTimeout()
 {
-    engine->frame(game->frame());
+    if(startupAppType == 1){ engine->frame(game->frame()); }
+    else if(startupAppType == 2){ engine->frame(comms->frame());}
 }
 
 

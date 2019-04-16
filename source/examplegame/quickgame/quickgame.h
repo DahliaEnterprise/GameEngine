@@ -5,14 +5,14 @@
 #include "gameengine/opengl_canvas.h"
 #include <QDebug>
 #include "gameengine/gameobject.h"
-//#include "character/charazard.h"
 #include "examplegame/quickgame/card/card_creature.h"
 #include <QTimer>
-//sr#include "examplegame/keyboardMouseInput/keyboardmouseinput.h"
 #include "examplegame/quickgame/card/card_moduspraecptum.h"
 #include "examplegame/quickgame/module/card/module_card_hightlightable.h"
 #include "examplegame/quickgame/card/card_turnactivatedcard.h"
 #include "examplegame/quickgame/module/card/module_card_clickable.h"
+#include "modules/keyboardMouseInput/keyboardmouseinput.h"
+
 class quickgame : public QObject
 {
     Q_OBJECT

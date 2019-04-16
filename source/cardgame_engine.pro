@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui network multimedia
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -37,10 +37,14 @@ SOURCES += \
     examplegame/quickgame/module/card/module_card_hightlightable.cpp \
     examplegame/quickgame/card/card_turnactivatedcard.cpp \
     examplegame/quickgame/module/card/module_card_clickable.cpp \
-    examplegame/keyboardMouseInput/keyboardmouseinput.cpp \
+    modules/keyboardMouseInput/keyboardmouseinput.cpp \
     examplegame/mainmenu/character/charazard.cpp \
     examplegame/mainmenu/mainmenu.cpp \
     gameengine/opengl.cpp \
+    communication/communication.cpp \
+    communication/communication_graphics_and_processing.cpp \
+    communication/network/network.cpp \
+    communication/camera/camera.cpp
 
 HEADERS += \
     gameengine.h \
@@ -51,13 +55,17 @@ HEADERS += \
     examplegame/quickgame/card/card_moduspraecptum.h \
     examplegame/quickgame/module/card/module_card_hightlightable.h \
     examplegame/quickgame/card/card_turnactivatedcard.h \
-    examplegame/keyboardMouseInput/keyboardmouseinput.h \
+    modules/keyboardMouseInput/keyboardmouseinput.h \
     examplegame/mainmenu/character/charazard.h \
     examplegame/mainmenu/mainmenu.h \
     examplegame/quickgame/module/card/module_card_clickable.h \
     examplegame/gameloop.h \
     gameengine/opengl.h \
-    gameengine/opengl_canvas.h
+    gameengine/opengl_canvas.h \
+    communication/communication.h \
+    communication/communication_graphics_and_processing.h \
+    communication/network/network.h \
+    communication/camera/camera.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

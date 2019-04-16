@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include "examplegame/quickgame/card/card_creature.h"
-#include "examplegame/keyboardMouseInput/keyboardmouseinput.h"
+#include "modules/keyboardMouseInput/keyboardmouseinput.h"
 #include "examplegame/quickgame/card/card_moduspraecptum.h"
 #include "examplegame/quickgame/card/card_turnactivatedcard.h"
 

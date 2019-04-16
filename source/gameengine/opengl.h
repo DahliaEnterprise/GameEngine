@@ -9,7 +9,7 @@
 #include "gameengine/opengl_canvas.h"
 #include <QPainter>
 #include <QDebug>
-#include "examplegame/keyboardMouseInput/keyboardmouseinput.h"
+#include "modules/keyboardMouseInput/keyboardmouseinput.h"
 
 class opengl : public QOpenGLWidget
 {

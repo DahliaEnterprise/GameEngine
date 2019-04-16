@@ -7,8 +7,8 @@
 #include "gameengine/opengl.h"
 #include <QThread>
 #include <QTimer>
-#include "examplegame/keyboardMouseInput/keyboardmouseinput.h"
-
+#include "modules/keyboardMouseInput/keyboardmouseinput.h"
+#include "communication/communication.h"
 
 class head : public QObject
 {
@@ -18,8 +18,10 @@ public:
     void start();
 
 private:
+    int startupAppType;
     keyboardMouseInput* keyboardmouse_input;
     gameloop* game;
+    communication* comms;
     gameengine* engine;
     QTimer* frameTimer;
     QThread* threadGpu;
