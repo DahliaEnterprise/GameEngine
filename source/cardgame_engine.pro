@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui network multimedia
+QT       += core gui network multimedia multimediawidgets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -44,7 +44,8 @@ SOURCES += \
     communication/communication.cpp \
     communication/communication_graphics_and_processing.cpp \
     communication/network/network.cpp \
-    communication/camera/camera.cpp
+    communication/camera/camera.cpp \
+    communication/camera/cameraimage.cpp
 
 HEADERS += \
     gameengine.h \
@@ -65,7 +66,8 @@ HEADERS += \
     communication/communication.h \
     communication/communication_graphics_and_processing.h \
     communication/network/network.h \
-    communication/camera/camera.h
+    communication/camera/camera.h \
+    communication/camera/cameraimage.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -12,4 +12,4 @@ void communication::start()
     graphicsandprocessing->start();
 }
 
-QList<gameobject*> communication::frame(){ return QList<gameobject*>();}
+QList<gameobject*> communication::frame(){ return graphicsandprocessing->frame(); }

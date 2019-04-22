@@ -38,7 +38,7 @@ void head::start()
 
     //Frame Timer
     frameTimer = new QTimer();
-    frameTimer->setInterval(10);
+    frameTimer->setInterval(100);
     QObject::connect(frameTimer, SIGNAL(timeout()), this, SLOT(frameTimeout()));
 
     frameTimer->start();

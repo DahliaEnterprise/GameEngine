@@ -1,7 +1,5 @@
 <RCC>
     <qresource prefix="/examplegame/quickgame/image">
-        <file alias="charazard.png">examplegame/quickgame/image/charazard.png</file>
-        <file alias="index.jpg">examplegame/quickgame/image/index.jpg</file>
         <file alias="transparent_background.png">examplegame/quickgame/image/transparent_background.png</file>
     </qresource>
     <qresource prefix="/examplegame/quickgame/image/card/creature">
@@ -15,5 +13,8 @@
     </qresource>
     <qresource prefix="/examplegame/quickgame/fonts">
         <file alias="Herey Script Free Version.ttf">examplegame/quickgame/fonts/Herey Script Free Version.ttf</file>
+    </qresource>
+    <qresource prefix="/source/communication/video">
+        <file alias="walking.mp4">communication/video/walking.mp4</file>
     </qresource>
 </RCC>
