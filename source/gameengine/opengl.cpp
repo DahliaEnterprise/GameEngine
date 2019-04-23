@@ -13,12 +13,13 @@ void opengl::start(keyboardMouseInput* setKeyboardMouseInput)
     QDesktopWidget* desktop = QApplication::desktop();
     int screen_width = desktop->width();
     int screen_height = desktop->height();
-    this->setFixedSize(screen_width, screen_height);
+    //this->setFixedSize(screen_width, screen_height);
+    this->setFixedSize(500, 500);
     this->setAutoFillBackground(false);
-    this->setWindowFlags(Qt::Widget | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
-    this->setAttribute(Qt::WA_NoSystemBackground, true);
-    this->setAttribute(Qt::WA_TranslucentBackground, true);
-    this->setAttribute(Qt::WA_AlwaysStackOnTop);
+    //muted:this->setWindowFlags(Qt::Widget | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+    //muted:this->setAttribute(Qt::WA_NoSystemBackground, true);
+    //muted:this->setAttribute(Qt::WA_TranslucentBackground, true);
+    //muted:this->setAttribute(Qt::WA_AlwaysStackOnTop);
 
     this->setUpdateBehavior(QOpenGLWidget::NoPartialUpdate);
 

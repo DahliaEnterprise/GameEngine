@@ -12,6 +12,9 @@
 #include "gameengine/gameobject.h"
 #include <QList>
 #include "communication/camera/cameraimage.h"
+#include "communication/image/bufferawareframe.h"
+#include <QThread>
+#include "communication/image/splitwholeimageintothreequalities.h"
 class communication_graphics_and_processing : public QObject
 {
     Q_OBJECT
@@ -30,14 +33,18 @@ private:
 
     cameraImage* cameraimage;
     gameobject* videostream_go;
-    int x = 0;
+    QList<bufferAwareFrame*> bufferAwareframes_list;
+    QList<QVideoFrame> clientCamera_framesBuffered;
+
+    QThread* threadSplitQualityByThree;
+    splitWholeImageIntoThreeQualities* splitQualityByThree;
 
 signals:
 
 public slots:
 
 private slots:
-    void processVideoFrame(QVideoFrame videoFrame);
+    void videoFrameImage(QImage image);
 };
 
 #endif // COMMUNICATION_GRAPHICS_AND_PROCESSING_H

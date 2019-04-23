@@ -44,8 +44,9 @@ SOURCES += \
     communication/communication.cpp \
     communication/communication_graphics_and_processing.cpp \
     communication/network/network.cpp \
-    communication/camera/camera.cpp \
-    communication/camera/cameraimage.cpp
+    communication/camera/cameraimage.cpp \
+    communication/image/bufferawareframe.cpp \
+    communication/image/splitwholeimageintothreequalities.cpp
 
 HEADERS += \
     gameengine.h \
@@ -66,8 +67,9 @@ HEADERS += \
     communication/communication.h \
     communication/communication_graphics_and_processing.h \
     communication/network/network.h \
-    communication/camera/camera.h \
-    communication/camera/cameraimage.h
+    communication/camera/cameraimage.h \
+    communication/image/bufferawareframe.h \
+    communication/image/splitwholeimageintothreequalities.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
