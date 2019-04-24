@@ -7,10 +7,17 @@ communication_graphics_and_processing::communication_graphics_and_processing(QOb
 
 void communication_graphics_and_processing::start()
 {
+    //Initialize incoming video feed as video frame buffer
+    Thread_videoFrameBuffer = new QThread();
+    videoFrameBuffer = new VideoFrameBuffer();
+    videoFrameBuffer->start();
+    videoFrameBuffer->moveToThread(Thread_videoFrameBuffer);
+    Thread_videoFrameBuffer->start();
+    QObject::connect(this, SIGNAL(videoFrameBuffer_Frame(QVideoFrame)), videoFrameBuffer, SLOT(appendFrame(QVideoFrame)));
     currentFrame = QImage(1280,720,QImage::Format_ARGB32);
     bufferedFrame = QImage(1280,720,QImage::Format_ARGB32);
+
     //Initialize video frame game object
-    cameraimage = new cameraImage();
     videostream_go = new gameobject();
     videostream_go->start(QImage(QString(":/examplegame/quickgame/image/card/creature/creature_stallion.png")));
 
@@ -58,7 +65,7 @@ void communication_graphics_and_processing::processVideoFrame(QVideoFrame videoF
 QList<gameobject*> communication_graphics_and_processing::frame()
 {
     goList.clear();
-    videostream_go->start(currentFrame);
+    videostream_go->start(videoFrameBuffer->frame());
     videostream_go->updateImageSpecifications(0,0,1280,720,1);
     goList.append(videostream_go);
 
@@ -67,41 +74,9 @@ QList<gameobject*> communication_graphics_and_processing::frame()
 
 void communication_graphics_and_processing::videoFrameImage(QVideoFrame VideoFrameAsImage)
 {
-
-    /* TO BE MOVED TO THREAD
-    VideoFrameAsImage.map(QAbstractVideoBuffer::ReadOnly);
-    QImage::Format imageFormat = QVideoFrame::imageFormatFromPixelFormat(VideoFrameAsImage.pixelFormat());
-    bufferedFrame = QImage(VideoFrameAsImage.bits(), VideoFrameAsImage.width(), VideoFrameAsImage.height(), VideoFrameAsImage.bytesPerLine(), imageFormat);
-
-    QPainter painter(&currentFrame);
-
-    //Low Quality frame
-    int currentX = 0;
-    int currentY = 0;
-    int lowSquareWidthHeight = 64;
-    bool keep_looping = true;
-     LOW QUALITY FRAME MUTED
-    while(keep_looping == true)
-    {
-        QPen pen;
-        pen.setStyle(Qt::SolidLine);
-        pen.setColor(bufferedFrame.pixel(currentX,currentY));
-        painter.setPen(pen);
-        painter.fillRect(currentX,currentY,lowSquareWidthHeight,lowSquareWidthHeight,bufferedFrame.pixel(currentX,currentY));
-
-        currentX += lowSquareWidthHeight;
-        if(currentX > VideoFrameAsImage.width() - 1)
-        {
-            currentX = 0;
-            currentY += lowSquareWidthHeight;
-        }
-
-        if(currentY > VideoFrameAsImage.height() - 1)
-        {
-            keep_looping = false;
-        }
-    }
-    */
-
-    //TODO Move to buffer frames, THEN TODO MOVE TO THREAD FOR SPLITTING FRAMES. MEDIUM QUALITY DEADLOCKS CPU, LIKELY RESOLVEABLE USING THREADS.
+    //VideoFrameAsImage(Client Camera) To VideoFrameBuffer(Split into three qualities)
+    emit videoFrameBuffer_Frame(VideoFrameAsImage);
 }
+
+
+
