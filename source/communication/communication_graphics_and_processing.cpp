@@ -74,21 +74,24 @@ void communication_graphics_and_processing::videoFrameImage(QVideoFrame VideoFra
     QPainter painter(&currentFrame);
 
     //Low Quality frame
-    int currentX = 0; int currentY = 0; int horizontalInterval = 64;
+    int currentX = 0;
+    int currentY = 0;
+    int lowSquareWidthHeight = 64;
     bool keep_looping = true;
+    /* LOW QUALITY FRAME MUTED
     while(keep_looping == true)
     {
         QPen pen;
         pen.setStyle(Qt::SolidLine);
         pen.setColor(bufferedFrame.pixel(currentX,currentY));
         painter.setPen(pen);
-        painter.fillRect(currentX,currentY,horizontalInterval,horizontalInterval,bufferedFrame.pixel(currentX,currentY));
+        painter.fillRect(currentX,currentY,lowSquareWidthHeight,lowSquareWidthHeight,bufferedFrame.pixel(currentX,currentY));
 
-        currentX += horizontalInterval;
+        currentX += lowSquareWidthHeight;
         if(currentX > VideoFrameAsImage.width() - 1)
         {
             currentX = 0;
-            currentY += horizontalInterval;
+            currentY += lowSquareWidthHeight;
         }
 
         if(currentY > VideoFrameAsImage.height() - 1)
@@ -96,13 +99,7 @@ void communication_graphics_and_processing::videoFrameImage(QVideoFrame VideoFra
             keep_looping = false;
         }
     }
+    */
 
-    //Medium Quality Frame
-    int centerSize = 32;
-    //todo:process of square quality of center of low quality frame.
-    keep_looping = true;
-    while(keep_looping == true)
-    {
-
-    }
+    //TODO Move to buffer frames, THEN TODO MOVE TO THREAD FOR SPLITTING FRAMES. MEDIUM QUALITY DEADLOCKS CPU, LIKELY RESOLVEABLE USING THREADS.
 }
