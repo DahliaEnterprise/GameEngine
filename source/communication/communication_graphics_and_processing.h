@@ -13,6 +13,7 @@
 #include <QList>
 #include "communication/camera/cameraimage.h"
 #include <QPainter>
+#include <QCameraViewfinderSettings>
 class communication_graphics_and_processing : public QObject
 {
     Q_OBJECT
@@ -31,6 +32,8 @@ private:
 
     cameraImage* cameraimage;
     gameobject* videostream_go;
+
+
     QImage currentFrame;
     QImage bufferedFrame;
 

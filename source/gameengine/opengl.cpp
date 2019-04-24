@@ -14,7 +14,8 @@ void opengl::start(keyboardMouseInput* setKeyboardMouseInput)
     int screen_width = desktop->width();
     int screen_height = desktop->height();
     //this->setFixedSize(screen_width, screen_height);
-    this->setFixedSize(500, 500);
+    //this->setFixedSize(500, 500);
+    this->resize(1280,720);
     this->setAutoFillBackground(false);
     //muted:this->setWindowFlags(Qt::Widget | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
     //muted:this->setAttribute(Qt::WA_NoSystemBackground, true);

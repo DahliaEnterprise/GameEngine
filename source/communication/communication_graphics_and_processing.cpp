@@ -7,8 +7,8 @@ communication_graphics_and_processing::communication_graphics_and_processing(QOb
 
 void communication_graphics_and_processing::start()
 {
-
-    currentFrame = QImage(500,500,QImage::Format_ARGB32);
+    currentFrame = QImage(1280,720,QImage::Format_ARGB32);
+    bufferedFrame = QImage(1280,720,QImage::Format_ARGB32);
     //Initialize video frame game object
     cameraimage = new cameraImage();
     videostream_go = new gameobject();
@@ -22,6 +22,9 @@ void communication_graphics_and_processing::start()
     camera = new QCamera();
     cameraViewfinder = new QCameraViewfinder();
     camera->setViewfinder(cameraViewfinder);
+    QCameraViewfinderSettings viewFinderSettings = camera->viewfinderSettings();
+    viewFinderSettings.setResolution(1280,720);
+    camera->setViewfinderSettings(viewFinderSettings);
     camera->setCaptureMode(QCamera::CaptureVideo);
 
     videoProbe = new QVideoProbe();
@@ -56,7 +59,7 @@ QList<gameobject*> communication_graphics_and_processing::frame()
 {
     goList.clear();
     videostream_go->start(currentFrame);
-    videostream_go->updateImageSpecifications(0,0,500,500,1);
+    videostream_go->updateImageSpecifications(0,0,1280,720,1);
     goList.append(videostream_go);
 
     return goList;
@@ -67,10 +70,39 @@ void communication_graphics_and_processing::videoFrameImage(QVideoFrame VideoFra
     VideoFrameAsImage.map(QAbstractVideoBuffer::ReadOnly);
     QImage::Format imageFormat = QVideoFrame::imageFormatFromPixelFormat(VideoFrameAsImage.pixelFormat());
     bufferedFrame = QImage(VideoFrameAsImage.bits(), VideoFrameAsImage.width(), VideoFrameAsImage.height(), VideoFrameAsImage.bytesPerLine(), imageFormat);
+
     QPainter painter(&currentFrame);
-    QPen pen;
-    pen.setStyle(Qt::SolidLine);
-    pen.setColor(QColor(100,153,238,255));
-    painter.setPen(pen);
-    painter.drawRect(0,0,100,100);
+
+    //Low Quality frame
+    int currentX = 0; int currentY = 0; int horizontalInterval = 64;
+    bool keep_looping = true;
+    while(keep_looping == true)
+    {
+        QPen pen;
+        pen.setStyle(Qt::SolidLine);
+        pen.setColor(bufferedFrame.pixel(currentX,currentY));
+        painter.setPen(pen);
+        painter.fillRect(currentX,currentY,horizontalInterval,horizontalInterval,bufferedFrame.pixel(currentX,currentY));
+
+        currentX += horizontalInterval;
+        if(currentX > VideoFrameAsImage.width() - 1)
+        {
+            currentX = 0;
+            currentY += horizontalInterval;
+        }
+
+        if(currentY > VideoFrameAsImage.height() - 1)
+        {
+            keep_looping = false;
+        }
+    }
+
+    //Medium Quality Frame
+    int centerSize = 32;
+    //todo:process of square quality of center of low quality frame.
+    keep_looping = true;
+    while(keep_looping == true)
+    {
+
+    }
 }
