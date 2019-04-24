@@ -45,7 +45,7 @@ void communication_graphics_and_processing::processVideoFrame(QVideoFrame videoF
     //QImage image(videoFrame.bits(), videoFrame.width(), videoFrame.height(), videoFrame.bytesPerLine(), imageFormat);
     //videostream_go->start(image);
 
-    /*bufferAwareFrame* bufferawareFrame = new bufferAwareFrame();
+    bufferAwareFrame* bufferawareFrame = new bufferAwareFrame();
     bufferawareFrame->start(image);
     bufferAwareframes_list.append(bufferawareFrame);
     //bufferAwareframes_list.removeFirst();
