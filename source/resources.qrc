@@ -14,7 +14,5 @@
     <qresource prefix="/examplegame/quickgame/fonts">
         <file alias="Herey Script Free Version.ttf">examplegame/quickgame/fonts/Herey Script Free Version.ttf</file>
     </qresource>
-    <qresource prefix="/source/communication/video">
-        <file alias="walking.mp4">communication/video/walking.mp4</file>
-    </qresource>
+    <qresource prefix="/source/communication/video"/>
 </RCC>

@@ -7,11 +7,8 @@ communication_graphics_and_processing::communication_graphics_and_processing(QOb
 
 void communication_graphics_and_processing::start()
 {
-    threadSplitQualityByThree = new QThread();
-    splitQualityByThree = new splitWholeImageIntoThreeQualities();
-    splitQualityByThree->moveToThread(threadSplitQualityByThree);
-    threadSplitQualityByThree->start();
 
+    currentFrame = QImage(500,500,QImage::Format_ARGB32);
     //Initialize video frame game object
     cameraimage = new cameraImage();
     videostream_go = new gameobject();
@@ -28,11 +25,12 @@ void communication_graphics_and_processing::start()
     camera->setCaptureMode(QCamera::CaptureVideo);
 
     videoProbe = new QVideoProbe();
-    if(videoProbe->setSource(camera)){ QObject::connect(videoProbe, SIGNAL(videoFrameProbed(QVideoFrame)), splitQualityByThree, SLOT(appendVideoFrame(QVideoFrame))); }
+    if(videoProbe->setSource(camera))
+    {
+        QObject::connect(videoProbe, SIGNAL(videoFrameProbed(QVideoFrame)), this, SLOT(videoFrameImage(QVideoFrame)));
+    }
 
     camera->start();
-
-    QObject::connect(splitQualityByThree, SIGNAL(videoFrameImage(QImage)), this, SLOT(videoFrameImage(QImage)));
 }
 
 /*
@@ -57,15 +55,22 @@ void communication_graphics_and_processing::processVideoFrame(QVideoFrame videoF
 QList<gameobject*> communication_graphics_and_processing::frame()
 {
     goList.clear();
-    //videostream_go->start(QImage(QString(":/examplegame/quickgame/image/card/creature/creature_stallion.png")));
-    //videostream_go->updateImageSpecifications(0,0,500,500,1);
+    videostream_go->start(currentFrame);
+    videostream_go->updateImageSpecifications(0,0,500,500,1);
     goList.append(videostream_go);
 
     return goList;
 }
 
-void communication_graphics_and_processing::videoFrameImage(QImage image)
+void communication_graphics_and_processing::videoFrameImage(QVideoFrame VideoFrameAsImage)
 {
-    videostream_go->start(image);
-    videostream_go->updateImageSpecifications(0,0,500,500,1);
+    VideoFrameAsImage.map(QAbstractVideoBuffer::ReadOnly);
+    QImage::Format imageFormat = QVideoFrame::imageFormatFromPixelFormat(VideoFrameAsImage.pixelFormat());
+    bufferedFrame = QImage(VideoFrameAsImage.bits(), VideoFrameAsImage.width(), VideoFrameAsImage.height(), VideoFrameAsImage.bytesPerLine(), imageFormat);
+    QPainter painter(&currentFrame);
+    QPen pen;
+    pen.setStyle(Qt::SolidLine);
+    pen.setColor(QColor(100,153,238,255));
+    painter.setPen(pen);
+    painter.drawRect(0,0,100,100);
 }
