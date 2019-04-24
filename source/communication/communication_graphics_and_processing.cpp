@@ -67,6 +67,8 @@ QList<gameobject*> communication_graphics_and_processing::frame()
 
 void communication_graphics_and_processing::videoFrameImage(QVideoFrame VideoFrameAsImage)
 {
+
+    /* TO BE MOVED TO THREAD
     VideoFrameAsImage.map(QAbstractVideoBuffer::ReadOnly);
     QImage::Format imageFormat = QVideoFrame::imageFormatFromPixelFormat(VideoFrameAsImage.pixelFormat());
     bufferedFrame = QImage(VideoFrameAsImage.bits(), VideoFrameAsImage.width(), VideoFrameAsImage.height(), VideoFrameAsImage.bytesPerLine(), imageFormat);
@@ -78,7 +80,7 @@ void communication_graphics_and_processing::videoFrameImage(QVideoFrame VideoFra
     int currentY = 0;
     int lowSquareWidthHeight = 64;
     bool keep_looping = true;
-    /* LOW QUALITY FRAME MUTED
+     LOW QUALITY FRAME MUTED
     while(keep_looping == true)
     {
         QPen pen;
