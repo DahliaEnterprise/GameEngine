@@ -18,22 +18,27 @@ QImage videoframebuffer_openglwidget::splitFrame(QVideoFrame VideoFrame)
 
     //Low Quality frame
     QImage lowQualityFrameImage = QImage(1280, 720, QImage::Format_RGB32);
-    lowQualityFrameImage = this->lowQuality(lowQualityFrameImage, VideoFrameAsImage);
-
+    lowQualityFrameImage = this->lowQuality(lowQualityFrameImage, VideoFrameAsImage, false);
 
     //Medium Quality Frame
     QImage medQualityFrameImage = QImage(1280, 720, QImage::Format_ARGB32);
-    QPainter painter2(&medQualityFrameImage);
-    QPen transparentPen; transparentPen.setStyle(Qt::SolidLine); transparentPen.setColor(QColor(0,0,0,0));
-    painter2.setPen(transparentPen);
-    painter2.fillRect(0,0,1280,720,QColor(0,0,0,0));
-
-
+    this->medQuality(medQualityFrameImage, VideoFrameAsImage);
 
     return this->temp_mergeframes(lowQualityFrameImage, medQualityFrameImage);
 }
 
-QImage videoframebuffer_openglwidget::lowQuality(QImage blank, QImage details)
+QImage videoframebuffer_openglwidget::medQuality(QImage blank, QImage details)
+{
+    //Initalize and transparent fill image.
+    QPainter painter2(&blank);
+    QPen transparentPen; transparentPen.setStyle(Qt::SolidLine); transparentPen.setColor(QColor(0,0,0,0));
+    painter2.setPen(transparentPen);
+    painter2.fillRect(0,0,1280,720,QColor(0,0,0,0));
+
+    return blank;
+}
+
+QImage videoframebuffer_openglwidget::lowQuality(QImage blank, QImage details, bool renderWithStretching)
 {
     QPainter painter(&blank);
     int currentX = 0;
@@ -46,7 +51,13 @@ QImage videoframebuffer_openglwidget::lowQuality(QImage blank, QImage details)
         pen.setStyle(Qt::SolidLine);
         pen.setColor(details.pixel(currentX,currentY));
         painter.setPen(pen);
-        painter.fillRect(currentX,currentY,1,1,details.pixel(currentX,currentY));
+        if(renderWithStretching == true)
+        {
+            painter.fillRect(currentX,currentY,lowSquareWidthHeight,lowSquareWidthHeight,details.pixel(currentX,currentY));
+        }else if(renderWithStretching == false)
+        {
+            painter.fillRect(currentX,currentY,1,1,details.pixel(currentX,currentY));
+        }
 
         currentX += lowSquareWidthHeight;
         if(currentX > details.width() - 1)

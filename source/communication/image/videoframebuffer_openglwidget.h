@@ -16,7 +16,8 @@ public:
     QImage temp_mergeframes(QImage lowQuality, QImage medQuality);
 
 private:
-    QImage lowQuality(QImage blank, QImage details);
+    QImage medQuality(QImage blank, QImage details);
+    QImage lowQuality(QImage blank, QImage details, bool renderWithStretching = true);
 
 };
 
