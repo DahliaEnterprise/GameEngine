@@ -7,6 +7,7 @@
 #include <QPainter>
 #include <QDebug>
 #include <QImage>
+#include <QRandomGenerator>
 class videoframebuffer_openglwidget : public QOpenGLWidget
 {
 public:
@@ -16,9 +17,8 @@ public:
     QImage temp_mergeframes(QImage lowQuality, QImage medQuality);
 
 private:
-    QImage medQuality(QImage blank, QImage details);
+    QImage medQuality(QImage blank, QImage details, bool renderWithStretching);
     QImage lowQuality(QImage blank, QImage details, bool renderWithStretching = true);
-
 };
 
 #endif // VIDEOFRAMEBUFFER_OPENGLWIDGET_H
