@@ -8,27 +8,69 @@ videoframebuffer_openglwidget::videoframebuffer_openglwidget()
 void videoframebuffer_openglwidget::start()
 {
     this->setUpdateBehavior(QOpenGLWidget::NoPartialUpdate);
+    this->show();
+
+    videoFrameWaitingToBeSplit = QVideoFrame();
+    bufferedFrame = QImage(1280, 720, QImage::Format_RGB32);
+}
+
+void videoframebuffer_openglwidget::paintEvent(QPaintEvent* event)
+{
+    //Copy video frame to QImage
+    QVideoFrame VideoFrame = videoFrameWaitingToBeSplit;
+    if(VideoFrame.width() > 0 && VideoFrame.height() > 0)
+    {
+        VideoFrame.map(QAbstractVideoBuffer::ReadOnly);
+        QImage::Format imageFormat = QVideoFrame::imageFormatFromPixelFormat(VideoFrame.pixelFormat());
+        QImage VideoFrameAsImage = QImage(VideoFrame.bits(), VideoFrame.width(), VideoFrame.height(), VideoFrame.bytesPerLine(), imageFormat);
+
+        //Low Quality frame
+        QImage lowQualityFrameImage = QImage(1280, 720, QImage::Format_RGB32);
+        lowQualityFrameImage = this->lowQuality(lowQualityFrameImage, VideoFrameAsImage, true);
+
+        //Medium Quality Frame
+        QImage medQualityFrameImage = QImage(1280, 720, QImage::Format_ARGB32);
+        medQualityFrameImage = this->medQuality(medQualityFrameImage, VideoFrameAsImage, true);
+
+        //High Quality Frame
+        QImage highQualityFrameImage = QImage(1280, 720, QImage::Format_ARGB32);
+        highQualityFrameImage = this->highQuality(highQualityFrameImage, VideoFrameAsImage, true);
+
+        bufferedFrame = this->temp_mergeframes(lowQualityFrameImage, medQualityFrameImage, highQualityFrameImage);
+    }
+}
+
+QImage videoframebuffer_openglwidget::frame()
+{
+    return bufferedFrame;
 }
 
 QImage videoframebuffer_openglwidget::splitFrame(QVideoFrame VideoFrame)
 {
+    videoFrameWaitingToBeSplit = VideoFrame;
+    this->update();
+
+    /** POSSIBLY DEPRECATED AFTER TRANSITION TO OPENGL PROCESSING **
     VideoFrame.map(QAbstractVideoBuffer::ReadOnly);
     QImage::Format imageFormat = QVideoFrame::imageFormatFromPixelFormat(VideoFrame.pixelFormat());
     QImage VideoFrameAsImage = QImage(VideoFrame.bits(), VideoFrame.width(), VideoFrame.height(), VideoFrame.bytesPerLine(), imageFormat);
 
     //Low Quality frame
     QImage lowQualityFrameImage = QImage(1280, 720, QImage::Format_RGB32);
-    lowQualityFrameImage = this->lowQuality(lowQualityFrameImage, VideoFrameAsImage, false);
+    lowQualityFrameImage = this->lowQuality(lowQualityFrameImage, VideoFrameAsImage, true);
 
     //Medium Quality Frame
     QImage medQualityFrameImage = QImage(1280, 720, QImage::Format_ARGB32);
-    medQualityFrameImage = this->medQuality(medQualityFrameImage, VideoFrameAsImage, false);
+    medQualityFrameImage = this->medQuality(medQualityFrameImage, VideoFrameAsImage, true);
 
     //High Quality Frame
     QImage highQualityFrameImage = QImage(1280, 720, QImage::Format_ARGB32);
     highQualityFrameImage = this->highQuality(highQualityFrameImage, VideoFrameAsImage, true);
 
     return this->temp_mergeframes(lowQualityFrameImage, medQualityFrameImage, highQualityFrameImage);
+    **/
+
+    return QImage();
 }
 
 QImage videoframebuffer_openglwidget::highQuality(QImage blank, QImage details, bool renderWithStretching)
@@ -176,7 +218,7 @@ QImage videoframebuffer_openglwidget::temp_mergeframes(QImage lowQuality, QImage
     QImage output = lowQuality;
 
     int quality = QRandomGenerator::global()->bounded(2);
-    quality = 1;
+    //quality = 1;
     if(quality == 0)
     {
         QPainter painter(&output);
