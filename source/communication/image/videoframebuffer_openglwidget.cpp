@@ -18,13 +18,63 @@ QImage videoframebuffer_openglwidget::splitFrame(QVideoFrame VideoFrame)
 
     //Low Quality frame
     QImage lowQualityFrameImage = QImage(1280, 720, QImage::Format_RGB32);
-    lowQualityFrameImage = this->lowQuality(lowQualityFrameImage, VideoFrameAsImage, true);
+    lowQualityFrameImage = this->lowQuality(lowQualityFrameImage, VideoFrameAsImage, false);
 
     //Medium Quality Frame
     QImage medQualityFrameImage = QImage(1280, 720, QImage::Format_ARGB32);
-    medQualityFrameImage = this->medQuality(medQualityFrameImage, VideoFrameAsImage, true);
+    medQualityFrameImage = this->medQuality(medQualityFrameImage, VideoFrameAsImage, false);
 
-    return this->temp_mergeframes(lowQualityFrameImage, medQualityFrameImage);
+    QImage highQualityFrameImage = QImage(1280, 720, QImage::Format_ARGB32);
+    //highQualityFrameImage = this->highQuality(highQualityFrameImage, VideoFrameAsImage, false);
+
+    return this->temp_mergeframes(lowQualityFrameImage, medQualityFrameImage, highQualityFrameImage);
+}
+
+QImage videoframebuffer_openglwidget::highQuality(QImage blank, QImage details, bool renderWithStretching)
+{
+    //NEEDS TO SKIP EVERY THREE AND EIGHT
+    //HIGH QUALITY STILL NOT SURE WHAT TO GRAB.....
+    QPainter painter(&blank);
+    painter.setCompositionMode(QPainter::CompositionMode_Source);
+    int highQualityInterval = 1;
+    int currentX = 0;
+    int currentY = 0;
+    bool keep_looping = true;
+    int pixels = 0;
+    while(keep_looping == true)
+    {
+        QPen pen;
+        pen.setStyle(Qt::SolidLine);
+        pen.setColor(details.pixel(currentX,currentY));
+        painter.setPen(pen);
+        //pixels++;
+        if(renderWithStretching == true)
+        {
+            //Centered for stretching
+            int tempCurrentX = currentX; int tempCurrentY = currentY;
+            tempCurrentX += highQualityInterval - 1;
+            tempCurrentY += highQualityInterval - 1;
+            painter.fillRect(currentX,currentY,highQualityInterval,highQualityInterval,details.pixel(currentX,currentY));
+        }else if(renderWithStretching == false)
+        {
+            painter.fillRect(currentX,currentY,1,1,details.pixel(currentX,currentY));
+        }
+
+        currentX += highQualityInterval;
+
+        if(currentX > details.width() - 1)
+        {
+            currentX = 0;
+            currentY += highQualityInterval;
+        }
+
+        if(currentY > details.height() - 1)
+        {
+            keep_looping = false;
+        }
+    }
+    qWarning() << pixels;
+    return blank;
 }
 
 QImage videoframebuffer_openglwidget::medQuality(QImage blank, QImage details, bool renderWithStretching)
@@ -36,7 +86,7 @@ QImage videoframebuffer_openglwidget::medQuality(QImage blank, QImage details, b
     painter2.fillRect(0,0,1280,720,QColor(0,0,0,0));
 
     //Get med data
-    int medInterval = 4;
+    int medInterval = 3;
     int currentX = 0;
     int currentY = 0;
     bool keep_looping = true;
@@ -51,8 +101,8 @@ QImage videoframebuffer_openglwidget::medQuality(QImage blank, QImage details, b
         {
             //Centered for stretching
             int tempCurrentX = currentX; int tempCurrentY = currentY;
-            tempCurrentX += medInterval/2;
-            tempCurrentY += medInterval/2;
+            tempCurrentX -= 1;
+            tempCurrentY -= 1;
             painter2.fillRect(tempCurrentX,
                               tempCurrentY,
                               medInterval,
@@ -63,7 +113,7 @@ QImage videoframebuffer_openglwidget::medQuality(QImage blank, QImage details, b
             //painter2.fillRect(currentX-2,currentY-2,4,4,details.pixel(currentX,currentY));
         }
 
-        currentX += medInterval/2;
+        currentX += medInterval;
 
         if(currentX > details.width() - 1)
         {
@@ -121,18 +171,26 @@ QImage videoframebuffer_openglwidget::lowQuality(QImage blank, QImage details, b
 }
 
 
-QImage videoframebuffer_openglwidget::temp_mergeframes(QImage lowQuality, QImage medQuality)
+QImage videoframebuffer_openglwidget::temp_mergeframes(QImage lowQuality, QImage medQuality, QImage highQuality)
 {
     QImage output = lowQuality;
 
-    QRandomGenerator random;
-    int quality = QRandomGenerator::global()->bounded(10);
-    if(quality > 0 && quality < 8)
+    int quality = QRandomGenerator::global()->bounded(100);
+    quality = 31;
+    if(quality > 0 && quality < 30)
     {
         QPainter painter(&output);
         painter.drawImage(0,0,medQuality);
 
+
+    }else if(quality >= 30)
+    {
+        QPainter painter(&output);
+        painter.drawImage(0,0,medQuality);
+        painter.drawImage(0,0,highQuality);
     }
 
+
     return output;
+
 }

@@ -14,9 +14,12 @@ public:
     videoframebuffer_openglwidget();
     void start();
     QImage splitFrame(QVideoFrame VideoFrame);
-    QImage temp_mergeframes(QImage lowQuality, QImage medQuality);
+    QImage temp_mergeframes(QImage lowQuality, QImage medQuality, QImage highQuality);
 
 private:
+    int tempQuality = 0;
+
+    QImage highQuality(QImage blank, QImage details, bool renderWithStretching = true);
     QImage medQuality(QImage blank, QImage details, bool renderWithStretching);
     QImage lowQuality(QImage blank, QImage details, bool renderWithStretching = true);
 };
