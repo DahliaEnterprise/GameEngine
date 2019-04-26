@@ -24,48 +24,49 @@ QImage videoframebuffer_openglwidget::splitFrame(QVideoFrame VideoFrame)
     QImage medQualityFrameImage = QImage(1280, 720, QImage::Format_ARGB32);
     medQualityFrameImage = this->medQuality(medQualityFrameImage, VideoFrameAsImage, false);
 
+    //High Quality Frame
     QImage highQualityFrameImage = QImage(1280, 720, QImage::Format_ARGB32);
-    //highQualityFrameImage = this->highQuality(highQualityFrameImage, VideoFrameAsImage, false);
+    highQualityFrameImage = this->highQuality(highQualityFrameImage, VideoFrameAsImage, true);
 
     return this->temp_mergeframes(lowQualityFrameImage, medQualityFrameImage, highQualityFrameImage);
 }
 
 QImage videoframebuffer_openglwidget::highQuality(QImage blank, QImage details, bool renderWithStretching)
 {
-    //NEEDS TO SKIP EVERY THREE AND EIGHT
-    //HIGH QUALITY STILL NOT SURE WHAT TO GRAB.....
+    //NEEDS TO SKIP EVERY FOUR AND EIGHT
     QPainter painter(&blank);
     painter.setCompositionMode(QPainter::CompositionMode_Source);
-    int highQualityInterval = 1;
     int currentX = 0;
     int currentY = 0;
     bool keep_looping = true;
-    int pixels = 0;
     while(keep_looping == true)
     {
         QPen pen;
         pen.setStyle(Qt::SolidLine);
         pen.setColor(details.pixel(currentX,currentY));
         painter.setPen(pen);
-        //pixels++;
+
         if(renderWithStretching == true)
         {
-            //Centered for stretching
-            int tempCurrentX = currentX; int tempCurrentY = currentY;
-            tempCurrentX += highQualityInterval - 1;
-            tempCurrentY += highQualityInterval - 1;
-            painter.fillRect(currentX,currentY,highQualityInterval,highQualityInterval,details.pixel(currentX,currentY));
+            //currentX += 3;
+            currentX++;
+            if(currentX < details.width()){ painter.fillRect(currentX-1,currentY,2,3,details.pixel(currentX,currentY)); }
+            currentX++;
+            if(currentX < details.width()){ painter.fillRect(currentX,currentY,1,3,details.pixel(currentX,currentY)); }
+            currentX++;
+            if(currentX < details.width()){ painter.fillRect(currentX,currentY,2,3,details.pixel(currentX,currentY)); }
         }else if(renderWithStretching == false)
         {
             painter.fillRect(currentX,currentY,1,1,details.pixel(currentX,currentY));
         }
 
-        currentX += highQualityInterval;
+        currentX += 2;
+
 
         if(currentX > details.width() - 1)
         {
             currentX = 0;
-            currentY += highQualityInterval;
+            currentY += 3;
         }
 
         if(currentY > details.height() - 1)
@@ -73,7 +74,6 @@ QImage videoframebuffer_openglwidget::highQuality(QImage blank, QImage details, 
             keep_looping = false;
         }
     }
-    qWarning() << pixels;
     return blank;
 }
 
@@ -86,8 +86,8 @@ QImage videoframebuffer_openglwidget::medQuality(QImage blank, QImage details, b
     painter2.fillRect(0,0,1280,720,QColor(0,0,0,0));
 
     //Get med data
-    int medInterval = 3;
-    int currentX = 0;
+    int medInterval = 4;
+    int currentX = 4;
     int currentY = 0;
     bool keep_looping = true;
     while(keep_looping == true)
@@ -134,7 +134,7 @@ QImage videoframebuffer_openglwidget::lowQuality(QImage blank, QImage details, b
 {
     QPainter painter(&blank);
     int lowSquareWidthHeight = 8;
-    int currentX = 0;
+    int currentX = 8;
     int currentY = 0;
     bool keep_looping = true;
     int pixels = 0;
@@ -175,15 +175,15 @@ QImage videoframebuffer_openglwidget::temp_mergeframes(QImage lowQuality, QImage
 {
     QImage output = lowQuality;
 
-    int quality = QRandomGenerator::global()->bounded(100);
-    quality = 31;
-    if(quality > 0 && quality < 30)
+    int quality = QRandomGenerator::global()->bounded(2);
+    quality = 1;
+    if(quality == 0)
     {
         QPainter painter(&output);
         painter.drawImage(0,0,medQuality);
 
 
-    }else if(quality >= 30)
+    }else if(quality == 1)
     {
         QPainter painter(&output);
         painter.drawImage(0,0,medQuality);
@@ -192,5 +192,6 @@ QImage videoframebuffer_openglwidget::temp_mergeframes(QImage lowQuality, QImage
 
 
     return output;
-
 }
+
+
