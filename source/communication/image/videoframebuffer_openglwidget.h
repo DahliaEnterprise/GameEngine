@@ -14,7 +14,7 @@ class videoframebuffer_openglwidget : public QOpenGLWidget
 public:
     videoframebuffer_openglwidget();
     void start();
-    QImage splitFrame(QVideoFrame VideoFrame);
+    void splitFrame(QVideoFrame VideoFrame);
     QImage temp_mergeframes(QImage lowQuality, QImage medQuality, QImage highQuality);
     QImage frame();
 
@@ -26,8 +26,12 @@ private:
     QVideoFrame videoFrameWaitingToBeSplit;
     QImage bufferedFrame;
 
+    int tQuality = 0;
+
 protected:
     void paintEvent(QPaintEvent* event);
+
+
 };
 
 #endif // VIDEOFRAMEBUFFER_OPENGLWIDGET_H

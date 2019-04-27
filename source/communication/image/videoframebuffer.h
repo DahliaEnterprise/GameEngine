@@ -16,9 +16,6 @@ public:
     QImage frame();
 
 private:
-    QImage bufferedFrame;
-    QList<QImage> frames;
-
     videoframebuffer_openglwidget* openglPainter;
 
 signals:

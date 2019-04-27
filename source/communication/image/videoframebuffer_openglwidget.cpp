@@ -8,6 +8,9 @@ videoframebuffer_openglwidget::videoframebuffer_openglwidget()
 void videoframebuffer_openglwidget::start()
 {
     this->setUpdateBehavior(QOpenGLWidget::NoPartialUpdate);
+    this->setFixedSize(1280, 720);
+    this->move(0, 0);
+    this->setWindowFlag(Qt::SubWindow);//This configuration hides window from taskbar and user.
     this->show();
 
     videoFrameWaitingToBeSplit = QVideoFrame();
@@ -40,37 +43,12 @@ void videoframebuffer_openglwidget::paintEvent(QPaintEvent* event)
     }
 }
 
-QImage videoframebuffer_openglwidget::frame()
-{
-    return bufferedFrame;
-}
+QImage videoframebuffer_openglwidget::frame(){ return bufferedFrame; }
 
-QImage videoframebuffer_openglwidget::splitFrame(QVideoFrame VideoFrame)
+void videoframebuffer_openglwidget::splitFrame(QVideoFrame VideoFrame)
 {
     videoFrameWaitingToBeSplit = VideoFrame;
     this->update();
-
-    /** POSSIBLY DEPRECATED AFTER TRANSITION TO OPENGL PROCESSING **
-    VideoFrame.map(QAbstractVideoBuffer::ReadOnly);
-    QImage::Format imageFormat = QVideoFrame::imageFormatFromPixelFormat(VideoFrame.pixelFormat());
-    QImage VideoFrameAsImage = QImage(VideoFrame.bits(), VideoFrame.width(), VideoFrame.height(), VideoFrame.bytesPerLine(), imageFormat);
-
-    //Low Quality frame
-    QImage lowQualityFrameImage = QImage(1280, 720, QImage::Format_RGB32);
-    lowQualityFrameImage = this->lowQuality(lowQualityFrameImage, VideoFrameAsImage, true);
-
-    //Medium Quality Frame
-    QImage medQualityFrameImage = QImage(1280, 720, QImage::Format_ARGB32);
-    medQualityFrameImage = this->medQuality(medQualityFrameImage, VideoFrameAsImage, true);
-
-    //High Quality Frame
-    QImage highQualityFrameImage = QImage(1280, 720, QImage::Format_ARGB32);
-    highQualityFrameImage = this->highQuality(highQualityFrameImage, VideoFrameAsImage, true);
-
-    return this->temp_mergeframes(lowQualityFrameImage, medQualityFrameImage, highQualityFrameImage);
-    **/
-
-    return QImage();
 }
 
 QImage videoframebuffer_openglwidget::highQuality(QImage blank, QImage details, bool renderWithStretching)
@@ -91,24 +69,44 @@ QImage videoframebuffer_openglwidget::highQuality(QImage blank, QImage details, 
         if(renderWithStretching == true)
         {
             //currentX += 3;
+            if(currentX < details.width()){ painter.fillRect(currentX-2,currentY,2,3,details.pixel(currentX,currentY)); }
             currentX++;
             if(currentX < details.width()){ painter.fillRect(currentX-1,currentY,2,3,details.pixel(currentX,currentY)); }
             currentX++;
+            if(currentX < details.width()){ painter.fillRect(currentX,currentY,2,3,details.pixel(currentX,currentY)); }
+            currentX+= 2;//move to 5th pixel placement
+
             if(currentX < details.width()){ painter.fillRect(currentX,currentY,1,3,details.pixel(currentX,currentY)); }
             currentX++;
-            if(currentX < details.width()){ painter.fillRect(currentX,currentY,2,3,details.pixel(currentX,currentY)); }
+            if(currentX < details.width()){ painter.fillRect(currentX,currentY,1,3,details.pixel(currentX,currentY)); }
+            currentX++;
+            if(currentX < details.width()){ painter.fillRect(currentX,currentY,1,3,details.pixel(currentX,currentY)); }
+            currentX+= 2;//move to 9th pixel placement
+
         }else if(renderWithStretching == false)
         {
-            painter.fillRect(currentX,currentY,1,1,details.pixel(currentX,currentY));
+            if(currentX < details.width()){ painter.fillRect(currentX,currentY,1,1,details.pixel(currentX,currentY)); }
+            currentX++;
+            if(currentX < details.width()){ painter.fillRect(currentX,currentY,1,1,details.pixel(currentX,currentY)); }
+            currentX++;
+            if(currentX < details.width()){ painter.fillRect(currentX,currentY,1,1,details.pixel(currentX,currentY)); }
+            currentX+= 2;//move to 5th pixel placement
+
+            if(currentX < details.width()){ painter.fillRect(currentX,currentY,1,1,details.pixel(currentX,currentY)); }
+            currentX++;
+            if(currentX < details.width()){ painter.fillRect(currentX,currentY,1,1,details.pixel(currentX,currentY)); }
+            currentX++;
+            if(currentX < details.width()){ painter.fillRect(currentX,currentY,1,1,details.pixel(currentX,currentY)); }
+            currentX+= 2;//move to 9th pixel placement
         }
 
-        currentX += 2;
+
 
 
         if(currentX > details.width() - 1)
         {
             currentX = 0;
-            currentY += 3;
+            currentY += 5;
         }
 
         if(currentY > details.height() - 1)
@@ -129,7 +127,7 @@ QImage videoframebuffer_openglwidget::medQuality(QImage blank, QImage details, b
 
     //Get med data
     int medInterval = 4;
-    int currentX = 4;
+    int currentX = 0;
     int currentY = 0;
     bool keep_looping = true;
     while(keep_looping == true)
@@ -142,6 +140,7 @@ QImage videoframebuffer_openglwidget::medQuality(QImage blank, QImage details, b
         if(renderWithStretching == true)
         {
             //Centered for stretching
+            /*
             int tempCurrentX = currentX; int tempCurrentY = currentY;
             tempCurrentX -= 1;
             tempCurrentY -= 1;
@@ -149,18 +148,19 @@ QImage videoframebuffer_openglwidget::medQuality(QImage blank, QImage details, b
                               tempCurrentY,
                               medInterval,
                               medInterval,details.pixel(currentX,currentY));
+                              */
+            painter2.fillRect(currentX,currentY,3,3,details.pixel(currentX,currentY));
         }else if(renderWithStretching == false)
         {
              painter2.fillRect(currentX,currentY,1,1,details.pixel(currentX,currentY));
-            //painter2.fillRect(currentX-2,currentY-2,4,4,details.pixel(currentX,currentY));
         }
 
-        currentX += medInterval;
+        currentX += medInterval + medInterval + medInterval;//move 4, lands on 8, move 4
 
         if(currentX > details.width() - 1)
         {
             currentX = 0;
-            currentY += medInterval;
+            currentY += medInterval + medInterval + medInterval;//move 4, lands on 8, move 4
         }
 
         if(currentY > details.height() - 1)
@@ -176,10 +176,9 @@ QImage videoframebuffer_openglwidget::lowQuality(QImage blank, QImage details, b
 {
     QPainter painter(&blank);
     int lowSquareWidthHeight = 8;
-    int currentX = 8;
+    int currentX = 0;
     int currentY = 0;
     bool keep_looping = true;
-    int pixels = 0;
     while(keep_looping == true)
     {
         QPen pen;
@@ -188,13 +187,12 @@ QImage videoframebuffer_openglwidget::lowQuality(QImage blank, QImage details, b
         painter.setPen(pen);
         if(renderWithStretching == true)
         {
-            painter.fillRect(currentX,currentY,lowSquareWidthHeight,lowSquareWidthHeight,details.pixel(currentX,currentY));
+            painter.fillRect(currentX,currentY,3,3,details.pixel(currentX,currentY));
         }else if(renderWithStretching == false)
         {
             painter.fillRect(currentX,currentY,1,1,details.pixel(currentX,currentY));
 
         }
-        pixels++;
 
         currentX += lowSquareWidthHeight;
         if(currentX > details.width() - 1)
@@ -217,15 +215,20 @@ QImage videoframebuffer_openglwidget::temp_mergeframes(QImage lowQuality, QImage
 {
     QImage output = lowQuality;
 
-    int quality = QRandomGenerator::global()->bounded(2);
-    //quality = 1;
-    if(quality == 0)
+
+    int changeQualityNumber = QRandomGenerator::global()->bounded(100);
+    if(changeQualityNumber < 30)
+    {
+        tQuality = QRandomGenerator::global()->bounded(3);
+    }
+    tQuality = 1;
+    if(tQuality == 0)
     {
         QPainter painter(&output);
         painter.drawImage(0,0,medQuality);
 
 
-    }else if(quality == 1)
+    }else if(tQuality == 1)
     {
         QPainter painter(&output);
         painter.drawImage(0,0,medQuality);
