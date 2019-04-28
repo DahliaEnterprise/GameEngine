@@ -27,12 +27,6 @@ void videoframebuffer_openglwidget::paintEvent(QPaintEvent* event)
         QImage::Format imageFormat = QVideoFrame::imageFormatFromPixelFormat(VideoFrame.pixelFormat());
         QImage VideoFrameAsImage = QImage(VideoFrame.bits(), VideoFrame.width(), VideoFrame.height(), VideoFrame.bytesPerLine(), imageFormat);
 
-        int tileArea = 7;
-        int startTileX = 0;
-        int startTileY = 0;
-        int endTileX = 7;
-        int endTileY = 7;
-
         bool keep_looping = true;
         while(keep_looping == true)
         {
@@ -51,7 +45,8 @@ void videoframebuffer_openglwidget::paintEvent(QPaintEvent* event)
             currentY = 0;
             pen.setColor(VideoFrameAsImage.pixel(currentX,currentY));
             painter.setPen(pen);
-            painter.fillRect(currentX,currentY,1,1,VideoFrameAsImage.pixel(currentX,currentY));
+            //painter.fillRect(currentX,currentY,1,1,VideoFrameAsImage.pixel(currentX,currentY));
+            this->paintPixel(currentX, currentY, VideoFrameAsImage.pixel(currentX,currentY), VideoFrameAsImage.width(), VideoFrameAsImage.height(), &painter);
 
             currentX = 4;
             currentY = 4;
@@ -79,13 +74,49 @@ void videoframebuffer_openglwidget::paintEvent(QPaintEvent* event)
             painter.fillRect(currentX,currentY,1,1,VideoFrameAsImage.pixel(currentX,currentY));
 
             /** High Quality **/
-            currentX = 8;
-            currentY = 4;
+            currentX = 2;
+            currentY = 0;
             pen.setColor(VideoFrameAsImage.pixel(currentX,currentY));
             painter.setPen(pen);
             painter.fillRect(currentX,currentY,1,1,VideoFrameAsImage.pixel(currentX,currentY));
 
+            currentX = 6;
+            currentY = 0;
+            pen.setColor(VideoFrameAsImage.pixel(currentX,currentY));
+            painter.setPen(pen);
+            painter.fillRect(currentX,currentY,1,1,VideoFrameAsImage.pixel(currentX,currentY));
 
+            //next horizontal level
+            currentX = 2;
+            currentY = 2;
+            pen.setColor(VideoFrameAsImage.pixel(currentX,currentY));
+            painter.setPen(pen);
+            painter.fillRect(currentX,currentY,1,1,VideoFrameAsImage.pixel(currentX,currentY));
+
+            currentX = 4;
+            currentY = 2;
+            pen.setColor(VideoFrameAsImage.pixel(currentX,currentY));
+            painter.setPen(pen);
+            painter.fillRect(currentX,currentY,1,1,VideoFrameAsImage.pixel(currentX,currentY));
+
+            currentX = 6;
+            currentY = 2;
+            pen.setColor(VideoFrameAsImage.pixel(currentX,currentY));
+            painter.setPen(pen);
+            painter.fillRect(currentX,currentY,1,1,VideoFrameAsImage.pixel(currentX,currentY));
+
+            currentX = 8;
+            currentY = 2;
+            pen.setColor(VideoFrameAsImage.pixel(currentX,currentY));
+            painter.setPen(pen);
+            painter.fillRect(currentX,currentY,1,1,VideoFrameAsImage.pixel(currentX,currentY));
+
+            //next horizontal level
+            currentX = 6;
+            currentY = 4;
+            pen.setColor(VideoFrameAsImage.pixel(currentX,currentY));
+            painter.setPen(pen);
+            painter.fillRect(currentX,currentY,1,1,VideoFrameAsImage.pixel(currentX,currentY));
 
 /////
 
@@ -126,6 +157,11 @@ void videoframebuffer_openglwidget::splitFrame(QVideoFrame VideoFrame)
 {
     videoFrameWaitingToBeSplit = VideoFrame;
     this->update();
+}
+
+bool videoframebuffer_openglwidget::paintPixel(int x, int y, QRgb color, int imageWidth, int imageHeight, QPainter *painter)
+{
+    bool output = false; if(x < imageWidth - 1){ if(y < imageHeight - 1) { painter->fillRect(x,y,1,1,color); output = true; } } return output;
 }
 
 QImage videoframebuffer_openglwidget::highQuality(QImage blank, QImage details, bool renderWithStretching)
