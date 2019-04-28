@@ -8,13 +8,13 @@ videoframebuffer_openglwidget::videoframebuffer_openglwidget()
 void videoframebuffer_openglwidget::start()
 {
     this->setUpdateBehavior(QOpenGLWidget::NoPartialUpdate);
-    this->setFixedSize(1280, 720);
+    this->setFixedSize(1920, 1080);
     this->move(0, 0);
     this->setWindowFlag(Qt::SubWindow);//This configuration hides window from taskbar and user.
     this->show();
 
     videoFrameWaitingToBeSplit = QVideoFrame();
-    bufferedFrame = QImage(1280, 720, QImage::Format_RGB32);
+    bufferedFrame = QImage(1920, 1080, QImage::Format_RGB32);
 }
 
 void videoframebuffer_openglwidget::paintEvent(QPaintEvent* event)
@@ -27,111 +27,81 @@ void videoframebuffer_openglwidget::paintEvent(QPaintEvent* event)
         QImage::Format imageFormat = QVideoFrame::imageFormatFromPixelFormat(VideoFrame.pixelFormat());
         QImage VideoFrameAsImage = QImage(VideoFrame.bits(), VideoFrame.width(), VideoFrame.height(), VideoFrame.bytesPerLine(), imageFormat);
 
+        QImage tile = QImage(VideoFrame.width(), VideoFrame.height(), QImage::Format_RGB32);
+        QPainter painter(&tile);
+        painter.setCompositionMode(QPainter::CompositionMode_Source);
+
+        int currentX = 0; int currentY = 0;
         bool keep_looping = true;
         while(keep_looping == true)
         {
-            QImage tile = QImage(1280, 720, QImage::Format_RGB32);
-
-            QPainter painter(&tile);
-            painter.setCompositionMode(QPainter::CompositionMode_Source);
-
-            QPen pen;
-            pen.setStyle(Qt::SolidLine);
-
-            int currentX = 0; int currentY = 0;
-
             /** Low quality **/
-            currentX = 4;
-            currentY = 0;
-            pen.setColor(VideoFrameAsImage.pixel(currentX,currentY));
-            painter.setPen(pen);
-            //painter.fillRect(currentX,currentY,1,1,VideoFrameAsImage.pixel(currentX,currentY));
-            this->paintPixel(currentX, currentY, VideoFrameAsImage.pixel(currentX,currentY), VideoFrameAsImage.width(), VideoFrameAsImage.height(), &painter);
+            int pixelEX = currentX + 4;
+            int pixelEY = currentY + 0;
 
-            currentX = 4;
-            currentY = 4;
-            pen.setColor(VideoFrameAsImage.pixel(currentX,currentY));
-            painter.setPen(pen);
-            painter.fillRect(currentX,currentY,1,1,VideoFrameAsImage.pixel(currentX,currentY));
+            this->paintPixel(pixelEX, pixelEY, VideoFrameAsImage, &painter);
 
+            pixelEX = currentX + 4;
+            pixelEY = currentY + 4;
+            this->paintPixel(pixelEX, pixelEY, VideoFrameAsImage, &painter);
             /** Medium Quality **/
-            currentX = 0;
-            currentY = 0;
-            pen.setColor(VideoFrameAsImage.pixel(currentX,currentY));
-            painter.setPen(pen);
-            painter.fillRect(currentX,currentY,1,1,VideoFrameAsImage.pixel(currentX,currentY));
+            pixelEX = currentX + 8;
+            pixelEY = currentY + 0;
+            this->paintPixel(pixelEX, pixelEY, VideoFrameAsImage, &painter);
 
-            currentX = 8;
-            currentY = 0;
-            pen.setColor(VideoFrameAsImage.pixel(currentX,currentY));
-            painter.setPen(pen);
-            painter.fillRect(currentX,currentY,1,1,VideoFrameAsImage.pixel(currentX,currentY));
-
-            currentX = 8;
-            currentY = 4;
-            pen.setColor(VideoFrameAsImage.pixel(currentX,currentY));
-            painter.setPen(pen);
-            painter.fillRect(currentX,currentY,1,1,VideoFrameAsImage.pixel(currentX,currentY));
+            pixelEX = currentX + 8;
+            pixelEY = currentY + 4;
+             this->paintPixel(pixelEX, pixelEY, VideoFrameAsImage, &painter);
 
             /** High Quality **/
-            currentX = 2;
-            currentY = 0;
-            pen.setColor(VideoFrameAsImage.pixel(currentX,currentY));
-            painter.setPen(pen);
-            painter.fillRect(currentX,currentY,1,1,VideoFrameAsImage.pixel(currentX,currentY));
+            pixelEX = currentX + 2;
+            pixelEY = currentY + 0;
+            this->paintPixel(pixelEX, pixelEY, VideoFrameAsImage, &painter);
 
-            currentX = 6;
-            currentY = 0;
-            pen.setColor(VideoFrameAsImage.pixel(currentX,currentY));
-            painter.setPen(pen);
-            painter.fillRect(currentX,currentY,1,1,VideoFrameAsImage.pixel(currentX,currentY));
+            pixelEX = currentX + 6;
+            pixelEY = currentY + 0;
+            this->paintPixel(pixelEX, pixelEY, VideoFrameAsImage, &painter);
 
             //next horizontal level
-            currentX = 2;
-            currentY = 2;
-            pen.setColor(VideoFrameAsImage.pixel(currentX,currentY));
-            painter.setPen(pen);
-            painter.fillRect(currentX,currentY,1,1,VideoFrameAsImage.pixel(currentX,currentY));
+            pixelEX = currentX + 2;
+            pixelEY = currentY + 2;
+            this->paintPixel(pixelEX, pixelEY, VideoFrameAsImage, &painter);
 
-            currentX = 4;
-            currentY = 2;
-            pen.setColor(VideoFrameAsImage.pixel(currentX,currentY));
-            painter.setPen(pen);
-            painter.fillRect(currentX,currentY,1,1,VideoFrameAsImage.pixel(currentX,currentY));
+            pixelEX = currentX + 4;
+            pixelEY = currentY + 2;
+            this->paintPixel(pixelEX, pixelEY, VideoFrameAsImage, &painter);
 
-            currentX = 6;
-            currentY = 2;
-            pen.setColor(VideoFrameAsImage.pixel(currentX,currentY));
-            painter.setPen(pen);
-            painter.fillRect(currentX,currentY,1,1,VideoFrameAsImage.pixel(currentX,currentY));
+            pixelEX = currentX + 6;
+            pixelEY = currentY + 2;
+            this->paintPixel(pixelEX, pixelEY, VideoFrameAsImage, &painter);
 
-            currentX = 8;
-            currentY = 2;
-            pen.setColor(VideoFrameAsImage.pixel(currentX,currentY));
-            painter.setPen(pen);
-            painter.fillRect(currentX,currentY,1,1,VideoFrameAsImage.pixel(currentX,currentY));
+            pixelEX = currentX + 8;
+            pixelEY = currentY + 2;
+            this->paintPixel(pixelEX, pixelEY, VideoFrameAsImage, &painter);
 
             //next horizontal level
-            currentX = 6;
-            currentY = 4;
-            pen.setColor(VideoFrameAsImage.pixel(currentX,currentY));
-            painter.setPen(pen);
-            painter.fillRect(currentX,currentY,1,1,VideoFrameAsImage.pixel(currentX,currentY));
+            pixelEX = currentX + 6;
+            pixelEY = currentY + 4;
+            this->paintPixel(pixelEX, pixelEY, VideoFrameAsImage, &painter);
 
-/////
+            /** Next tile **/
+            if(currentX < VideoFrameAsImage.width() - 1)
+            {
+                currentX += 8;
+            }else
+            {
+                currentX = 0;
+                currentY += 6;
+            }
 
-            currentX = 0;
-
-            painter.end();
-
-
-            bufferedFrame = tile;
-
-
-            keep_looping = false;
+            if(currentY >= VideoFrameAsImage.height() - 1)
+            {
+              keep_looping = false;
+            }
         }
 
-
+        bufferedFrame = tile;
+        painter.end();
 
         /** DEPRECATED --- TRANSITIONING TOWARDS TILES
         //Low Quality frame
@@ -159,9 +129,18 @@ void videoframebuffer_openglwidget::splitFrame(QVideoFrame VideoFrame)
     this->update();
 }
 
-bool videoframebuffer_openglwidget::paintPixel(int x, int y, QRgb color, int imageWidth, int imageHeight, QPainter *painter)
+bool videoframebuffer_openglwidget::paintPixel(int x, int y, QImage sourceImage, QPainter *painter)
 {
-    bool output = false; if(x < imageWidth - 1){ if(y < imageHeight - 1) { painter->fillRect(x,y,1,1,color); output = true; } } return output;
+    bool output = false;
+    if(x < sourceImage.width() - 1)
+    {
+        if(y < sourceImage.height() - 1)
+        {
+            painter->fillRect(x, y, 2, 2, sourceImage.pixel(x,y));
+            output = true;
+        }
+    }
+    return output;
 }
 
 QImage videoframebuffer_openglwidget::highQuality(QImage blank, QImage details, bool renderWithStretching)
