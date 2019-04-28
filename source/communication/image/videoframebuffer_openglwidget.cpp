@@ -27,6 +27,82 @@ void videoframebuffer_openglwidget::paintEvent(QPaintEvent* event)
         QImage::Format imageFormat = QVideoFrame::imageFormatFromPixelFormat(VideoFrame.pixelFormat());
         QImage VideoFrameAsImage = QImage(VideoFrame.bits(), VideoFrame.width(), VideoFrame.height(), VideoFrame.bytesPerLine(), imageFormat);
 
+        int tileArea = 7;
+        int startTileX = 0;
+        int startTileY = 0;
+        int endTileX = 7;
+        int endTileY = 7;
+
+        bool keep_looping = true;
+        while(keep_looping == true)
+        {
+            QImage tile = QImage(1280, 720, QImage::Format_RGB32);
+
+            QPainter painter(&tile);
+            painter.setCompositionMode(QPainter::CompositionMode_Source);
+
+            QPen pen;
+            pen.setStyle(Qt::SolidLine);
+
+            int currentX = 0; int currentY = 0;
+
+            /** Low quality **/
+            currentX = 4;
+            currentY = 0;
+            pen.setColor(VideoFrameAsImage.pixel(currentX,currentY));
+            painter.setPen(pen);
+            painter.fillRect(currentX,currentY,1,1,VideoFrameAsImage.pixel(currentX,currentY));
+
+            currentX = 4;
+            currentY = 4;
+            pen.setColor(VideoFrameAsImage.pixel(currentX,currentY));
+            painter.setPen(pen);
+            painter.fillRect(currentX,currentY,1,1,VideoFrameAsImage.pixel(currentX,currentY));
+
+            /** Medium Quality **/
+            currentX = 0;
+            currentY = 0;
+            pen.setColor(VideoFrameAsImage.pixel(currentX,currentY));
+            painter.setPen(pen);
+            painter.fillRect(currentX,currentY,1,1,VideoFrameAsImage.pixel(currentX,currentY));
+
+            currentX = 8;
+            currentY = 0;
+            pen.setColor(VideoFrameAsImage.pixel(currentX,currentY));
+            painter.setPen(pen);
+            painter.fillRect(currentX,currentY,1,1,VideoFrameAsImage.pixel(currentX,currentY));
+
+            currentX = 8;
+            currentY = 4;
+            pen.setColor(VideoFrameAsImage.pixel(currentX,currentY));
+            painter.setPen(pen);
+            painter.fillRect(currentX,currentY,1,1,VideoFrameAsImage.pixel(currentX,currentY));
+
+            /** High Quality **/
+            currentX = 8;
+            currentY = 4;
+            pen.setColor(VideoFrameAsImage.pixel(currentX,currentY));
+            painter.setPen(pen);
+            painter.fillRect(currentX,currentY,1,1,VideoFrameAsImage.pixel(currentX,currentY));
+
+
+
+/////
+
+            currentX = 0;
+
+            painter.end();
+
+
+            bufferedFrame = tile;
+
+
+            keep_looping = false;
+        }
+
+
+
+        /** DEPRECATED --- TRANSITIONING TOWARDS TILES
         //Low Quality frame
         QImage lowQualityFrameImage = QImage(1280, 720, QImage::Format_RGB32);
         lowQualityFrameImage = this->lowQuality(lowQualityFrameImage, VideoFrameAsImage, true);
@@ -40,6 +116,7 @@ void videoframebuffer_openglwidget::paintEvent(QPaintEvent* event)
         highQualityFrameImage = this->highQuality(highQualityFrameImage, VideoFrameAsImage, true);
 
         bufferedFrame = this->temp_mergeframes(lowQualityFrameImage, medQualityFrameImage, highQualityFrameImage);
+        **/
     }
 }
 
@@ -69,18 +146,18 @@ QImage videoframebuffer_openglwidget::highQuality(QImage blank, QImage details, 
         if(renderWithStretching == true)
         {
             //currentX += 3;
-            if(currentX < details.width()){ painter.fillRect(currentX+3,currentY+4,2,5,details.pixel(currentX,currentY)); }
+            if(currentX < details.width()){ painter.fillRect(currentX+1,currentY,1,1,details.pixel(currentX,currentY)); }
             currentX++;
-            if(currentX < details.width()){ painter.fillRect(currentX+4,currentY+4,1,5,details.pixel(currentX,currentY)); }
+            if(currentX < details.width()){ painter.fillRect(currentX+1,currentY,1,1,details.pixel(currentX,currentY)); }
             currentX++;
-            if(currentX < details.width()){ painter.fillRect(currentX+4,currentY+4,2,5,details.pixel(currentX,currentY)); }
+            if(currentX < details.width()){ painter.fillRect(currentX+1,currentY,1,1,details.pixel(currentX,currentY)); }
             currentX+= 2;//move to 5th pixel placement
 
-            if(currentX < details.width()){ painter.fillRect(currentX+4,currentY+4,1,5,details.pixel(currentX,currentY)); }
+            if(currentX < details.width()){ painter.fillRect(currentX+1,currentY,1,1,details.pixel(currentX,currentY)); }
             currentX++;
-            if(currentX < details.width()){ painter.fillRect(currentX+4,currentY+4,1,5,details.pixel(currentX,currentY)); }
+            if(currentX < details.width()){ painter.fillRect(currentX+1,currentY,1,1,details.pixel(currentX,currentY)); }
             currentX++;
-            if(currentX < details.width()){ painter.fillRect(currentX+4,currentY+4,1,5,details.pixel(currentX,currentY)); }
+            if(currentX < details.width()){ painter.fillRect(currentX+1,currentY,1,1,details.pixel(currentX,currentY)); }
             currentX+= 2;//move to 9th pixel placement
 
         }else if(renderWithStretching == false)
@@ -136,7 +213,7 @@ QImage videoframebuffer_openglwidget::medQuality(QImage blank, QImage details, b
 
         if(renderWithStretching == true)
         {
-            painter2.fillRect(currentX+4,currentY+4,3,3,details.pixel(currentX,currentY));
+            painter2.fillRect(currentX,currentY,1,1,details.pixel(currentX,currentY));
         }else if(renderWithStretching == false)
         {
              painter2.fillRect(currentX,currentY,1,1,details.pixel(currentX,currentY));
@@ -173,7 +250,7 @@ QImage videoframebuffer_openglwidget::lowQuality(QImage blank, QImage details, b
         painter.setPen(pen);
         if(renderWithStretching == true)
         {
-            painter.fillRect(currentX+1,currentY+1,8,8,details.pixel(currentX,currentY));
+            painter.fillRect(currentX,currentY,1,1,details.pixel(currentX,currentY));
         }else if(renderWithStretching == false)
         {
             painter.fillRect(currentX,currentY,1,1,details.pixel(currentX,currentY));
@@ -206,7 +283,7 @@ QImage videoframebuffer_openglwidget::temp_mergeframes(QImage lowQuality, QImage
     {
         tQuality = QRandomGenerator::global()->bounded(2);
     }
-    //tQuality = 3;
+    tQuality = 1;
     if(tQuality == 0)
     {
         QPainter painter(&output);
@@ -215,10 +292,12 @@ QImage videoframebuffer_openglwidget::temp_mergeframes(QImage lowQuality, QImage
     }else if(tQuality == 1)
     {
         QPainter painter(&output);
-        painter.setOpacity(0.90);
-        painter.drawImage(0,0,medQuality);
-        painter.setOpacity(0.90);
+        painter.setOpacity(0.9);
         painter.drawImage(0,0,highQuality);
+        painter.setOpacity(0.5);
+        painter.drawImage(0,0,medQuality);
+        painter.setOpacity(0.5);
+        painter.drawImage(0,0,lowQuality);
     }
 
     return output;
