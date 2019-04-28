@@ -39,50 +39,77 @@ void videoframebuffer_openglwidget::paintEvent(QPaintEvent* event)
             int pixelEX = currentX + 4;
             int pixelEY = currentY + 0;
 
-            this->paintPixel(pixelEX, pixelEY, VideoFrameAsImage, &painter);
+            this->paintPixel(pixelEX, pixelEY, 2, 2, VideoFrameAsImage, &painter);
 
             pixelEX = currentX + 4;
             pixelEY = currentY + 4;
-            this->paintPixel(pixelEX, pixelEY, VideoFrameAsImage, &painter);
+            this->paintPixel(pixelEX, pixelEY, 2, 2, VideoFrameAsImage, &painter);
+
             /** Medium Quality **/
             pixelEX = currentX + 8;
             pixelEY = currentY + 0;
-            this->paintPixel(pixelEX, pixelEY, VideoFrameAsImage, &painter);
+            this->paintPixel(pixelEX, pixelEY, 2, 2, VideoFrameAsImage, &painter);
 
             pixelEX = currentX + 8;
             pixelEY = currentY + 4;
-             this->paintPixel(pixelEX, pixelEY, VideoFrameAsImage, &painter);
+            this->paintPixel(pixelEX, pixelEY, 2, 2, VideoFrameAsImage, &painter);
 
             /** High Quality **/
             pixelEX = currentX + 2;
             pixelEY = currentY + 0;
-            this->paintPixel(pixelEX, pixelEY, VideoFrameAsImage, &painter);
+            this->paintPixel(pixelEX, pixelEY, 2, 2, VideoFrameAsImage, &painter);
 
             pixelEX = currentX + 6;
             pixelEY = currentY + 0;
-            this->paintPixel(pixelEX, pixelEY, VideoFrameAsImage, &painter);
+            this->paintPixel(pixelEX, pixelEY, 2, 2, VideoFrameAsImage, &painter);
 
             //next horizontal level
             pixelEX = currentX + 2;
             pixelEY = currentY + 2;
-            this->paintPixel(pixelEX, pixelEY, VideoFrameAsImage, &painter);
+            this->paintPixel(pixelEX, pixelEY, 2, 2, VideoFrameAsImage, &painter);
 
             pixelEX = currentX + 4;
             pixelEY = currentY + 2;
-            this->paintPixel(pixelEX, pixelEY, VideoFrameAsImage, &painter);
+            this->paintPixel(pixelEX, pixelEY, 2, 2, VideoFrameAsImage, &painter);
 
             pixelEX = currentX + 6;
             pixelEY = currentY + 2;
-            this->paintPixel(pixelEX, pixelEY, VideoFrameAsImage, &painter);
+            this->paintPixel(pixelEX, pixelEY, 2, 2, VideoFrameAsImage, &painter);
 
             pixelEX = currentX + 8;
             pixelEY = currentY + 2;
-            this->paintPixel(pixelEX, pixelEY, VideoFrameAsImage, &painter);
+            this->paintPixel(pixelEX, pixelEY, 2, 2, VideoFrameAsImage, &painter);
 
             //next horizontal level
             pixelEX = currentX + 6;
             pixelEY = currentY + 4;
-            this->paintPixel(pixelEX, pixelEY, VideoFrameAsImage, &painter);
+            this->paintPixel(pixelEX, pixelEY, 2, 2, VideoFrameAsImage, &painter);
+
+            /** Sharp Quality **/
+            pixelEX = currentX + 2;
+            pixelEY = currentY + 4;
+            this->paintPixel(pixelEX, pixelEY, 1, 1, VideoFrameAsImage, &painter);
+
+            pixelEX = currentX + 3;
+            pixelEY = currentY + 4;
+            this->paintPixel(pixelEX, pixelEY, 1, 1, VideoFrameAsImage, &painter);
+
+            pixelEX = currentX + 3;
+            pixelEY = currentY + 5;
+            this->paintPixel(pixelEX, pixelEY, 1, 1, VideoFrameAsImage, &painter);
+
+            pixelEX = currentX + 2;
+            pixelEY = currentY + 5;
+            this->paintPixel(pixelEX, pixelEY, 1, 1, VideoFrameAsImage, &painter);
+
+            pixelEX = currentX + 4;
+            pixelEY = currentY + 5;
+            this->paintPixel(pixelEX, pixelEY, 1, 1, VideoFrameAsImage, &painter);
+
+            pixelEX = currentX + 3;
+            pixelEY = currentY + 6;
+            this->paintPixel(pixelEX, pixelEY, 1, 1, VideoFrameAsImage, &painter);
+
 
             /** Next tile **/
             if(currentX < VideoFrameAsImage.width() - 1)
@@ -102,22 +129,6 @@ void videoframebuffer_openglwidget::paintEvent(QPaintEvent* event)
 
         bufferedFrame = tile;
         painter.end();
-
-        /** DEPRECATED --- TRANSITIONING TOWARDS TILES
-        //Low Quality frame
-        QImage lowQualityFrameImage = QImage(1280, 720, QImage::Format_RGB32);
-        lowQualityFrameImage = this->lowQuality(lowQualityFrameImage, VideoFrameAsImage, true);
-
-        //Medium Quality Frame
-        QImage medQualityFrameImage = QImage(1280, 720, QImage::Format_ARGB32);
-        medQualityFrameImage = this->medQuality(medQualityFrameImage, VideoFrameAsImage, true);
-
-        //High Quality Frame
-        QImage highQualityFrameImage = QImage(1280, 720, QImage::Format_ARGB32);
-        highQualityFrameImage = this->highQuality(highQualityFrameImage, VideoFrameAsImage, true);
-
-        bufferedFrame = this->temp_mergeframes(lowQualityFrameImage, medQualityFrameImage, highQualityFrameImage);
-        **/
     }
 }
 
@@ -129,14 +140,14 @@ void videoframebuffer_openglwidget::splitFrame(QVideoFrame VideoFrame)
     this->update();
 }
 
-bool videoframebuffer_openglwidget::paintPixel(int x, int y, QImage sourceImage, QPainter *painter)
+bool videoframebuffer_openglwidget::paintPixel(int x, int y, int stretchX, int stretchY, QImage sourceImage, QPainter *painter)
 {
     bool output = false;
     if(x < sourceImage.width() - 1)
     {
         if(y < sourceImage.height() - 1)
         {
-            painter->fillRect(x, y, 2, 2, sourceImage.pixel(x,y));
+            painter->fillRect(x, y, stretchX, stretchY, sourceImage.pixel(x,y));
             output = true;
         }
     }
