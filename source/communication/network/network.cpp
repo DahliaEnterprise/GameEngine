@@ -7,8 +7,9 @@ network::network(QObject *parent) : QObject(parent)
 
 void network::start()
 {
-    server->listen(QHostAddress::Any, 6060);
-    QObject::connect(server, SIGNAL(newConnection()), this, SLOT(incomingNewConnection()));
+    quint16 recvPort = 8080;
 
-    //socket->connectToHost()
+    socket = new QTcpSocket();
+    socket->connectToHost(QString("127.0.0.1"), recvPort, QIODevice::ReadWrite);
 }
+

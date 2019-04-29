@@ -17,8 +17,10 @@ public:
 
 private:
     videoframebuffer_openglwidget* openglPainter;
+    qint64 timestampLastFrame;
 
 signals:
+    void splitFrame(QImage);
 
 public slots:
     void appendFrame(QVideoFrame frame);

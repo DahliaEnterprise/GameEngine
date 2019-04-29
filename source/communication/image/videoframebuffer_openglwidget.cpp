@@ -33,19 +33,24 @@ void videoframebuffer_openglwidget::paintEvent(QPaintEvent* event)
         painter.setOpacity(1);
         painter.setCompositionMode(QPainter::CompositionMode_Source);
 
+        lowQualityTiles.clear();
+
         int currentX = 0; int currentY = 0;
         bool keep_looping = true;
         while(keep_looping == true)
         {
+            QVector<QRgb> lowQualityTile_pixelColorList;
+
             /** Low quality **/
             int pixelEX = currentX + 4;
             int pixelEY = currentY + 0;
-
             this->paintPixel(pixelEX, pixelEY, 2, 2, VideoFrameAsImage, &painter);
+            if(this->paintLowQualityPixel(pixelEX, pixelEY, 2, 2, VideoFrameAsImage, &painter) == true){ lowQualityTile_pixelColorList.append(VideoFrameAsImage.pixel(pixelEX,pixelEY)); }
 
             pixelEX = currentX + 4;
             pixelEY = currentY + 4;
             this->paintPixel(pixelEX, pixelEY, 2, 2, VideoFrameAsImage, &painter);
+            if(this->paintLowQualityPixel(pixelEX, pixelEY, 2, 2, VideoFrameAsImage, &painter) == true){ lowQualityTile_pixelColorList.append(VideoFrameAsImage.pixel(pixelEX,pixelEY)); }
 
             /** Medium Quality **/
             pixelEX = currentX + 8;
@@ -94,7 +99,7 @@ void videoframebuffer_openglwidget::paintEvent(QPaintEvent* event)
 
             pixelEX = currentX + 3;
             pixelEY = currentY + 4;
-            this->paintPixel(pixelEX, pixelEY, 1, 1, VideoFrameAsImage, &painter);
+            //this->paintPixel(pixelEX, pixelEY, 1, 1, VideoFrameAsImage, &painter);
 
             pixelEX = currentX + 3;
             pixelEY = currentY + 5;
@@ -102,15 +107,15 @@ void videoframebuffer_openglwidget::paintEvent(QPaintEvent* event)
 
             pixelEX = currentX + 2;
             pixelEY = currentY + 5;
-            this->paintPixel(pixelEX, pixelEY, 1, 1, VideoFrameAsImage, &painter);
+            //this->paintPixel(pixelEX, pixelEY, 1, 1, VideoFrameAsImage, &painter);
 
             pixelEX = currentX + 4;
             pixelEY = currentY + 5;
-            this->paintPixel(pixelEX, pixelEY, 1, 1, VideoFrameAsImage, &painter);
+            //this->paintPixel(pixelEX, pixelEY, 1, 1, VideoFrameAsImage, &painter);
 
             pixelEX = currentX + 3;
             pixelEY = currentY + 6;
-            this->paintPixel(pixelEX, pixelEY, 1, 1, VideoFrameAsImage, &painter);
+            //this->paintPixel(pixelEX, pixelEY, 1, 1, VideoFrameAsImage, &painter);
 
             /** Ultra Quality **/
             pixelEX = currentX + 0;
@@ -209,6 +214,20 @@ bool videoframebuffer_openglwidget::paintPixel(int x, int y, int stretchX, int s
         if(y < sourceImage.height() - 1)
         {
             painter->fillRect(x, y, 1, 1, sourceImage.pixel(x,y));
+            output = true;
+        }
+    }
+    return output;
+}
+
+bool videoframebuffer_openglwidget::paintLowQualityPixel(int x, int y, int stretchX, int stretchY, QImage sourceImage, QPainter *painter)
+{
+    bool output = false;
+    if(x < sourceImage.width() - 1)
+    {
+        if(y < sourceImage.height() - 1)
+        {
+            //painter->fillRect(x, y, 1, 1, sourceImage.pixel(x,y));
             output = true;
         }
     }

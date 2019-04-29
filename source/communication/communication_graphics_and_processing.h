@@ -50,6 +50,7 @@ public slots:
 
 private slots:
     void videoFrameImage(QVideoFrame image);
+    void updateBufferedFrame(QImage image);
 };
 
 #endif // COMMUNICATION_GRAPHICS_AND_PROCESSING_H

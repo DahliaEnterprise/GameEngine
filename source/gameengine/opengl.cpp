@@ -22,12 +22,12 @@ void opengl::start(keyboardMouseInput* setKeyboardMouseInput)
     //muted:this->setAttribute(Qt::WA_TranslucentBackground, true);
     //muted:this->setAttribute(Qt::WA_AlwaysStackOnTop);
 
-    this->setUpdateBehavior(QOpenGLWidget::NoPartialUpdate);
+    this->setUpdateBehavior(QOpenGLWidget::PartialUpdate);
 
     QSurfaceFormat surface = this->format();
     surface.setRenderableType(QSurfaceFormat::OpenGL);
-    surface.setSamples(2);
-    surface.setSwapBehavior(QSurfaceFormat::SingleBuffer);
+    //surface.setSamples(8);
+    surface.setSwapBehavior(QSurfaceFormat::TripleBuffer);
     this->setFormat(surface);
 }
 
@@ -38,7 +38,7 @@ void opengl::paintEvent(QPaintEvent* event)
     //Initalize and Setup Painter
     QPainter painter;
     painter.begin(this);
-    painter.setRenderHint(QPainter::SmoothPixmapTransform, true);
+    painter.setRenderHint(QPainter::Antialiasing, true);
     painter.setCompositionMode(QPainter::CompositionMode_Source);
 
     //Render

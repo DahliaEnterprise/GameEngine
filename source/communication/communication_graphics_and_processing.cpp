@@ -14,6 +14,7 @@ void communication_graphics_and_processing::start()
     videoFrameBuffer->moveToThread(Thread_videoFrameBuffer);
     Thread_videoFrameBuffer->start();
     QObject::connect(this, SIGNAL(videoFrameBuffer_Frame(QVideoFrame)), videoFrameBuffer, SLOT(appendFrame(QVideoFrame)));
+    QObject::connect(videoFrameBuffer, SIGNAL(splitFrame(QImage)), this, SLOT(updateBufferedFrame(QImage)));
     currentFrame = QImage(1280,720,QImage::Format_ARGB32);
     bufferedFrame = QImage(1280,720,QImage::Format_ARGB32);
 
@@ -24,6 +25,7 @@ void communication_graphics_and_processing::start()
 
     //Initailize networking
     net = new network();
+    net->start();
 
     //Initialize webcam stream
     camera = new QCamera();
@@ -43,29 +45,10 @@ void communication_graphics_and_processing::start()
     camera->start();
 }
 
-/*
-void communication_graphics_and_processing::processVideoFrame(QVideoFrame videoFrame)
-{
-    splitQualityByThree->appendVideoFrame(videoFrame);
-    //deprecated:clientCamera_framesBuffered.append(videoFrame);
-    //QImage::Format imageFormat = QVideoFrame::imageFormatFromPixelFormat(videoFrame.pixelFormat());
-    //videoFrame.map(QAbstractVideoBuffer::ReadOnly);//required to be called before calling ".bits()"
-    //QImage image(videoFrame.bits(), videoFrame.width(), videoFrame.height(), videoFrame.bytesPerLine(), imageFormat);
-    //videostream_go->start(image);
-
-    bufferAwareFrame* bufferawareFrame = new bufferAwareFrame();
-    bufferawareFrame->start(image);
-    bufferAwareframes_list.append(bufferawareFrame);
-    //bufferAwareframes_list.removeFirst();
-
-}
-*/
-
-
 QList<gameobject*> communication_graphics_and_processing::frame()
 {
     goList.clear();
-    videostream_go->start(videoFrameBuffer->frame());
+    videostream_go->start(bufferedFrame /*videoFrameBuffer->frame()*/);
     videostream_go->updateImageSpecifications(0,0,1280,720,1);
     goList.append(videostream_go);
 
@@ -76,6 +59,11 @@ void communication_graphics_and_processing::videoFrameImage(QVideoFrame VideoFra
 {
     //VideoFrameAsImage(Client Camera) To VideoFrameBuffer(Split into three qualities)
     emit videoFrameBuffer_Frame(VideoFrameAsImage);
+}
+
+void communication_graphics_and_processing::updateBufferedFrame(QImage image)
+{
+    bufferedFrame = image;
 }
 
 

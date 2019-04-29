@@ -20,9 +20,12 @@ public:
 
 private:
     bool paintPixel(int x, int y, int stretchX, int stretchY, QImage sourceImage, QPainter* painter);
+    bool paintLowQualityPixel(int x, int y, int stretchX, int stretchY, QImage sourceImage, QPainter *painter);
 
     QVideoFrame videoFrameWaitingToBeSplit;
     QImage bufferedFrame;
+
+    QVector<QVector<QRgb>> lowQualityTiles;
 
     int tQuality = 0;
 

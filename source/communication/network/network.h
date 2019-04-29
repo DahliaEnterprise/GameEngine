@@ -12,12 +12,13 @@ public:
     void start();
 
 private:
-    QTcpServer* server;
     QTcpSocket* socket;
 
 signals:
 
 public slots:
+
+private slots:
 };
 
 #endif // NETWORK_H
