@@ -15,13 +15,12 @@ void VideoFrameBuffer::start()
 void VideoFrameBuffer::appendFrame(QVideoFrame VideoFrame)
 {
     qint64 msSinceLastFrame = QDateTime::currentMSecsSinceEpoch() - timestampLastFrame;
-    if(msSinceLastFrame > 1)
-    {
+    //if(msSinceLastFrame > 1)
+    //{
         openglPainter->splitFrame(VideoFrame);
         emit splitFrame(openglPainter->frame());
         timestampLastFrame = QDateTime::currentMSecsSinceEpoch();
-    }
-
+    //}
 }
 
 QImage VideoFrameBuffer::frame(){ return openglPainter->frame(); }

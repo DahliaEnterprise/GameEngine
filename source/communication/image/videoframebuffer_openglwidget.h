@@ -3,12 +3,14 @@
 
 #include <QObject>
 #include <QOpenGLWidget>
+#include <QOpenGLFunctions>
 #include <QVideoFrame>
 #include <QPainter>
 #include <QDebug>
 #include <QImage>
 #include <QRandomGenerator>
 #include <QPaintEvent>
+#include <QDateTime>
 class videoframebuffer_openglwidget : public QOpenGLWidget
 {
 public:
@@ -28,6 +30,9 @@ private:
     QVector<QVector<QRgb>> lowQualityTiles;
 
     int tQuality = 0;
+
+    int frames = 0;
+    qint64 timestamp_sincelastsecond;
 
 protected:
     void paintEvent(QPaintEvent* event);

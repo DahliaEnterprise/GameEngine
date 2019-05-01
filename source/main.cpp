@@ -4,12 +4,17 @@
 #include <QThread>
 #include "head.h"
 
+#include "OpenGLEngine/oglemastercontroller.h"
+
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
     head h;
     h.start();
+
+    ogleMasterController* ogle = new ogleMasterController();
+    ogle->start();
 
     return a.exec();
 }

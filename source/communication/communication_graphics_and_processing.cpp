@@ -29,10 +29,12 @@ void communication_graphics_and_processing::start()
 
     //Initialize webcam stream
     camera = new QCamera();
+
     cameraViewfinder = new QCameraViewfinder();
     camera->setViewfinder(cameraViewfinder);
     QCameraViewfinderSettings viewFinderSettings = camera->viewfinderSettings();
     viewFinderSettings.setResolution(1280,720);
+
     camera->setViewfinderSettings(viewFinderSettings);
     camera->setCaptureMode(QCamera::CaptureVideo);
 
@@ -63,7 +65,8 @@ void communication_graphics_and_processing::videoFrameImage(QVideoFrame VideoFra
 
 void communication_graphics_and_processing::updateBufferedFrame(QImage image)
 {
-    bufferedFrame = image;
+    QImage image2 = image.scaled(1280,720, Qt::IgnoreAspectRatio, Qt::FastTransformation);
+    bufferedFrame = image2;
 }
 
 

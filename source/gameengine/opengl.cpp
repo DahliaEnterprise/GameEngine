@@ -25,7 +25,8 @@ void opengl::start(keyboardMouseInput* setKeyboardMouseInput)
     this->setUpdateBehavior(QOpenGLWidget::PartialUpdate);
 
     QSurfaceFormat surface = this->format();
-    surface.setRenderableType(QSurfaceFormat::OpenGL);
+    surface.setMajorVersion(3);
+    surface.setRenderableType(QSurfaceFormat::OpenGLES);
     //surface.setSamples(8);
     surface.setSwapBehavior(QSurfaceFormat::TripleBuffer);
     this->setFormat(surface);
@@ -38,7 +39,7 @@ void opengl::paintEvent(QPaintEvent* event)
     //Initalize and Setup Painter
     QPainter painter;
     painter.begin(this);
-    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.setRenderHint(QPainter::Antialiasing, false);
     painter.setCompositionMode(QPainter::CompositionMode_Source);
 
     //Render

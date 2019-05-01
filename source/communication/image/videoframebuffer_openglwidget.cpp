@@ -8,14 +8,15 @@ videoframebuffer_openglwidget::videoframebuffer_openglwidget()
 void videoframebuffer_openglwidget::start()
 {
     this->setWindowTitle(QString("GPU ACCESS"));
-    this->setUpdateBehavior(QOpenGLWidget::NoPartialUpdate);
-    this->setFixedSize(1920, 1080);
+    this->setUpdateBehavior(QOpenGLWidget::PartialUpdate);
+    this->setFixedSize(1280, 720);
     this->move(0, 0);
     this->setWindowFlag(Qt::SubWindow);//This configuration hides window from taskbar and user.
     this->show();
 
     videoFrameWaitingToBeSplit = QVideoFrame();
-    bufferedFrame = QImage(1920, 1080, QImage::Format_RGB32);
+    bufferedFrame = QImage(1280, 720, QImage::Format_ARGB32_Premultiplied);
+    timestamp_sincelastsecond = QDateTime::currentMSecsSinceEpoch();
 }
 
 void videoframebuffer_openglwidget::paintEvent(QPaintEvent* event)
@@ -28,7 +29,7 @@ void videoframebuffer_openglwidget::paintEvent(QPaintEvent* event)
         QImage::Format imageFormat = QVideoFrame::imageFormatFromPixelFormat(VideoFrame.pixelFormat());
         QImage VideoFrameAsImage = QImage(VideoFrame.bits(), VideoFrame.width(), VideoFrame.height(), VideoFrame.bytesPerLine(), imageFormat);
 
-        QImage tile = QImage(VideoFrame.width(), VideoFrame.height(), QImage::Format_RGB32);
+        QImage tile = QImage(VideoFrame.width(), VideoFrame.height(), QImage::Format_ARGB32_Premultiplied);
         QPainter painter(&tile);
         painter.setOpacity(1);
         painter.setCompositionMode(QPainter::CompositionMode_Source);
@@ -196,6 +197,15 @@ void videoframebuffer_openglwidget::paintEvent(QPaintEvent* event)
         bufferedFrame = tile;
         painter.end();
     }
+
+    frames++;
+    qint64 currentTimestamp = QDateTime::currentMSecsSinceEpoch();
+    if((currentTimestamp - timestamp_sincelastsecond) >= 1000)
+    {
+        qWarning() << frames << "frames per second.";
+        frames = 0;
+        timestamp_sincelastsecond = currentTimestamp;
+    }
 }
 
 QImage videoframebuffer_openglwidget::frame(){ return bufferedFrame; }
@@ -213,7 +223,7 @@ bool videoframebuffer_openglwidget::paintPixel(int x, int y, int stretchX, int s
     {
         if(y < sourceImage.height() - 1)
         {
-            painter->fillRect(x, y, 1, 1, sourceImage.pixel(x,y));
+            painter->fillRect(x, y, 2, 2, sourceImage.pixel(x,y));
             output = true;
         }
     }
@@ -221,7 +231,7 @@ bool videoframebuffer_openglwidget::paintPixel(int x, int y, int stretchX, int s
 }
 
 bool videoframebuffer_openglwidget::paintLowQualityPixel(int x, int y, int stretchX, int stretchY, QImage sourceImage, QPainter *painter)
-{
+{//networking and painting -- todo finish
     bool output = false;
     if(x < sourceImage.width() - 1)
     {

@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QTcpSocket>
 #include <QTcpServer>
+#include <QDebug>
 class network : public QObject
 {
     Q_OBJECT
@@ -12,6 +13,7 @@ public:
     void start();
 
 private:
+    QTcpServer* server;
     QTcpSocket* socket;
 
 signals:
