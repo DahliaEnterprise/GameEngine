@@ -4,6 +4,7 @@ OGLEWindow::OGLEWindow(QWindow *parent) : QWindow(parent)
 {
     ogleContext = nullptr; oglePaintDevice = nullptr;
     this->setSurfaceType(QWindow::OpenGLSurface);
+
 }
 
 OGLEWindow::~OGLEWindow(){}
@@ -31,6 +32,15 @@ void OGLEWindow::renderNow()
 {
     if(this->isExposed() == true)
     {
+        if(framesUpdateKeepAlive == nullptr)
+        {
+            framesUpdateKeepAlive = new QTimer();
+            QObject::connect(framesUpdateKeepAlive, SIGNAL(timeout()), this, SLOT(updateFrame()));
+            framesUpdateKeepAlive->start(5);
+        }
+        if(timestamp == 0){ timestamp = QDateTime::currentMSecsSinceEpoch(); }
+
+
         //(Initialize if nessecary and) Make context current
         bool initOGLF = false;
         if(ogleContext == nullptr){ ogleContext = new QOpenGLContext(this); ogleContext->setFormat(requestedFormat()); ogleContext->create(); initOGLF = true; }
@@ -49,7 +59,9 @@ void OGLEWindow::renderNow()
         //Draw operations
         QPainter painter(oglePaintDevice);
         QPen pen;
-        pen.setColor(QColor(100,100,0,100));
+        QRandomGenerator random;
+
+        pen.setColor(QColor(QString::number(random.bounded(255)).toInt(),100,0,100));
         pen.setWidth(1);
         painter.setPen(pen);
         int x = 0;
@@ -62,7 +74,19 @@ void OGLEWindow::renderNow()
         }
 
         render(&painter);
-
+        frames++;
+        qint64 sinceLastFrame = QDateTime::currentMSecsSinceEpoch() - timestamp;
+        if(sinceLastFrame > 1000)
+        {
+            qWarning() << frames;
+            timestamp = QDateTime::currentMSecsSinceEpoch();
+            frames = 0;
+        }
         ogleContext->swapBuffers(this);
     }
+}
+
+void OGLEWindow::updateFrame()
+{
+    requestUpdate();
 }
