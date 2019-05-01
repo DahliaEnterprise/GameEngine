@@ -49,7 +49,9 @@ SOURCES += \
     communication/image/videoframebuffer_openglwidget.cpp \
     OpenGLEngine/oglemastercontroller.cpp \
     OpenGLEngine/oglewindow.cpp \
-    Communications/communicationscontroller.cpp
+    Communications/communicationscontroller.cpp \
+    Communications/qcameracontroller.cpp \
+    Communications/videoframeinstruction.cpp
 
 HEADERS += \
     gameengine.h \
@@ -75,7 +77,9 @@ HEADERS += \
     communication/image/videoframebuffer_openglwidget.h \
     OpenGLEngine/oglemastercontroller.h \
     OpenGLEngine/oglewindow.h \
-    Communications/communicationscontroller.h
+    Communications/communicationscontroller.h \
+    Communications/qcameracontroller.h \
+    Communications/videoframeinstruction.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

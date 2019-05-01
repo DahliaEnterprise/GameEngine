@@ -12,6 +12,8 @@
 #include <QTimer>
 #include <QRandomGenerator>
 #include "Communications/communicationscontroller.h"
+#include "Communications/videoframeinstruction.h"
+#include <QList>
 class OGLEWindow : public QWindow, protected QOpenGLFunctions
 {
     Q_OBJECT
@@ -29,10 +31,14 @@ private:
     QOpenGLContext* ogleContext;
     QOpenGLPaintDevice* oglePaintDevice;
 
+    QSurfaceFormat format;
+
     bool renderingEnabled;
 
+    QList<QList<videoFrameInstruction*>> bufferedFrames;
+
     //FPS monitoring
-    QTimer* framesUpdateKeepAlive;
+    QTimer* framesUpdateKeepAlive = nullptr;
     qint64 timestamp;
     int frames = 0;
 
@@ -44,6 +50,8 @@ signals:
 public slots:
     void renderNow();
     void updateFrame();
+    void videoFrameInstructions(QList<videoFrameInstruction*> videoFrameInstructionList);
+
 protected:
     bool event(QEvent* event) override;
     void exposeEvent(QExposeEvent* event) override;

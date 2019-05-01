@@ -4,7 +4,13 @@ OGLEWindow::OGLEWindow(QWindow *parent) : QWindow(parent)
 {
     ogleContext = nullptr; oglePaintDevice = nullptr;
     this->setSurfaceType(QWindow::OpenGLSurface);
-    renderingEnabled = false;
+    format.setSamples(2);//multisampling
+    format.setSwapBehavior(QSurfaceFormat::DoubleBuffer);
+    format.setStencilBufferSize(8);
+    this->setFormat(format);
+    this->create();
+
+    renderingEnabled = true;
 }
 
 OGLEWindow::~OGLEWindow(){}
@@ -40,17 +46,18 @@ void OGLEWindow::renderNow()
             QObject::connect(framesUpdateKeepAlive, SIGNAL(timeout()), this, SLOT(updateFrame()));
             framesUpdateKeepAlive->start(5);
         }
+
         if(timestamp == 0){ timestamp = QDateTime::currentMSecsSinceEpoch(); }
 
         if(renderingEnabled == true)
         {
             //(Initialize if nessecary and) Make context current
             bool initOGLF = false;
-            if(ogleContext == nullptr){ ogleContext = new QOpenGLContext(this); ogleContext->setFormat(requestedFormat()); ogleContext->create(); initOGLF = true; }
+            if(ogleContext == nullptr){ ogleContext = new QOpenGLContext(this); ogleContext->setFormat(format); ogleContext->create(); initOGLF = true; }
 
             ogleContext->makeCurrent(this);
 
-            if(initOGLF == true){ initializeOpenGLFunctions(); initialize(); }
+            if(initOGLF == true){  initializeOpenGLFunctions(); initialize(); }
 
             //render();
             //Initialize paint device and configure paint device
@@ -59,14 +66,33 @@ void OGLEWindow::renderNow()
             oglePaintDevice->setSize(size() * devicePixelRatio());
             oglePaintDevice->setDevicePixelRatio(devicePixelRatio());
 
-            //Draw operations
+            /// Draw operations
             QPainter painter(oglePaintDevice);
+            painter.setCompositionMode(QPainter::CompositionMode_Source);
+
+            /** Offscreen work **/
+            //TODO: communicationsControl->offscreenWork();
+
+            /** Onscreen work **/
+            //TODO: communicationsControl->onscreenWork();
             QPen pen;
             QRandomGenerator random;
 
-            pen.setColor(QColor(QString::number(random.bounded(255)).toInt(),100,0,100));
+            pen.setColor(QColor(QString::number(random.bounded(255)).toInt(),QString::number(random.bounded(255)).toInt(),QString::number(random.bounded(255)).toInt(),100));
             pen.setWidth(1);
             painter.setPen(pen);
+            painter.setFont(QFont(QString("Arial"), 15, 1, false));
+            if(bufferedFrames.isEmpty() == false)
+            {
+                QList<videoFrameInstruction*> instructionList = bufferedFrames.first();
+                if(instructionList.isEmpty() == false)
+                {
+                    painter.drawText(QPointF(0,100), instructionList.first()->getText());
+                }
+            }
+
+            /** DEPRECATED
+
             int x = 0;
             int y = 0;
             for(int i = 0; i < 1000; i++)
@@ -75,8 +101,9 @@ void OGLEWindow::renderNow()
                 painter.drawLine(x,0,100,100);
                 if(x >= 1000){ x = 0; y += 10;}
             }
+            **/
+            //render(&painter);
 
-            render(&painter);
             frames++;
             qint64 sinceLastFrame = QDateTime::currentMSecsSinceEpoch() - timestamp;
             if(sinceLastFrame > 1000)
@@ -90,7 +117,14 @@ void OGLEWindow::renderNow()
     }
 }
 
-void OGLEWindow::updateFrame()
+void OGLEWindow::updateFrame(){ requestUpdate(); }
+
+
+void OGLEWindow::videoFrameInstructions(QList<videoFrameInstruction*> videoFrameInstructionList)
 {
-    requestUpdate();
+    if(videoFrameInstructionList.isEmpty() == false)
+    {
+        bufferedFrames.append(videoFrameInstructionList);
+        //qWarning() << videoFrameInstructionList.at(0)->getText();
+    }
 }
