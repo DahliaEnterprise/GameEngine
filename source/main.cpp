@@ -10,8 +10,8 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    head h;
-    h.start();
+    //head h;
+    //h.start();
 
     ogleMasterController* ogle = new ogleMasterController();
     ogle->start();
