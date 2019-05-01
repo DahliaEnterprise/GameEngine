@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include "oglewindow.h"
+#include "Communications/communicationscontroller.h"
 class ogleMasterController : public QObject
 {
     Q_OBJECT
@@ -12,6 +13,8 @@ public:
 
 private:
     OGLEWindow* window;
+    CommunicationsController* communicationsControl;
+
 
 signals:
 

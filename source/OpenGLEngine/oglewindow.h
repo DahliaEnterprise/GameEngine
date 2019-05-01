@@ -11,12 +11,14 @@
 #include <QDebug>
 #include <QTimer>
 #include <QRandomGenerator>
+#include "Communications/communicationscontroller.h"
 class OGLEWindow : public QWindow, protected QOpenGLFunctions
 {
     Q_OBJECT
 public:
     explicit OGLEWindow(QWindow *parent = nullptr);
     ~OGLEWindow() override;
+    void defineCommunicationsController(CommunicationsController* setCommunicationsControl);
 
     virtual void render(QPainter* painter);
     virtual void render();
@@ -26,9 +28,16 @@ public:
 private:
     QOpenGLContext* ogleContext;
     QOpenGLPaintDevice* oglePaintDevice;
+
+    bool renderingEnabled;
+
+    //FPS monitoring
     QTimer* framesUpdateKeepAlive;
     qint64 timestamp;
     int frames = 0;
+
+    //Global Scope
+    CommunicationsController* communicationsControl;
 
 signals:
 
