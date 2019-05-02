@@ -14,6 +14,7 @@
 #include "Communications/communicationscontroller.h"
 #include "Communications/videoframeinstruction.h"
 #include <QList>
+#include <QVector>
 class OGLEWindow : public QWindow, protected QOpenGLFunctions
 {
     Q_OBJECT
@@ -35,7 +36,7 @@ private:
 
     bool renderingEnabled;
 
-    QList<QList<videoFrameInstruction*>> bufferedFrames;
+    QList<videoFrame*> bufferedFrames;
 
     //FPS monitoring
     QTimer* framesUpdateKeepAlive = nullptr;
@@ -50,7 +51,8 @@ signals:
 public slots:
     void renderNow();
     void updateFrame();
-    void videoFrameInstructions(QList<videoFrameInstruction*> videoFrameInstructionList);
+    //void videoFrameInstructions(QList<videoFrameInstruction*> videoFrameInstructionList);
+    void screenVideoFrame(videoFrame*);
 
 protected:
     bool event(QEvent* event) override;

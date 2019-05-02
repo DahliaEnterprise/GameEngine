@@ -71,10 +71,9 @@ void OGLEWindow::renderNow()
             painter.setCompositionMode(QPainter::CompositionMode_Source);
 
             /** Offscreen work **/
-            //TODO: communicationsControl->offscreenWork();
+            //TODO: accept offscreen work
 
             /** Onscreen work **/
-            //TODO: communicationsControl->onscreenWork();
             QPen pen;
             QRandomGenerator random;
 
@@ -84,14 +83,19 @@ void OGLEWindow::renderNow()
             painter.setFont(QFont(QString("Arial"), 15, 1, false));
             if(bufferedFrames.isEmpty() == false)
             {
-                QList<videoFrameInstruction*> instructionList = bufferedFrames.first();
-                if(instructionList.isEmpty() == false)
+                videoFrame* vFrame = bufferedFrames.first();
+                if(vFrame != nullptr)
                 {
-                    painter.drawText(QPointF(0,100), instructionList.first()->getText());
+                    QVector<videoFrameInstruction*> vfiList = vFrame->videoFrameInstructionList();
+                    if(vfiList.isEmpty() == false)
+                    {
+                        //TODO: loop through all the instructions contained in the video frame
+                        videoFrameInstruction* vfi = vfiList.at(0);
+                        painter.drawText(QPointF(0,100), vfi->getText());
+                    }
                 }
             }
-
-            /** DEPRECATED
+/*
 
             int x = 0;
             int y = 0;
@@ -101,7 +105,7 @@ void OGLEWindow::renderNow()
                 painter.drawLine(x,0,100,100);
                 if(x >= 1000){ x = 0; y += 10;}
             }
-            **/
+*/
             //render(&painter);
 
             frames++;
@@ -119,7 +123,7 @@ void OGLEWindow::renderNow()
 
 void OGLEWindow::updateFrame(){ requestUpdate(); }
 
-
+/** DEPRECATED
 void OGLEWindow::videoFrameInstructions(QList<videoFrameInstruction*> videoFrameInstructionList)
 {
     if(videoFrameInstructionList.isEmpty() == false)
@@ -127,4 +131,10 @@ void OGLEWindow::videoFrameInstructions(QList<videoFrameInstruction*> videoFrame
         bufferedFrames.append(videoFrameInstructionList);
         //qWarning() << videoFrameInstructionList.at(0)->getText();
     }
+}
+**/
+
+void OGLEWindow::screenVideoFrame(videoFrame* vFrame)
+{
+    if(vFrame != nullptr){ bufferedFrames.append(vFrame); }
 }

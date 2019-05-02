@@ -8,14 +8,13 @@
 #include <QList>
 #include "Communications/videoframeinstruction.h"
 #include "Communications/videoframe.h"
+#include <QPainter>
 class CommunicationsController : public QObject
 {
     Q_OBJECT
 public:
     explicit CommunicationsController(QObject *parent = nullptr);
     void start();
-    void offscreenWork();
-    void onscreenWork();
 
 private:
     QCameraController* cameraController;
