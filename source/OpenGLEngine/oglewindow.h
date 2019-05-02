@@ -15,12 +15,17 @@
 #include "Communications/videoframeinstruction.h"
 #include <QList>
 #include <QVector>
+#include <QCamera>
+#include "OpenGLEngine/camera/oglecameracontroller.h"
+#include <QMap>
 class OGLEWindow : public QWindow, protected QOpenGLFunctions
 {
     Q_OBJECT
 public:
     explicit OGLEWindow(QWindow *parent = nullptr);
     ~OGLEWindow() override;
+    void start();
+
     void defineCommunicationsController(CommunicationsController* setCommunicationsControl);
 
     virtual void render(QPainter* painter);
@@ -29,16 +34,20 @@ public:
     virtual void initialize();
 
 private:
+    //OpenGL and Rendering
     QOpenGLContext* ogleContext;
     QOpenGLPaintDevice* oglePaintDevice;
-
     QSurfaceFormat format;
-
     bool renderingEnabled;
-
     QList<videoFrame*> bufferedFrames;
 
-    //FPS monitoring
+    //Hardware relating to graphics
+    ogleCameraController* cameraController;
+    QVideoFrame cameraUnalteredVideoFrameBuffer;
+    QMap<int, qint64> unalteredCameraVideoStream_fpsManagement;
+    QMap<int, QVideoFrame> unalteredCameraVideoStream_sustainedFrame;
+
+    //Frames Per Second counter of display
     QTimer* framesUpdateKeepAlive = nullptr;
     qint64 timestamp;
     int frames = 0;
@@ -47,12 +56,13 @@ private:
     CommunicationsController* communicationsControl;
 
 signals:
+    void requestedUnalteredCameraFrame(QVideoFrame shallowVFrame);
 
 public slots:
     void renderNow();
     void updateFrame();
-    //void videoFrameInstructions(QList<videoFrameInstruction*> videoFrameInstructionList);
     void screenVideoFrame(videoFrame*);
+    void unalteredCameraFrame(QVideoFrame vFrame);
 
 protected:
     bool event(QEvent* event) override;

@@ -9,11 +9,19 @@ OGLEWindow::OGLEWindow(QWindow *parent) : QWindow(parent)
     format.setStencilBufferSize(8);
     this->setFormat(format);
     this->create();
+    this->resize(1280,720);
 
     renderingEnabled = true;
 }
 
 OGLEWindow::~OGLEWindow(){}
+
+void OGLEWindow::start()
+{
+    cameraController = new ogleCameraController();
+    cameraController->start();
+    QObject::connect(cameraController, SIGNAL(unalteredCameraFrame(QVideoFrame)), this, SLOT(unalteredCameraFrame(QVideoFrame)));
+}
 
 void OGLEWindow::defineCommunicationsController(CommunicationsController* setCommunicationsControl){ communicationsControl = setCommunicationsControl; }
 
@@ -36,6 +44,8 @@ bool OGLEWindow::event(QEvent* event)
 
 void OGLEWindow::exposeEvent(QExposeEvent *event){ this->renderNow(); }
 
+void OGLEWindow::updateFrame(){ requestUpdate(); }
+
 void OGLEWindow::renderNow()
 {
     if(this->isExposed() == true)
@@ -44,7 +54,7 @@ void OGLEWindow::renderNow()
         {
             framesUpdateKeepAlive = new QTimer();
             QObject::connect(framesUpdateKeepAlive, SIGNAL(timeout()), this, SLOT(updateFrame()));
-            framesUpdateKeepAlive->start(5);
+            framesUpdateKeepAlive->start(1);
         }
 
         if(timestamp == 0){ timestamp = QDateTime::currentMSecsSinceEpoch(); }
@@ -68,19 +78,13 @@ void OGLEWindow::renderNow()
 
             /// Draw operations
             QPainter painter(oglePaintDevice);
+            painter.setRenderHint(QPainter::Antialiasing, true);
             painter.setCompositionMode(QPainter::CompositionMode_Source);
 
             /** Offscreen work **/
-            //TODO: accept offscreen work
+            //TODO: Crunch offscreen work, return back to sender
 
             /** Onscreen work **/
-            QPen pen;
-            QRandomGenerator random;
-
-            pen.setColor(QColor(QString::number(random.bounded(255)).toInt(),QString::number(random.bounded(255)).toInt(),QString::number(random.bounded(255)).toInt(),100));
-            pen.setWidth(1);
-            painter.setPen(pen);
-            painter.setFont(QFont(QString("Arial"), 15, 1, false));
             if(bufferedFrames.isEmpty() == false)
             {
                 videoFrame* vFrame = bufferedFrames.first();
@@ -89,23 +93,86 @@ void OGLEWindow::renderNow()
                     QVector<videoFrameInstruction*> vfiList = vFrame->videoFrameInstructionList();
                     if(vfiList.isEmpty() == false)
                     {
-                        //TODO: loop through all the instructions contained in the video frame
-                        videoFrameInstruction* vfi = vfiList.at(0);
-                        painter.drawText(QPointF(0,100), vfi->getText());
+
+                        QVector<videoFrameInstruction*>::const_iterator vfiListIterator = vfiList.constBegin();
+                        while(vfiListIterator != vfiList.constEnd())
+                        {
+                            videoFrameInstruction* vfi = *vfiListIterator;
+                            if(vfi->instructionType() == 0)
+                            {
+                                QPen pen;
+                                QRandomGenerator random;
+
+                                pen.setColor(QColor(QString::number(random.bounded(255)).toInt(),QString::number(random.bounded(255)).toInt(),QString::number(random.bounded(255)).toInt(),100));
+                                pen.setWidth(1);
+                                painter.setPen(pen);
+                                painter.setFont(QFont(QString("Arial"), 15, 1, false));
+
+                                videoFrameInstruction* vfi = vfiList.at(0);
+                                painter.drawText(QPointF(0,100), vfi->getText());
+                            }else if(vfi->instructionType() == 1)
+                            {
+                                //Determine how long ago the last frame was produced to the screen.
+                                if(unalteredCameraVideoStream_fpsManagement.isEmpty() == true){ unalteredCameraVideoStream_fpsManagement.insert(vfi->unalteredCameraVideo_getFpsMonitorId(), QDateTime::currentMSecsSinceEpoch()); }else{
+                                if(unalteredCameraVideoStream_fpsManagement.contains(vfi->unalteredCameraVideo_getFpsMonitorId()) == false){ unalteredCameraVideoStream_fpsManagement.insert(vfi->unalteredCameraVideo_getFpsMonitorId(), QDateTime::currentMSecsSinceEpoch()); }else{
+                                    qint64 timestampLastframeProduced = unalteredCameraVideoStream_fpsManagement.value(vfi->unalteredCameraVideo_getFpsMonitorId());
+                                    qint64 timesinceLastframeProduced = QDateTime::currentMSecsSinceEpoch() - timestampLastframeProduced;
+                                    //determine miliseconds between frames based on maxfps
+                                    qint64 msBetweenFrames = 1000 / vfi->unalteredCameraVideo_getMaxFps();
+                                    if(timesinceLastframeProduced >= msBetweenFrames)
+                                    {
+                                        //Update sustained frame
+                                        if(unalteredCameraVideoStream_sustainedFrame.isEmpty() == true)
+                                        {
+                                            QVideoFrame shallow = cameraUnalteredVideoFrameBuffer;
+                                            unalteredCameraVideoStream_sustainedFrame.insert(vfi->unalteredCameraVideo_getFpsMonitorId(), shallow);
+                                        }else{
+                                            if(unalteredCameraVideoStream_sustainedFrame.contains(vfi->unalteredCameraVideo_getFpsMonitorId()) == false)
+                                            {
+                                                QVideoFrame shallow = cameraUnalteredVideoFrameBuffer;
+                                                unalteredCameraVideoStream_sustainedFrame.insert(vfi->unalteredCameraVideo_getFpsMonitorId(), shallow);
+
+                                            }else{
+                                                unalteredCameraVideoStream_sustainedFrame.remove(vfi->unalteredCameraVideo_getFpsMonitorId());
+                                                QVideoFrame shallow = cameraUnalteredVideoFrameBuffer;
+                                                unalteredCameraVideoStream_sustainedFrame.insert(vfi->unalteredCameraVideo_getFpsMonitorId(), shallow);
+                                            }
+                                        }
+
+                                        ///
+                                        QVideoFrame unalteredVideoFrame = unalteredCameraVideoStream_sustainedFrame.value(vfi->unalteredCameraVideo_getFpsMonitorId());
+                                        unalteredVideoFrame.map(QAbstractVideoBuffer::ReadOnly);
+                                        QImage::Format imageFormat = QVideoFrame::imageFormatFromPixelFormat(unalteredVideoFrame.pixelFormat());
+                                        QImage VideoFrameAsImage = QImage(unalteredVideoFrame.bits(), unalteredVideoFrame.width(), unalteredVideoFrame.height(), unalteredVideoFrame.bytesPerLine(), imageFormat);
+                                        painter.drawImage(QRect(0,0,1024,512), VideoFrameAsImage);
+                                        /*
+                                        cameraUnalteredVideoFrameBuffer.map(QAbstractVideoBuffer::ReadOnly);
+                                        QImage::Format imageFormat = QVideoFrame::imageFormatFromPixelFormat(cameraUnalteredVideoFrameBuffer.pixelFormat());
+                                        QImage VideoFrameAsImage = QImage(cameraUnalteredVideoFrameBuffer.bits(), cameraUnalteredVideoFrameBuffer.width(), cameraUnalteredVideoFrameBuffer.height(), cameraUnalteredVideoFrameBuffer.bytesPerLine(), imageFormat);
+                                        painter.drawImage(QRect(0,0,1280,720), VideoFrameAsImage);
+                                        */
+                                        unalteredCameraVideoStream_fpsManagement.remove(vfi->unalteredCameraVideo_getFpsMonitorId());
+                                        unalteredCameraVideoStream_fpsManagement.insert(vfi->unalteredCameraVideo_getFpsMonitorId(), QDateTime::currentMSecsSinceEpoch());
+                                    }else{
+                                        //Display sustained frame
+                                        QVideoFrame unalteredVideoFrame = unalteredCameraVideoStream_sustainedFrame.value(vfi->unalteredCameraVideo_getFpsMonitorId());
+                                        unalteredVideoFrame.map(QAbstractVideoBuffer::ReadOnly);
+                                        QImage::Format imageFormat = QVideoFrame::imageFormatFromPixelFormat(unalteredVideoFrame.pixelFormat());
+                                        QImage VideoFrameAsImage = QImage(unalteredVideoFrame.bits(), unalteredVideoFrame.width(), unalteredVideoFrame.height(), unalteredVideoFrame.bytesPerLine(), imageFormat);
+                                        painter.drawImage(QRect(0,0,1024,512), VideoFrameAsImage);
+                                    }
+                                }
+                                }
+                            }
+
+                            vfiListIterator++;
+                        }
+
+
                     }
                 }
             }
-/*
 
-            int x = 0;
-            int y = 0;
-            for(int i = 0; i < 1000; i++)
-            {
-                x += 5;
-                painter.drawLine(x,0,100,100);
-                if(x >= 1000){ x = 0; y += 10;}
-            }
-*/
             //render(&painter);
 
             frames++;
@@ -121,20 +188,8 @@ void OGLEWindow::renderNow()
     }
 }
 
-void OGLEWindow::updateFrame(){ requestUpdate(); }
 
-/** DEPRECATED
-void OGLEWindow::videoFrameInstructions(QList<videoFrameInstruction*> videoFrameInstructionList)
-{
-    if(videoFrameInstructionList.isEmpty() == false)
-    {
-        bufferedFrames.append(videoFrameInstructionList);
-        //qWarning() << videoFrameInstructionList.at(0)->getText();
-    }
-}
-**/
+void OGLEWindow::screenVideoFrame(videoFrame* vFrame){ if(vFrame != nullptr){ bufferedFrames.append(vFrame); } }
 
-void OGLEWindow::screenVideoFrame(videoFrame* vFrame)
-{
-    if(vFrame != nullptr){ bufferedFrames.append(vFrame); }
-}
+void OGLEWindow::unalteredCameraFrame(QVideoFrame vFrame){ cameraUnalteredVideoFrameBuffer = vFrame;  }
+

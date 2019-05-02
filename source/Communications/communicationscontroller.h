@@ -2,13 +2,13 @@
 #define COMMUNICATIONSCONTROLLER_H
 
 #include <QObject>
-#include "Communications/qcameracontroller.h"
 #include <QTimer>
 #include <QDebug>
 #include <QList>
 #include "Communications/videoframeinstruction.h"
 #include "Communications/videoframe.h"
 #include <QPainter>
+#include <QDateTime>
 class CommunicationsController : public QObject
 {
     Q_OBJECT
@@ -17,11 +17,11 @@ public:
     void start();
 
 private:
-    QCameraController* cameraController;
     QTimer* processorKeepAlive;
 
+    qint64 timestampUnalteredCameraFrame;
+
 signals:
-    void videoFrameInstructions(QList<videoFrameInstruction*>);
     void screenVideoFrame(videoFrame*);
 
 public slots:
