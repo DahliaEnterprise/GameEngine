@@ -18,8 +18,9 @@ public:
 
 private:
     QTimer* processorKeepAlive;
-
     qint64 timestampUnalteredCameraFrame;
+    int targetVFIrate;
+    int timebetweenFrames;
 
 signals:
     void screenVideoFrame(videoFrame*);

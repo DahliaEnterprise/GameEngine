@@ -18,6 +18,7 @@
 #include <QCamera>
 #include "OpenGLEngine/camera/oglecameracontroller.h"
 #include <QMap>
+#include <QVector>
 class OGLEWindow : public QWindow, protected QOpenGLFunctions
 {
     Q_OBJECT
@@ -39,7 +40,8 @@ private:
     QOpenGLPaintDevice* oglePaintDevice;
     QSurfaceFormat format;
     bool renderingEnabled;
-    QList<videoFrame*> bufferedFrames;
+    QVector<videoFrame*> bufferedOnScreenFrames;
+    qint64 timestampLastOnScreenFrameProduced;
 
     //Hardware relating to graphics
     ogleCameraController* cameraController;
@@ -50,7 +52,8 @@ private:
     //Frames Per Second counter of display
     QTimer* framesUpdateKeepAlive = nullptr;
     qint64 timestamp;
-    int frames = 0;
+    int frames;
+    int framesPerSecond;
 
     //Global Scope
     CommunicationsController* communicationsControl;
