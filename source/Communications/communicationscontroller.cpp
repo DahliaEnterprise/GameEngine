@@ -24,6 +24,10 @@ void CommunicationsController::onscreenWork(){}//change onscreenwork to emit ons
 
 void CommunicationsController::processor()
 {
+    //todo: offscreenWork(gpuWork*)
+    //Todo: screenVideoFrame(videoFrame*);
+
+    /** DEPRECATED
     //Emit onscreenwork to show a "loading" text.
     videoFrame.clear();
 
@@ -32,7 +36,7 @@ void CommunicationsController::processor()
     videoFrame.append(loadingText);
 
     emit videoFrameInstructions(videoFrame);
-
+    **/
     ///Run processor again
     QTimer::singleShot(5, this, SLOT(processor()));
 }

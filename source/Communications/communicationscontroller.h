@@ -7,7 +7,7 @@
 #include <QDebug>
 #include <QList>
 #include "Communications/videoframeinstruction.h"
-
+#include "Communications/videoframe.h"
 class CommunicationsController : public QObject
 {
     Q_OBJECT
@@ -20,10 +20,10 @@ public:
 private:
     QCameraController* cameraController;
     QTimer* processorKeepAlive;
-    QList<videoFrameInstruction*> videoFrame; //First shows closest to screen, last shows furthest
 
 signals:
     void videoFrameInstructions(QList<videoFrameInstruction*>);
+    void screenVideoFrame(videoFrame*);
 
 public slots:
 
