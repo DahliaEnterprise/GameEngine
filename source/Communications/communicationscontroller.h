@@ -25,6 +25,7 @@ private:
 
 signals:
     void screenVideoFrame(videoFrame*);
+    void offScreenVideoFrame(videoFrame*);
 
 public slots:
 

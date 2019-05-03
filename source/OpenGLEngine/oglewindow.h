@@ -19,6 +19,8 @@
 #include "OpenGLEngine/camera/oglecameracontroller.h"
 #include <QMap>
 #include <QVector>
+#include <QColor>
+#include "OpenGLEngine/camera/camerasplitbyquality.h"
 class OGLEWindow : public QWindow, protected QOpenGLFunctions
 {
     Q_OBJECT
@@ -41,16 +43,20 @@ private:
     QSurfaceFormat format;
     bool renderingEnabled;
     QVector<videoFrame*> onScreenVideoFrames;
+    QVector<videoFrame*> offScreenVideoFrames;
 
     //Hardware relating to graphics
     ogleCameraController* cameraController;
     QVideoFrame cameraUnalteredVideoFrameBuffer;
+    cameraSplitByQuality* offScreenProcessor_splitByQuality;
 
     //Frames Per Second counter of display
     QTimer* framesUpdateKeepAlive = nullptr;
     qint64 framesTimestamp;
     int frames;
     int framesPerSecond;
+
+    void fpsCounterOfDisplay();
 
     //Global Scope
     CommunicationsController* communicationsControl;
@@ -62,6 +68,8 @@ public slots:
     void renderNow();
     void updateFrame();
     void screenVideoFrame(videoFrame*);
+    void offScreenVideoFrame(videoFrame* vFrame);
+
     void cameraEmitting_unalteredCameraFrame(QVideoFrame vFrame);
 
 protected:

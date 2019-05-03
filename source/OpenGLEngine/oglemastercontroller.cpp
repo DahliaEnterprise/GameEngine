@@ -23,4 +23,6 @@ void ogleMasterController::start()
 
     //signals slots
     QObject::connect(communicationsControl, SIGNAL(screenVideoFrame(videoFrame*)), window, SLOT(screenVideoFrame(videoFrame*)));
+    QObject::connect(communicationsControl, SIGNAL(offScreenVideoFrame(videoFrame*)), window, SLOT(offScreenVideoFrame(videoFrame*)));
+
 }

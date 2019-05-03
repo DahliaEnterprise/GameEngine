@@ -9,16 +9,25 @@ class videoFrameInstruction : public QObject
 public:
     explicit videoFrameInstruction(QObject *parent = nullptr);
 
+    //
     int instructionType();
 
+    //
     void text(QString textToDisplay);
     QString getText();
 
+    //
     void unalteredCameraVideo(int setFpsMonitorId, int setMaxFps, double setX, double setY, double setWidth, double setHeight);
     int unalteredCameraVideo_getMaxFps();
     int unalteredCameraVideo_getFpsMonitorId();
 
-    enum VideoInstructionDataType{Text, UnalteredCameraVideoFrame};
+    //
+    void splitQualitiesCameraVideo(int setFpsMonitorId, int setMaxFps, double setX, double setY, double setWidth, double setHeight);
+
+    //
+    enum VideoInstructionDataType{Text,
+                                  UnalteredCameraVideoFrame,
+                                  SplitQualitiesVideoFrame};
 
 private:
 
