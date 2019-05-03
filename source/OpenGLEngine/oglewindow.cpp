@@ -23,14 +23,25 @@ OGLEWindow::~OGLEWindow(){}
 void OGLEWindow::defineCommunicationsController(CommunicationsController* setCommunicationsControl){ communicationsControl = setCommunicationsControl; }
 void OGLEWindow::start()
 {
+
+    //Start Camera
     cameraController = new ogleCameraController();
     cameraController->start();
 
+    //Start "Split By Quality" (Off Screen Processor)
+    cameraSplitByQualityThread = new QThread();
     offScreenProcessor_splitByQuality = new cameraSplitByQuality();
     offScreenProcessor_splitByQuality->start();
+    offScreenProcessor_splitByQuality->moveToThread(cameraSplitByQualityThread);
+    cameraSplitByQualityThread->start();
 
+    //Emit Signals of Unaltered Camera Frames
     if(framesUpdateKeepAlive == nullptr){ framesUpdateKeepAlive = new QTimer(); QObject::connect(framesUpdateKeepAlive, SIGNAL(timeout()), this, SLOT(updateFrame())); framesUpdateKeepAlive->start(5); }
+
+    //signals slots
     QObject::connect(cameraController, SIGNAL(unalteredCameraFrame(QVideoFrame)), this, SLOT(cameraEmitting_unalteredCameraFrame(QVideoFrame)));
+    QObject::connect(this, SIGNAL(requestSplitByQuality(QVideoFrame)), offScreenProcessor_splitByQuality, SLOT(requestSplitByQuality(QVideoFrame)));
+    QObject::connect(offScreenProcessor_splitByQuality, SIGNAL(renderedSplitQualities(QVector<QColor>)), this, SLOT(renderedSplitQualities(QVector<QColor>)));
 }
 
 
@@ -83,21 +94,6 @@ void OGLEWindow::renderNow()
             painter.setRenderHint(QPainter::Antialiasing, true);
             painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
 
-            /** Offscreen work **/
-            if(offScreenVideoFrames.isEmpty() == false)
-            {   //Video Frame Instructions Available
-                videoFrame* vFrame = onScreenVideoFrames.at(0);
-                while(vFrame->hasNextInstruction() == true)
-                {
-                    videoFrameInstruction* vfi = vFrame->getNextInstruction();
-                    if(vfi->instructionType() == videoFrameInstruction::SplitQualitiesVideoFrame)
-                    {
-                        qWarning() << "SPLITING";
-                        //todo: emit "to cameraSplitByQuality (threaded)"
-                    }
-                }
-            }
-
             /** Onscreen work **/
             if(onScreenVideoFrames.isEmpty() == false)
             {   //Video Frame Instructions Available
@@ -123,6 +119,26 @@ void OGLEWindow::renderNow()
                         QImage::Format imageFormat = QVideoFrame::imageFormatFromPixelFormat(cameraUnalteredVideoFrameBuffer.pixelFormat());
                         QImage VideoFrameAsImage = QImage(cameraUnalteredVideoFrameBuffer.bits(), cameraUnalteredVideoFrameBuffer.width(), cameraUnalteredVideoFrameBuffer.height(), cameraUnalteredVideoFrameBuffer.bytesPerLine(), imageFormat);
                         painter.drawImage(QRect(0,0,1280,720), VideoFrameAsImage);
+                    }else if(vfi->instructionType() == videoFrameInstruction::SplitQualitiesVideoFrame)
+                    {
+                        //Display split quality
+                        if(splitLQFrame.size() > 0)
+                        {
+                            int x = 0; int y = 0;
+                            for(int i = 0; i < splitLQFrame.size(); i++)
+                            {
+                                painter.fillRect(QRect(x,y, 1,1), splitLQFrame.at(i));
+                                x+= 2;
+                                if(x >= 1279)
+                                {
+                                    x = 0;
+                                    y++;
+                                }
+                            }
+                        }
+
+                        //Request another split quality
+                        emit requestSplitByQuality(cameraUnalteredVideoFrameBuffer);
                     }
                 }
 
@@ -166,6 +182,65 @@ void OGLEWindow::renderNow()
             }
             //render(&painter);
 
+
+            /** Offscreen work **
+            if(offScreenVideoFrames.isEmpty() == false)
+            {   //Video Frame Instructions Available
+                videoFrame* vFrame = offScreenVideoFrames.at(0);
+                while(vFrame->hasNextInstruction() == true)
+                {
+                    videoFrameInstruction* vfi = vFrame->getNextInstruction();
+                    if(vfi->instructionType() == videoFrameInstruction::SplitQualitiesVideoFrame)
+                    {
+                        /*
+                        cameraUnalteredVideoFrameBuffer.map(QAbstractVideoBuffer::ReadOnly);
+                        QImage::Format imageFormat = QVideoFrame::imageFormatFromPixelFormat(cameraUnalteredVideoFrameBuffer.pixelFormat());
+                        QImage VideoFrameAsImage = QImage(cameraUnalteredVideoFrameBuffer.bits(), cameraUnalteredVideoFrameBuffer.width(), cameraUnalteredVideoFrameBuffer.height(), cameraUnalteredVideoFrameBuffer.bytesPerLine(), imageFormat);
+                        emit requestSplitByQuality(VideoFrameAsImage);
+                        /
+
+                        emit requestSplitByQuality(cameraUnalteredVideoFrameBuffer);
+                    }
+                }
+
+                //Remove consumed frame
+                offScreenVideoFrames.removeFirst();
+
+                //Remove frames until size is achieved
+                if(offScreenVideoFrames.size() >= 60)
+                {
+                    bool alternate = false;
+                    int index = 0;
+                    while(offScreenVideoFrames.size() >= 60)
+                    {
+                        if(alternate == false)
+                        {
+                            index += 2;
+                            if(index < offScreenVideoFrames.size())
+                            {
+                                offScreenVideoFrames.removeAt(index);
+                                alternate = true;
+                            }
+
+                        }else if(alternate == true)
+                        {
+                            index += 3;
+                            if(index < offScreenVideoFrames.size())
+                            {
+                                offScreenVideoFrames.removeAt(index);
+                                alternate = false;
+                            }
+                        }
+
+                        if(index >= offScreenVideoFrames.size()-1)
+                        {
+                            index = 0;
+                        }
+                    }
+                }
+
+            }*/
+
             this->fpsCounterOfDisplay();
             ogleContext->swapBuffers(this);
         }
@@ -178,6 +253,8 @@ void OGLEWindow::offScreenVideoFrame(videoFrame* vFrame){ if(vFrame != nullptr){
 
 
 void OGLEWindow::cameraEmitting_unalteredCameraFrame(QVideoFrame vFrame){ cameraUnalteredVideoFrameBuffer = vFrame; }
+
+void OGLEWindow::renderedSplitQualities(QVector<QColor> lqFrame){ splitLQFrame = lqFrame; }
 
 
 void OGLEWindow::fpsCounterOfDisplay()

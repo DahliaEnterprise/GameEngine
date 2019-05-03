@@ -21,6 +21,7 @@
 #include <QVector>
 #include <QColor>
 #include "OpenGLEngine/camera/camerasplitbyquality.h"
+#include <QThread>
 class OGLEWindow : public QWindow, protected QOpenGLFunctions
 {
     Q_OBJECT
@@ -47,8 +48,12 @@ private:
 
     //Hardware relating to graphics
     ogleCameraController* cameraController;
+
     QVideoFrame cameraUnalteredVideoFrameBuffer;
+
+    QThread* cameraSplitByQualityThread;
     cameraSplitByQuality* offScreenProcessor_splitByQuality;
+    QVector<QColor> splitLQFrame;
 
     //Frames Per Second counter of display
     QTimer* framesUpdateKeepAlive = nullptr;
@@ -62,7 +67,8 @@ private:
     CommunicationsController* communicationsControl;
 
 signals:
-    void requestedUnalteredCameraFrame(QVideoFrame shallowVFrame);
+    void requestedUnalteredCameraFrame(QVideoFrame);
+    void requestSplitByQuality(QVideoFrame);
 
 public slots:
     void renderNow();
@@ -71,6 +77,9 @@ public slots:
     void offScreenVideoFrame(videoFrame* vFrame);
 
     void cameraEmitting_unalteredCameraFrame(QVideoFrame vFrame);
+
+private slots:
+    void renderedSplitQualities(QVector<QColor>);
 
 protected:
     bool event(QEvent* event) override;

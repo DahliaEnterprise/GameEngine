@@ -32,17 +32,21 @@ void CommunicationsController::processor()
         loadingText->text(QString("Detecting Camera"));
         vFrame->appendVideoFrameInstruction(loadingText);*/
 
-    emit screenVideoFrame(vFrameOnScreen);
+        videoFrameInstruction* splitQualititesCameraFrame = new videoFrameInstruction();
+        splitQualititesCameraFrame->splitQualitiesCameraVideo(2, 60, 0,0,1280,720);
+        vFrameOnScreen->appendVideoFrameInstruction(splitQualititesCameraFrame);
 
+    emit screenVideoFrame(vFrameOnScreen);
+/*
     //Emit offscreen video frame instructions
     videoFrame* vFrameOffScreen = new videoFrame();
 
         videoFrameInstruction* splitQualititesCameraFrame = new videoFrameInstruction();
         splitQualititesCameraFrame->splitQualitiesCameraVideo(2, 60, 0,0,1280,720);
-        vFrameOnScreen->appendVideoFrameInstruction(splitQualititesCameraFrame);
+        vFrameOffScreen->appendVideoFrameInstruction(splitQualititesCameraFrame);
 
-    emit offScreenVideoFrame(vFrameOffScreen);
-
+    //emit offScreenVideoFrame(vFrameOffScreen);
+*/
     ///Run processor again
     QTimer::singleShot(timebetweenFrames, this, SLOT(processor()));
 }
