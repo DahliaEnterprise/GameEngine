@@ -8,21 +8,14 @@ ogleCameraController::ogleCameraController(QObject *parent) : QObject(parent)
 void ogleCameraController::start()
 {
     camera = new QCamera();
-
-    cameraViewFinder = new QCameraViewfinder();
-    camera->setViewfinder(cameraViewFinder);
+    cameraViewFinder = new QCameraViewfinder(); camera->setViewfinder(cameraViewFinder);
     QCameraViewfinderSettings viewFinderSettings = camera->viewfinderSettings();
     viewFinderSettings.setResolution(1280,720);
-
     camera->setViewfinderSettings(viewFinderSettings);
     camera->setCaptureMode(QCamera::CaptureVideo);
 
     videoProbe = new QVideoProbe();
-    if(videoProbe->setSource(camera))
-    {
-        QObject::connect(videoProbe, SIGNAL(videoFrameProbed(QVideoFrame)), this, SLOT(slotUnalteredCameraFrame(QVideoFrame)));
-    }
-
+    if(videoProbe->setSource(camera)){ QObject::connect(videoProbe, SIGNAL(videoFrameProbed(QVideoFrame)), this, SLOT(slotUnalteredCameraFrame(QVideoFrame))); }
     camera->start();
 }
 

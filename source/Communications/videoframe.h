@@ -10,10 +10,13 @@ class videoFrame : public QObject
 public:
     explicit videoFrame(QObject *parent = nullptr);
     void appendVideoFrameInstruction(videoFrameInstruction* vfi);
-    QVector<videoFrameInstruction*> videoFrameInstructionList();
+    QVector<videoFrameInstruction*>* videoFrameInstructionList();
+    videoFrameInstruction* getNextInstruction();
+    bool hasNextInstruction();
 
 private:
-    QVector<videoFrameInstruction*> vfiList;
+    QVector<videoFrameInstruction*>* vfiList;
+    int nextInstruction;
 
 signals:
 

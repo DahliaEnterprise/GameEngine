@@ -25,9 +25,9 @@ class OGLEWindow : public QWindow, protected QOpenGLFunctions
 public:
     explicit OGLEWindow(QWindow *parent = nullptr);
     ~OGLEWindow() override;
-    void start();
 
     void defineCommunicationsController(CommunicationsController* setCommunicationsControl);
+    void start();
 
     virtual void render(QPainter* painter);
     virtual void render();
@@ -40,18 +40,15 @@ private:
     QOpenGLPaintDevice* oglePaintDevice;
     QSurfaceFormat format;
     bool renderingEnabled;
-    QVector<videoFrame*> bufferedOnScreenFrames;
-    qint64 timestampLastOnScreenFrameProduced;
+    QVector<videoFrame*> onScreenVideoFrames;
 
     //Hardware relating to graphics
     ogleCameraController* cameraController;
     QVideoFrame cameraUnalteredVideoFrameBuffer;
-    QMap<int, qint64> unalteredCameraVideoStream_fpsManagement;
-    QMap<int, QVideoFrame> unalteredCameraVideoStream_sustainedFrame;
 
     //Frames Per Second counter of display
     QTimer* framesUpdateKeepAlive = nullptr;
-    qint64 timestamp;
+    qint64 framesTimestamp;
     int frames;
     int framesPerSecond;
 
@@ -65,7 +62,7 @@ public slots:
     void renderNow();
     void updateFrame();
     void screenVideoFrame(videoFrame*);
-    void unalteredCameraFrame(QVideoFrame vFrame);
+    void cameraEmitting_unalteredCameraFrame(QVideoFrame vFrame);
 
 protected:
     bool event(QEvent* event) override;

@@ -8,7 +8,7 @@ CommunicationsController::CommunicationsController(QObject *parent) : QObject(pa
 
 void CommunicationsController::start()
 {
-    targetVFIrate = 60;
+    targetVFIrate = 120;
     timebetweenFrames = 1000 / targetVFIrate;
 
     ///Begin Processor
@@ -21,13 +21,16 @@ void CommunicationsController::processor()
 {
     //Emit video frame instructions
     videoFrame* vFrame = new videoFrame();
-        videoFrameInstruction* loadingText = new videoFrameInstruction();
-        loadingText->text(QString("Detecting Camera"));
-        vFrame->appendVideoFrameInstruction(loadingText);
+
+    videoFrameInstruction* loadingText = new videoFrameInstruction();
+    loadingText->text(QString("Detecting Camera"));
+    vFrame->appendVideoFrameInstruction(loadingText);
 
         videoFrameInstruction* unalteredCameraFrame = new videoFrameInstruction();
         unalteredCameraFrame->unalteredCameraVideo(1, 60, 0,0,1280,720);
         vFrame->appendVideoFrameInstruction(unalteredCameraFrame);
+
+
 
     emit screenVideoFrame(vFrame);
 

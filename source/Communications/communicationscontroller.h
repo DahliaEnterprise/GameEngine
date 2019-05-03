@@ -21,6 +21,7 @@ private:
     qint64 timestampUnalteredCameraFrame;
     int targetVFIrate;
     int timebetweenFrames;
+    int updateInterval;
 
 signals:
     void screenVideoFrame(videoFrame*);
