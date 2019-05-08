@@ -53,7 +53,8 @@ SOURCES += \
     Communications/videoframeinstruction.cpp \
     Communications/videoframe.cpp \
     OpenGLEngine/camera/oglecameracontroller.cpp \
-    OpenGLEngine/camera/camerasplitbyquality.cpp
+    OpenGLEngine/camera/camerasplitbyquality.cpp \
+    ExampleGames/tennis/tennis.cpp
 
 HEADERS += \
     gameengine.h \
@@ -83,12 +84,12 @@ HEADERS += \
     Communications/videoframeinstruction.h \
     Communications/videoframe.h \
     OpenGLEngine/camera/oglecameracontroller.h \
-    OpenGLEngine/camera/camerasplitbyquality.h
+    OpenGLEngine/camera/camerasplitbyquality.h \
+    ExampleGames/tennis/tennis.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-RESOURCES += \
-    resources.qrc
+RESOURCES +=

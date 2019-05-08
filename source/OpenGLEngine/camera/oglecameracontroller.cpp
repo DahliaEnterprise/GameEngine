@@ -15,7 +15,7 @@ void ogleCameraController::start()
     camera->setCaptureMode(QCamera::CaptureVideo);
 
     videoProbe = new QVideoProbe();
-    if(videoProbe->setSource(camera)){ QObject::connect(videoProbe, SIGNAL(videoFrameProbed(QVideoFrame)), this, SLOT(slotUnalteredCameraFrame(QVideoFrame))); }
+    if(videoProbe->setSource(camera)){ QObject::connect(videoProbe, SIGNAL(videoFrameProbed(QVideoFrame)), this, SLOT(slotUnalteredCameraFrame(QVideoFrame)), Qt::QueuedConnection); }
     camera->start();
 }
 

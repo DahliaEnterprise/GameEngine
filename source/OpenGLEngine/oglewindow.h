@@ -29,7 +29,6 @@ public:
     explicit OGLEWindow(QWindow *parent = nullptr);
     ~OGLEWindow() override;
 
-    void defineCommunicationsController(CommunicationsController* setCommunicationsControl);
     void start();
 
     virtual void render(QPainter* painter);
@@ -44,16 +43,6 @@ private:
     QSurfaceFormat format;
     bool renderingEnabled;
     QVector<videoFrame*> onScreenVideoFrames;
-    QVector<videoFrame*> offScreenVideoFrames;
-
-    //Hardware relating to graphics
-    ogleCameraController* cameraController;
-
-    QVideoFrame cameraUnalteredVideoFrameBuffer;
-
-    QThread* cameraSplitByQualityThread;
-    cameraSplitByQuality* offScreenProcessor_splitByQuality;
-    QVector<QColor> splitLQFrame;
 
     //Frames Per Second counter of display
     QTimer* framesUpdateKeepAlive = nullptr;
@@ -63,23 +52,14 @@ private:
 
     void fpsCounterOfDisplay();
 
-    //Global Scope
-    CommunicationsController* communicationsControl;
-
 signals:
-    void requestedUnalteredCameraFrame(QVideoFrame);
-    void requestSplitByQuality(QVideoFrame);
 
 public slots:
     void renderNow();
-    void updateFrame();
+    //void updateFrame();
     void screenVideoFrame(videoFrame*);
-    void offScreenVideoFrame(videoFrame* vFrame);
-
-    void cameraEmitting_unalteredCameraFrame(QVideoFrame vFrame);
 
 private slots:
-    void renderedSplitQualities(QVector<QColor>);
 
 protected:
     bool event(QEvent* event) override;

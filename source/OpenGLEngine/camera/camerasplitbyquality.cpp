@@ -8,9 +8,8 @@ cameraSplitByQuality::cameraSplitByQuality(QObject *parent) : QObject(parent)
 void cameraSplitByQuality::start()
 {
     timer = new QTimer();
-    timer->start(5);
-
-    QObject::connect(timer, SIGNAL(timeout()), this, SLOT(splitQuality()));
+    timer->start(30);
+    QObject::connect(timer, SIGNAL(timeout()), this, SLOT(splitQuality()), Qt::QueuedConnection);
 }
 
 
@@ -25,47 +24,34 @@ void cameraSplitByQuality::splitQuality()
 {
     if(framesAwaitingToBeSplit.isEmpty() == false)
     {
+        qint64 timestart = QDateTime::currentMSecsSinceEpoch();
         QVector<QColor> lowQFrame;
         QVideoFrame vFrame = framesAwaitingToBeSplit.first();
         vFrame.map(QAbstractVideoBuffer::ReadOnly);
-        //QImage::Format imageFormat = QVideoFrame::imageFormatFromPixelFormat(vFrame.pixelFormat());
-        //QImage VideoFrameAsImage = QImage(vFrame.bits(), vFrame.width(), vFrame.height(), vFrame.bytesPerLine(), imageFormat);
+        QImage::Format imageFormat = QVideoFrame::imageFormatFromPixelFormat(vFrame.pixelFormat());
+        QImage VideoFrameAsImage = QImage(vFrame.bits(), vFrame.width(), vFrame.height(), vFrame.bytesPerLine(), imageFormat);
 
         if(vFrame.width() > 0 && vFrame.height() > 0)
         {
             QVector<QColor> lowQualityFrame;
-
-            int x = 0; int y = 0;
-            bool alternate = false;
-            for(int i = 0; i < vFrame.mappedBytes()-1; i+= 4)
+            uchar* bits = vFrame.bits();
+            for(qint64 i = 0; i < vFrame.mappedBytes(); i += 4)
             {
-                uchar* bits = vFrame.bits();
-                QColor color = QColor(bits[i], bits[i+1], bits[i+2], 255);
-                if(alternate == false)
-                {
-                    alternate = true;
-                }else if(alternate == true){
-                    lowQualityFrame.append(color);
-                    alternate = false;
-                }
 
-                x += 4;
-                if(x >= vFrame.width()-1)
-                {
-                    x = 0;
-                    y++;
-                }
-
-                if(y >= vFrame.height()-1)
-                {
-                    i = vFrame.mappedBytes();
-                }
+                std::string red( reinterpret_cast< char const* >(bits[i]) );
+                qWarning() << QString::fromStdString(red);
+                //TODO convert bits to integer
+                QColor color = QColor::fromRgb(bits[i], bits[i+1], bits[i+2], bits[i+3]);
+                //qWarning() << bits[i] << " " << bits[i+1] << " " << bits[i+2] << " " << bits[i+3] << " " << bits[i+4];
+                lowQualityFrame.append(color);
             }
 
             //todo create a class that groups qualities of frames
 
             emit renderedSplitQualities(lowQualityFrame);
         }
+
+        qWarning() << (QDateTime::currentMSecsSinceEpoch() - timestart);
         framesAwaitingToBeSplit.removeFirst();
     }
 }
