@@ -10,7 +10,6 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-     qRegisterMetaType<QList<videoFrameInstruction*>>();
      qRegisterMetaType<QVector<QColor>>();
 
     //head h;

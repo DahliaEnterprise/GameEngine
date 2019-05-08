@@ -11,8 +11,6 @@
 #include <QDebug>
 #include <QTimer>
 #include <QRandomGenerator>
-#include "Communications/communicationscontroller.h"
-#include "Communications/videoframeinstruction.h"
 #include <QList>
 #include <QVector>
 #include <QCamera>
@@ -42,7 +40,6 @@ private:
     QOpenGLPaintDevice* oglePaintDevice;
     QSurfaceFormat format;
     bool renderingEnabled;
-    QVector<videoFrame*> onScreenVideoFrames;
 
     //Frames Per Second counter of display
     QTimer* framesUpdateKeepAlive = nullptr;
@@ -57,7 +54,6 @@ signals:
 public slots:
     void renderNow();
     //void updateFrame();
-    void screenVideoFrame(videoFrame*);
 
 private slots:
 

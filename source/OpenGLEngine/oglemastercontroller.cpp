@@ -1,4 +1,4 @@
-#include "oglemastercontroller.h"
+#include "ogleMasterController.h"
 
 ogleMasterController::ogleMasterController(QObject *parent) : QObject(parent)
 {

@@ -29,7 +29,6 @@ SOURCES += \
     gameengine.cpp \
     gameengine/opengl_canvas.cpp \
     examplegame/gameloop.cpp \
-    head.cpp \
     gameengine/gameobject.cpp \
     examplegame/quickgame/quickgame.cpp \
     examplegame/quickgame/card/card_creature.cpp \
@@ -41,24 +40,14 @@ SOURCES += \
     examplegame/mainmenu/character/charazard.cpp \
     examplegame/mainmenu/mainmenu.cpp \
     gameengine/opengl.cpp \
-    communication/communication.cpp \
-    communication/communication_graphics_and_processing.cpp \
-    communication/network/network.cpp \
-    communication/camera/cameraimage.cpp \
-    communication/image/videoframebuffer.cpp \
-    communication/image/videoframebuffer_openglwidget.cpp \
     OpenGLEngine/oglemastercontroller.cpp \
     OpenGLEngine/oglewindow.cpp \
-    Communications/communicationscontroller.cpp \
-    Communications/videoframeinstruction.cpp \
-    Communications/videoframe.cpp \
     OpenGLEngine/camera/oglecameracontroller.cpp \
     OpenGLEngine/camera/camerasplitbyquality.cpp \
     ExampleGames/tennis/tennis.cpp
 
 HEADERS += \
     gameengine.h \
-    head.h \
     gameengine/gameobject.h \
     examplegame/quickgame/quickgame.h \
     examplegame/quickgame/card/card_creature.h \
@@ -72,17 +61,8 @@ HEADERS += \
     examplegame/gameloop.h \
     gameengine/opengl.h \
     gameengine/opengl_canvas.h \
-    communication/communication.h \
-    communication/communication_graphics_and_processing.h \
-    communication/network/network.h \
-    communication/camera/cameraimage.h \
-    communication/image/videoframebuffer.h \
-    communication/image/videoframebuffer_openglwidget.h \
     OpenGLEngine/oglemastercontroller.h \
     OpenGLEngine/oglewindow.h \
-    Communications/communicationscontroller.h \
-    Communications/videoframeinstruction.h \
-    Communications/videoframe.h \
     OpenGLEngine/camera/oglecameracontroller.h \
     OpenGLEngine/camera/camerasplitbyquality.h \
     ExampleGames/tennis/tennis.h
