@@ -4,16 +4,10 @@ OGLEWindow::OGLEWindow(QWindow *parent) : QWindow(parent)
 {
     ogleContext = nullptr; oglePaintDevice = nullptr;
     this->setSurfaceType(QWindow::OpenGLSurface);
-    format.setSamples(0);//multisampling
-    format.setSwapBehavior(QSurfaceFormat::DoubleBuffer);
-    format.setStencilBufferSize(8);
-    this->setFormat(format);
+    format.setSamples(0); format.setSwapBehavior(QSurfaceFormat::DoubleBuffer); format.setStencilBufferSize(8);this->setFormat(format);
     this->create();
-    this->setPosition(100,100);
-    this->resize(1280,720);
-    framesTimestamp = QDateTime::currentMSecsSinceEpoch();
-    frames = 0;
-    framesPerSecond = 0;
+    this->setPosition(100,100); this->resize(1280,720);
+    framesTimestamp = QDateTime::currentMSecsSinceEpoch(); frames = 0; framesPerSecond = 0;
     renderingEnabled = true;
 }
 
@@ -192,8 +186,6 @@ void OGLEWindow::renderNow()
     }
 }
 
-
-void OGLEWindow::screenVideoFrame(videoFrame* vFrame){ if(vFrame != nullptr){ onScreenVideoFrames.append(vFrame); }}
 
 void OGLEWindow::fpsCounterOfDisplay()
 {

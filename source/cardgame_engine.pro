@@ -26,45 +26,15 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-    gameengine.cpp \
-    gameengine/opengl_canvas.cpp \
-    examplegame/gameloop.cpp \
-    gameengine/gameobject.cpp \
-    examplegame/quickgame/quickgame.cpp \
-    examplegame/quickgame/card/card_creature.cpp \
-    examplegame/quickgame/card/card_moduspraecptum.cpp \
-    examplegame/quickgame/module/card/module_card_hightlightable.cpp \
-    examplegame/quickgame/card/card_turnactivatedcard.cpp \
-    examplegame/quickgame/module/card/module_card_clickable.cpp \
     modules/keyboardMouseInput/keyboardmouseinput.cpp \
-    examplegame/mainmenu/character/charazard.cpp \
-    examplegame/mainmenu/mainmenu.cpp \
-    gameengine/opengl.cpp \
     OpenGLEngine/oglemastercontroller.cpp \
     OpenGLEngine/oglewindow.cpp \
-    OpenGLEngine/camera/oglecameracontroller.cpp \
-    OpenGLEngine/camera/camerasplitbyquality.cpp \
     ExampleGames/tennis/tennis.cpp
 
 HEADERS += \
-    gameengine.h \
-    gameengine/gameobject.h \
-    examplegame/quickgame/quickgame.h \
-    examplegame/quickgame/card/card_creature.h \
-    examplegame/quickgame/card/card_moduspraecptum.h \
-    examplegame/quickgame/module/card/module_card_hightlightable.h \
-    examplegame/quickgame/card/card_turnactivatedcard.h \
     modules/keyboardMouseInput/keyboardmouseinput.h \
-    examplegame/mainmenu/character/charazard.h \
-    examplegame/mainmenu/mainmenu.h \
-    examplegame/quickgame/module/card/module_card_clickable.h \
-    examplegame/gameloop.h \
-    gameengine/opengl.h \
-    gameengine/opengl_canvas.h \
     OpenGLEngine/oglemastercontroller.h \
     OpenGLEngine/oglewindow.h \
-    OpenGLEngine/camera/oglecameracontroller.h \
-    OpenGLEngine/camera/camerasplitbyquality.h \
     ExampleGames/tennis/tennis.h
 
 # Default rules for deployment.

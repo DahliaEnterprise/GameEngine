@@ -10,15 +10,9 @@
 #include <QDateTime>
 #include <QDebug>
 #include <QTimer>
-#include <QRandomGenerator>
 #include <QList>
 #include <QVector>
-#include <QCamera>
-#include "OpenGLEngine/camera/oglecameracontroller.h"
 #include <QMap>
-#include <QVector>
-#include <QColor>
-#include "OpenGLEngine/camera/camerasplitbyquality.h"
 #include <QThread>
 class OGLEWindow : public QWindow, protected QOpenGLFunctions
 {
@@ -42,7 +36,6 @@ private:
     bool renderingEnabled;
 
     //Frames Per Second counter of display
-    QTimer* framesUpdateKeepAlive = nullptr;
     qint64 framesTimestamp;
     int frames;
     int framesPerSecond;
