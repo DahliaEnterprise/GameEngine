@@ -1,6 +1,6 @@
 #include "oglewindow.h"
 
-OGLEWindow::OGLEWindow(QWindow *parent) : QWindow(parent)
+OGLEWindow::OGLEWindow(QOpenGLWindow::UpdateBehavior updateBehavior, QOpenGLWindow *parent) /*: QOpenGLWindow(parent)*/
 {
     //Initalize variables intended to begin nullptr or zero'ed.
     ogleContext = nullptr; oglePaintDevice = nullptr;
@@ -9,11 +9,12 @@ OGLEWindow::OGLEWindow(QWindow *parent) : QWindow(parent)
     this->setSurfaceType(QWindow::OpenGLSurface);format.setSamples(0); format.setSwapBehavior(QSurfaceFormat::SingleBuffer); format.setStencilBufferSize(8);this->setFormat(format);this->create();this->setPosition(100,100); this->resize(1280,720);
     framesTimestamp = QDateTime::currentMSecsSinceEpoch(); frames = 0; framesPerSecond = 0;
     renderingEnabled = true;
+    //this->setUpdateBehavior(QOpenGLWindow::PartialUpdateBlit);
 }
 
 OGLEWindow::~OGLEWindow(){}
 
-void OGLEWindow::start(){renderTimer = new QTimer();renderTimer->start(10);QObject::connect(renderTimer, SIGNAL(timeout()), this, SLOT(requestRenderUpdate()));}
+void OGLEWindow::start(){this->setTitle(QString("Dahlias OpenGL Engine - Dogle"));renderTimer = new QTimer();renderTimer->start(10);QObject::connect(renderTimer, SIGNAL(timeout()), this, SLOT(requestRenderUpdate()));}
 void OGLEWindow::render(QPainter* painter){ Q_UNUSED(painter); }
 void OGLEWindow::initialize(){}
 void OGLEWindow::render(){}
@@ -23,25 +24,23 @@ void OGLEWindow::exposeEvent(QExposeEvent *event){ Q_UNUSED(event);this->renderN
 
 void OGLEWindow::renderNow()
 {
-
     this->fpsCounterOfDisplay();
     if(this->isExposed() == true)
     {
         if(renderingEnabled == true)
         {
-
             //(Initialize if nessecary and) Make context current
             bool initOGLF = false; if(ogleContext == nullptr){ogleContext = new QOpenGLContext(this);ogleContext->setFormat(format);ogleContext->create();initOGLF = true;}ogleContext->makeCurrent(this);if(initOGLF == true){  initializeOpenGLFunctions(); initialize(); }
             //Initialize paint device and configure paint device
-            if(oglePaintDevice == nullptr){oglePaintDevice = new QOpenGLPaintDevice();}glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);oglePaintDevice->setSize(size() * devicePixelRatio());oglePaintDevice->setDevicePixelRatio(devicePixelRatio());
+            this->initalizeOglePaintDevice();
 
             /// Draw operations
             /** MUTED DURING ALTERNATIVE TESTING OF
              */
             QPainter painter(oglePaintDevice);
             painter.setRenderHint(QPainter::Antialiasing, true);
-            painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
-
+            painter.setCompositionMode(QPainter::CompositionMode_DestinationOver);
+            //TODO: left off working out layer replacement or perhaps area replacement or maybe objects most front redrawing.
             QPen pen;
 
             pen.setColor(QColor(25, 255, 200, 255));
@@ -173,6 +172,7 @@ void OGLEWindow::renderNow()
 
 
 void OGLEWindow::fpsCounterOfDisplay(){frames++; qint64 sinceLastFrame = QDateTime::currentMSecsSinceEpoch() - framesTimestamp; if(sinceLastFrame > 1000){qWarning() << frames;framesTimestamp = QDateTime::currentMSecsSinceEpoch();frames = 0;}}
-
-
 void OGLEWindow::requestRenderUpdate(){this->requestUpdate();}
+void OGLEWindow::appendPainter(QPainter* painter){bufferedDrawingInstructions.append(painter);}
+
+void OGLEWindow::initalizeOglePaintDevice(){if(oglePaintDevice == nullptr){oglePaintDevice = new QOpenGLPaintDevice();}glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);oglePaintDevice->setSize(size() * devicePixelRatio());oglePaintDevice->setDevicePixelRatio(devicePixelRatio());}

@@ -15,15 +15,19 @@
 #include <QMap>
 #include <QThread>
 #include <QRandomGenerator>
-class OGLEWindow : public QWindow, protected QOpenGLFunctions
+#include <QOpenGLWindow>
+class OGLEWindow : public QOpenGLWindow, protected QOpenGLFunctions
 {
     Q_OBJECT
 public:
-    explicit OGLEWindow(QWindow *parent = nullptr);
+    explicit OGLEWindow(QOpenGLWindow::UpdateBehavior updateBehavior = NoPartialUpdate, QOpenGLWindow *parent = nullptr);
     ~OGLEWindow() override;
 
     void start();
 
+    void appendPainter(QPainter* painter);
+
+    //Overloaded
     virtual void render(QPainter* painter);
     virtual void render();
 
@@ -36,12 +40,14 @@ private:
     QSurfaceFormat format;
     bool renderingEnabled;
     QTimer* renderTimer;
+    QVector<QPainter*> bufferedDrawingInstructions;
+    void initalizeOglePaintDevice();
+
 
     //Frames Per Second counter of display
     qint64 framesTimestamp;
     int frames;
     int framesPerSecond;
-
     void fpsCounterOfDisplay();
 
 signals:
