@@ -1,4 +1,4 @@
-#include "ogleMasterController.h"
+#include "OpenGLEngine/oglemastercontroller.h"
 
 ogleMasterController::ogleMasterController(QObject *parent) : QObject(parent)
 {
@@ -7,9 +7,6 @@ ogleMasterController::ogleMasterController(QObject *parent) : QObject(parent)
 
 void ogleMasterController::start()
 {
-    ///Display
-    window = new OGLEWindow();
-    window->start();
-    window->resize(QSize(1280, 720));
-    window->show();
+    ///Show Window rendering data from OpenGL Engine
+    window = new OGLEWindow();window->start();window->resize(QSize(1280, 720));window->show();
 }

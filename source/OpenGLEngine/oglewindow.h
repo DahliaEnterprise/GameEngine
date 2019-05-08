@@ -14,6 +14,7 @@
 #include <QVector>
 #include <QMap>
 #include <QThread>
+#include <QRandomGenerator>
 class OGLEWindow : public QWindow, protected QOpenGLFunctions
 {
     Q_OBJECT
@@ -34,6 +35,7 @@ private:
     QOpenGLPaintDevice* oglePaintDevice;
     QSurfaceFormat format;
     bool renderingEnabled;
+    QTimer* renderTimer;
 
     //Frames Per Second counter of display
     qint64 framesTimestamp;
@@ -49,6 +51,7 @@ public slots:
     //void updateFrame();
 
 private slots:
+    void requestRenderUpdate();
 
 protected:
     bool event(QEvent* event) override;
