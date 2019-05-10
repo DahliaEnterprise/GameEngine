@@ -25,6 +25,7 @@ void OGLEWindow::exposeEvent(QExposeEvent *event){ Q_UNUSED(event);this->renderN
 void OGLEWindow::renderNow()
 {
     this->fpsCounterOfDisplay();
+
     if(this->isExposed() == true)
     {
         if(renderingEnabled == true)
@@ -166,6 +167,9 @@ void OGLEWindow::renderNow()
             //render(&painter);//call (base-class) render after drawing here
 
             ogleContext->swapBuffers(this);
+
+            //Signal frame finished rendering
+            emit frameRenderFinished();
         }
     }
 }

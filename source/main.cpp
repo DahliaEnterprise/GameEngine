@@ -11,10 +11,8 @@ int main(int argc, char *argv[])
 
 
     ogleMasterController* ogle = new ogleMasterController();
-
     tennis* t = new tennis();
     t->setOpenGLMasterController(ogle);
-
     t->start();
     ogle->start();
 

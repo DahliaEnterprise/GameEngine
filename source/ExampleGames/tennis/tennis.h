@@ -12,11 +12,13 @@ public:
 
     void setOpenGLMasterController(ogleMasterController* setOgle);
 
-    void start();
+    bool start();
+
+    void ogleAvailableForNextFrame();
 
 private:
     //Set from outside scope of this
-    ogleMasterController* ogle;
+    ogleMasterController* ogle; bool OGLEMasterController_isSet = false;
 
 signals:
 

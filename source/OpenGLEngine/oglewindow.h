@@ -51,10 +51,10 @@ private:
     void fpsCounterOfDisplay();
 
 signals:
+    void frameRenderFinished();
 
 public slots:
     void renderNow();
-    //void updateFrame();
 
 private slots:
     void requestRenderUpdate();
