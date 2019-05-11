@@ -10,6 +10,15 @@ bool tennis::start()
     bool tennisIsReady = true;
     if(OGLEMasterController_isSet == true){QObject::connect(ogle, SIGNAL(frameRenderFinished()), this, SLOT(ogleAvailableForNextFrame())); }else{tennisIsReady = false; }
 
+    if(tennisIsReady == true)
+    {
+        logicThread = new QThread();
+        logic = new tennis_script();
+        logic->moveToThread(logicThread);
+        //logic->start();
+        logicThread->start();
+    }
+
     return output;
 }
 
@@ -17,5 +26,6 @@ bool tennis::start()
 void tennis::ogleAvailableForNextFrame()
 {
     //TODO: if frame instructions are available, push frame
-    // ogle->getWindow()->incomingNextFrame();
+    //logic->determineFrame();
+    //ogle->getWindow()->incomingNextFrame();
 }

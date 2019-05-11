@@ -16,6 +16,7 @@ private:
     OGLEWindow* window;
 
 signals:
+    void frameRenderFinished();
 
 public slots:
 };

@@ -4,6 +4,8 @@
 #include <QObject>
 #include "OpenGLEngine/oglemastercontroller.h"
 #include <QOpenGLPaintDevice>
+#include "ExampleGames/tennis/tennis_script.h"
+#include <QThread>
 class tennis : public QObject
 {
     Q_OBJECT
@@ -14,15 +16,19 @@ public:
 
     bool start();
 
-    void ogleAvailableForNextFrame();
-
 private:
+    QThread* logicThread;
+    tennis_script* logic;
+
     //Set from outside scope of this
     ogleMasterController* ogle; bool OGLEMasterController_isSet = false;
 
 signals:
 
 public slots:
+
+private slots:
+    void ogleAvailableForNextFrame();
 };
 
 #endif // TENNIS_H
