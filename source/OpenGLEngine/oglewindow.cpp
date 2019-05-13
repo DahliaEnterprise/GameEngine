@@ -1,6 +1,6 @@
 #include "oglewindow.h"
 
-OGLEWindow::OGLEWindow(QOpenGLWindow::UpdateBehavior updateBehavior, QOpenGLWindow *parent) /*: QOpenGLWindow(parent)*/
+OGLEWindow::OGLEWindow(QOpenGLWindow::UpdateBehavior updateBehavior, QOpenGLWindow *parent)
 {
     //Initalize variables intended to begin nullptr or zero'ed.
     ogleContext = nullptr; oglePaintDevice = nullptr;
@@ -14,13 +14,19 @@ OGLEWindow::OGLEWindow(QOpenGLWindow::UpdateBehavior updateBehavior, QOpenGLWind
 
 OGLEWindow::~OGLEWindow(){}
 
-void OGLEWindow::start(){this->setTitle(QString("Dahlias OpenGL Engine - Dogle"));renderTimer = new QTimer();renderTimer->start(10);QObject::connect(renderTimer, SIGNAL(timeout()), this, SLOT(requestRenderUpdate()));}
+void OGLEWindow::start(){this->setTitle(QString("Dahlias OpenGL Engine - Dogle"));OGLEMousePosition = new ogleWindowMousePosition();mouseUpdatedTimestamp=0;renderTimer = new QTimer();renderTimer->start(10);QObject::connect(renderTimer, SIGNAL(timeout()), this, SLOT(requestRenderUpdate()));}
 void OGLEWindow::render(QPainter* painter){ Q_UNUSED(painter); }
 void OGLEWindow::initialize(){}
 void OGLEWindow::render(){}
 bool OGLEWindow::event(QEvent* event){bool output = false; if(event->type() == QEvent::UpdateRequest){renderNow();output = true;}else{output = QWindow::event(event);} return output;}
 void OGLEWindow::exposeEvent(QExposeEvent *event){ Q_UNUSED(event);this->renderNow(); }
+void OGLEWindow::mouseMoveEvent(QMouseEvent * event){ if(mouseUpdatedTimestamp==0){mouseUpdatedTimestamp=QDateTime::currentMSecsSinceEpoch();} if((QDateTime::currentMSecsSinceEpoch() - mouseUpdatedTimestamp) > 15){mouseUpdatedTimestamp=QDateTime::currentMSecsSinceEpoch();mouseX=event->x();mouseY=event->y();} }
+ogleWindowMousePosition* OGLEWindow::getMousePosition(){OGLEMousePosition->setMousePosition(mouseX,mouseY); return OGLEMousePosition;}
 
+void OGLEWindow::nextFrame()
+{
+
+}
 
 void OGLEWindow::renderNow()
 {
@@ -36,8 +42,6 @@ void OGLEWindow::renderNow()
             this->initalizeOglePaintDevice();
 
             /// Draw operations
-            /** MUTED DURING ALTERNATIVE TESTING OF
-             */
             QPainter painter(oglePaintDevice);
             painter.setRenderHint(QPainter::Antialiasing, true);
             painter.setCompositionMode(QPainter::CompositionMode_DestinationOver);
@@ -177,6 +181,4 @@ void OGLEWindow::renderNow()
 
 void OGLEWindow::fpsCounterOfDisplay(){frames++; qint64 sinceLastFrame = QDateTime::currentMSecsSinceEpoch() - framesTimestamp; if(sinceLastFrame > 1000){qWarning() << frames;framesTimestamp = QDateTime::currentMSecsSinceEpoch();frames = 0;}}
 void OGLEWindow::requestRenderUpdate(){this->requestUpdate();}
-void OGLEWindow::appendPainter(QPainter* painter){bufferedDrawingInstructions.append(painter);}
-
 void OGLEWindow::initalizeOglePaintDevice(){if(oglePaintDevice == nullptr){oglePaintDevice = new QOpenGLPaintDevice();}glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);oglePaintDevice->setSize(size() * devicePixelRatio());oglePaintDevice->setDevicePixelRatio(devicePixelRatio());}

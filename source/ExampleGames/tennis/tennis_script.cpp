@@ -1,9 +1,6 @@
 #include "tennis_script.h"
 
-tennis_script::tennis_script(QObject *parent) : QObject(parent)
-{
-
-}
+tennis_script::tennis_script(QObject *parent) : QObject(parent){}
 void tennis_script::start(){objectsInitialized = false;scriptKeepalive = new QTimer();QObject::connect(scriptKeepalive, SIGNAL(timeout()), this, SLOT(wakeupScript()));scriptKeepalive->start(100);}
 void tennis_script::wakeupScript(){QTimer::singleShot(6, this, SLOT(cycleLogic()));}
 

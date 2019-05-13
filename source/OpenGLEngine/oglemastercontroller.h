@@ -4,6 +4,8 @@
 #include <QObject>
 #include "oglewindow.h"
 #include <QThread>
+#include "ExampleGames/tennis/tennis.h"
+#include <QTimer>
 class ogleMasterController : public QObject
 {
     Q_OBJECT
@@ -13,12 +15,17 @@ public:
     OGLEWindow* getWindow();
 
 private:
+    tennis* t;
     OGLEWindow* window;
+    QTimer* mousePositionUpdateTimer;
 
 signals:
-    void frameRenderFinished();
 
 public slots:
+    void frameRenderFinished();
+
+private slots:
+    void updatedMousePosition();
 };
 
 #endif // OGLEMASTERCONTROLLER_H

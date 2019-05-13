@@ -26,22 +26,22 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-    modules/keyboardMouseInput/keyboardmouseinput.cpp \
     OpenGLEngine/oglemastercontroller.cpp \
     OpenGLEngine/oglewindow.cpp \
     ExampleGames/tennis/tennis.cpp \
     ExampleGames/tennis/tennis_script.cpp \
     OpenGLEngine/ogleemblem.cpp \
-    ExampleGames/tennis/playerTools/paddle.cpp
+    ExampleGames/tennis/playerTools/paddle.cpp \
+    OpenGLEngine/oglewindowmouseposition.cpp
 
 HEADERS += \
-    modules/keyboardMouseInput/keyboardmouseinput.h \
     OpenGLEngine/oglemastercontroller.h \
     OpenGLEngine/oglewindow.h \
     ExampleGames/tennis/tennis.h \
     ExampleGames/tennis/tennis_script.h \
     OpenGLEngine/ogleemblem.h \
-    ExampleGames/tennis/playerTools/paddle.h
+    ExampleGames/tennis/playerTools/paddle.h \
+    OpenGLEngine/oglewindowmouseposition.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

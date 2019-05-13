@@ -2,30 +2,27 @@
 
 tennis::tennis(QObject *parent) : QObject(parent){}
 
-void tennis::setOpenGLMasterController(ogleMasterController* setOgle){ogle = setOgle;OGLEMasterController_isSet=true;}
-
 bool tennis::start()
 {
     bool output = false;
-    bool tennisIsReady = true;
-    if(OGLEMasterController_isSet == true){QObject::connect(ogle, SIGNAL(frameRenderFinished()), this, SLOT(ogleAvailableForNextFrame())); }else{tennisIsReady = false; }
 
-    if(tennisIsReady == true)
-    {
-        logicThread = new QThread();
-        logic = new tennis_script();
-        logic->moveToThread(logicThread);
-        //logic->start();
-        logicThread->start();
-    }
+    logic = new tennis_script();
+    logic->start();
 
     return output;
 }
 
 
-void tennis::ogleAvailableForNextFrame()
+void tennis::determine_frame()
 {
     //TODO: if frame instructions are available, push frame
-    //logic->determineFrame();
+    logic->determine_frame();
     //ogle->getWindow()->incomingNextFrame();
+}
+
+
+void tennis::updatedMousePosition(ogleWindowMousePosition* newMousePosition)
+{
+    mousePosition=newMousePosition;
+    qWarning() << mousePosition->getMouseX();
 }

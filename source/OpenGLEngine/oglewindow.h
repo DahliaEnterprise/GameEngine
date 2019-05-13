@@ -16,6 +16,9 @@
 #include <QThread>
 #include <QRandomGenerator>
 #include <QOpenGLWindow>
+#include <QCursor>
+#include <QDateTime>
+#include "OpenGLEngine/oglewindowmouseposition.h"
 class OGLEWindow : public QOpenGLWindow, protected QOpenGLFunctions
 {
     Q_OBJECT
@@ -24,8 +27,9 @@ public:
     ~OGLEWindow() override;
 
     void start();
+    void nextFrame();
 
-    void appendPainter(QPainter* painter);
+    ogleWindowMousePosition* getMousePosition();
 
     //Overloaded
     virtual void render(QPainter* painter);
@@ -40,9 +44,13 @@ private:
     QSurfaceFormat format;
     bool renderingEnabled;
     QTimer* renderTimer;
-    QVector<QPainter*> bufferedDrawingInstructions;
     void initalizeOglePaintDevice();
+    ogleWindowMousePosition* OGLEMousePosition;
 
+    //Mouse
+    qint64 mouseUpdatedTimestamp;
+    int mouseX;
+    int mouseY;
 
     //Frames Per Second counter of display
     qint64 framesTimestamp;
@@ -62,6 +70,7 @@ private slots:
 protected:
     bool event(QEvent* event) override;
     void exposeEvent(QExposeEvent* event) override;
+    void mouseMoveEvent(QMouseEvent * event) override;
 
 };
 
