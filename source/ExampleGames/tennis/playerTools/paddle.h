@@ -24,9 +24,14 @@ private:
     int screenHeight;
     int mouseX;
     int mouseY;
-
     predictiveMousePosition* correctedMousePosition;
     int correctedX;
+    int correctedY;
+
+    int paddleWidth;
+    int paddleHeight;
+    int paddleX;
+    int paddleY;
 
 signals:
 

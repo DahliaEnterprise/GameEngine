@@ -8,11 +8,13 @@ class predictiveMousePosition : public QObject
     Q_OBJECT
 public:
     explicit predictiveMousePosition(QObject *parent = nullptr);
-    void determineCorrection(int mouseX, int newMouseX);
+    void determineCorrection(int mouseX, int newMouseX, int mouseY, int newMouseY);
     int getCorrectedX();
+    int getCorrectedY();
 
 private:
     int correctedX;
+    int correctedY;
 
 signals:
 
