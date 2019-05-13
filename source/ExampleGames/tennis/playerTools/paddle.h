@@ -6,6 +6,7 @@
 #include "OpenGLEngine/oglewindowmouseposition.h"
 #include "OpenGLEngine/ogleemblem.h"
 #include "OpenGLEngine/ogleemblem/ogleemblembox.h"
+#include "ExampleGames/tennis/predictivemouseposition.h"
 class paddle : public QObject
 {
     Q_OBJECT
@@ -24,6 +25,7 @@ private:
     int mouseX;
     int mouseY;
 
+    predictiveMousePosition* correctedMousePosition;
     int correctedX;
 
 signals:
