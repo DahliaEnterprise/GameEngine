@@ -24,6 +24,8 @@ private:
     int mouseX;
     int mouseY;
 
+    int correctedX;
+
 signals:
 
 public slots:

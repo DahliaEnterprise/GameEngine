@@ -15,12 +15,19 @@ void paddle::start(int setScreenWidth, int setScreenHeight)
 
 ogleEmblem* paddle::determine_frame()
 {
-    emblemBox->selectiveCharacteristicUpdate(ogleEmblemBox::characteristic::CharacteristicLeft, mouseX);
+    emblemBox->selectiveCharacteristicUpdate(ogleEmblemBox::characteristic::CharacteristicLeft, correctedX);
     emblemBox->selectiveCharacteristicUpdate(ogleEmblemBox::characteristic::CharacteristicTop, mouseY);
     return emblem;
 }
 
 void paddle::updatedMousePosition(ogleWindowMousePosition* newMousePosition)
 {
+    //estimate mouse x y position
+    int xSpeed = std::abs(std::abs(mouseX)-std::abs(newMousePosition->getMouseX()));
+    int xDirection = mouseX-newMousePosition->getMouseX();
+    if(xDirection < 0){correctedX = newMousePosition->getMouseX() + xSpeed;
+    }else if(xDirection > 0){correctedX = newMousePosition->getMouseX() - xSpeed;}
+
+    //
     mouseX=newMousePosition->getMouseX();mouseY=newMousePosition->getMouseY();
 }
