@@ -4,7 +4,7 @@ ogleMasterController::ogleMasterController(QObject *parent) : QObject(parent){}
 void ogleMasterController::start()
 {
     ///Show Window rendering data from OpenGL Engine
-    window = new OGLEWindow(QOpenGLWindow::PartialUpdateBlit);window->start();window->resize(QSize(1280, 720));window->show();QObject::connect(window, SIGNAL(frameRenderFinished()), this, SLOT(frameRenderFinished()));
+    window = new OGLEWindow(QOpenGLWindow::NoPartialUpdate);window->start();window->resize(QSize(1280, 720));window->show();QObject::connect(window, SIGNAL(frameRenderFinished()), this, SLOT(frameRenderFinished()));
     ///Startup Game Script
     t = new tennis();t->start();
     mousePositionUpdateTimer = new QTimer();
@@ -14,7 +14,6 @@ void ogleMasterController::start()
 OGLEWindow* ogleMasterController::getWindow(){return window;}
 void ogleMasterController::frameRenderFinished()
 {
-    //TOD:window->nextFrame(t->determine_frame());
-    window->nextFrame(); t->determine_frame();
+    window->nextFrame(t->determine_frame());
 }
 void ogleMasterController::updatedMousePosition(){t->updatedMousePosition(window->getMousePosition());}

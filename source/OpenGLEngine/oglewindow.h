@@ -19,6 +19,7 @@
 #include <QCursor>
 #include <QDateTime>
 #include "OpenGLEngine/oglewindowmouseposition.h"
+#include "OpenGLEngine/ogleemblem.h"
 class OGLEWindow : public QOpenGLWindow, protected QOpenGLFunctions
 {
     Q_OBJECT
@@ -27,7 +28,7 @@ public:
     ~OGLEWindow() override;
 
     void start();
-    void nextFrame();
+    void nextFrame(QVector<ogleEmblem*> emblemListToNextFrame);
 
     ogleWindowMousePosition* getMousePosition();
 
@@ -42,10 +43,10 @@ private:
     QOpenGLContext* ogleContext;
     QOpenGLPaintDevice* oglePaintDevice;
     QSurfaceFormat format;
-    bool renderingEnabled;
     QTimer* renderTimer;
     void initalizeOglePaintDevice();
     ogleWindowMousePosition* OGLEMousePosition;
+    QVector<ogleEmblem*> frameAEmblems;
 
     //Mouse
     qint64 mouseUpdatedTimestamp;

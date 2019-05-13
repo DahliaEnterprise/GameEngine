@@ -5,13 +5,15 @@
 #include <QTimer>
 #include "OpenGLEngine/ogleemblem.h"
 #include "ExampleGames/tennis/playerTools/paddle.h"
+#include "OpenGLEngine/oglewindowmouseposition.h"
 class tennis_script : public QObject
 {
     Q_OBJECT
 public:
     explicit tennis_script(QObject *parent = nullptr);
     void start();
-    void determine_frame();
+    QVector<ogleEmblem*> determine_frame();
+    void updatedMousePosition(ogleWindowMousePosition* newMousePosition);
 
 private:
     QTimer* scriptKeepalive;

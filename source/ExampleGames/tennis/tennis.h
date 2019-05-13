@@ -6,14 +6,16 @@
 #include "ExampleGames/tennis/tennis_script.h"
 #include "OpenGLEngine/oglewindowmouseposition.h"
 #include <QDebug>
+#include <QVector>
+#include "OpenGLEngine/ogleemblem.h"
 class tennis : public QObject
 {
     Q_OBJECT
 public:
     explicit tennis(QObject *parent = nullptr);
 
-    bool start();
-    void determine_frame();
+    void start();
+    QVector<ogleEmblem*> determine_frame();
     void updatedMousePosition(ogleWindowMousePosition* newMousePosition);
 
 private:

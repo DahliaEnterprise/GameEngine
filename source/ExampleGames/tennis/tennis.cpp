@@ -2,27 +2,14 @@
 
 tennis::tennis(QObject *parent) : QObject(parent){}
 
-bool tennis::start()
-{
-    bool output = false;
-
-    logic = new tennis_script();
-    logic->start();
-
-    return output;
-}
+void tennis::start(){ logic = new tennis_script();logic->start();mousePosition=new ogleWindowMousePosition();}
 
 
-void tennis::determine_frame()
-{
-    //TODO: if frame instructions are available, push frame
-    logic->determine_frame();
-    //ogle->getWindow()->incomingNextFrame();
-}
+QVector<ogleEmblem*> tennis::determine_frame(){return logic->determine_frame();}
 
 
 void tennis::updatedMousePosition(ogleWindowMousePosition* newMousePosition)
 {
     mousePosition=newMousePosition;
-    qWarning() << mousePosition->getMouseX();
+    logic->updatedMousePosition(newMousePosition);
 }
