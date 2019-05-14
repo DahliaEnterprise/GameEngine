@@ -35,7 +35,8 @@ SOURCES += \
     OpenGLEngine/oglewindowmouseposition.cpp \
     OpenGLEngine/ogleemblem/ogleemblembox.cpp \
     ExampleGames/tennis/predictivemouseposition.cpp \
-    ExampleGames/tennis/aiTools/aipaddle.cpp
+    ExampleGames/tennis/aiTools/aipaddle.cpp \
+    ExampleGames/tennis/token.cpp
 
 HEADERS += \
     OpenGLEngine/oglemastercontroller.h \
@@ -47,7 +48,8 @@ HEADERS += \
     OpenGLEngine/oglewindowmouseposition.h \
     OpenGLEngine/ogleemblem/ogleemblembox.h \
     ExampleGames/tennis/predictivemouseposition.h \
-    ExampleGames/tennis/aiTools/aipaddle.h
+    ExampleGames/tennis/aiTools/aipaddle.h \
+    ExampleGames/tennis/token.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
