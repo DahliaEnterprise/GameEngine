@@ -11,10 +11,12 @@ void paddle::start(int setScreenWidth, int setScreenHeight)
     correctedMousePosition = new predictiveMousePosition();
     emblemBox = new ogleEmblemBox();emblemBox->defineEveryCharacteristic(QColor(100,100,100,255), QColor(100,100,100,255), 10,100,paddleWidth,paddleHeight);
     emblem = new ogleEmblem();emblem->start(emblemBox);
-
 }
 
-ogleEmblem* paddle::determine_frame(){return emblem;}
+ogleEmblem* paddle::determine_frame(){
+    emblemBox->selectiveCharacteristicUpdate(ogleEmblemBox::characteristic::CharacteristicLeft, paddleX);
+    return emblem;
+}
 
 void paddle::updatedMousePosition(ogleWindowMousePosition* newMousePosition)
 {
@@ -24,7 +26,6 @@ void paddle::updatedMousePosition(ogleWindowMousePosition* newMousePosition)
 
     //determine paddle x and paddle y
     paddleX = correctedX - (paddleWidth / 2);
-    emblemBox->selectiveCharacteristicUpdate(ogleEmblemBox::characteristic::CharacteristicLeft, paddleX);
 
     //update current mouse x and mouse y positions
     mouseX=newMousePosition->getMouseX();mouseY=newMousePosition->getMouseY();

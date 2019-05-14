@@ -6,6 +6,7 @@
 #include "OpenGLEngine/ogleemblem.h"
 #include "ExampleGames/tennis/playerTools/paddle.h"
 #include "OpenGLEngine/oglewindowmouseposition.h"
+#include "ExampleGames/tennis/aiTools/aipaddle.h"
 class tennis_script : public QObject
 {
     Q_OBJECT
@@ -22,6 +23,7 @@ private:
 
     ogleEmblem* playerOneEmblem;
     paddle* playerOnePaddle;
+    aiPaddle* playerAiPaddle;
 
 
 signals:
