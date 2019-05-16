@@ -29,4 +29,6 @@ void token::cyclePhysics()
 {
     currentX += velocityX;
     currentY += velocityY;
+
+    //TODO: bounce off edges of screen
 }

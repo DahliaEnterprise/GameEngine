@@ -36,7 +36,8 @@ SOURCES += \
     OpenGLEngine/ogleemblem/ogleemblembox.cpp \
     ExampleGames/tennis/predictivemouseposition.cpp \
     ExampleGames/tennis/aiTools/aipaddle.cpp \
-    ExampleGames/tennis/token.cpp
+    ExampleGames/tennis/token.cpp \
+    DahliaBroadcast/dahliabroadcast.cpp
 
 HEADERS += \
     OpenGLEngine/oglemastercontroller.h \
@@ -49,7 +50,8 @@ HEADERS += \
     OpenGLEngine/ogleemblem/ogleemblembox.h \
     ExampleGames/tennis/predictivemouseposition.h \
     ExampleGames/tennis/aiTools/aipaddle.h \
-    ExampleGames/tennis/token.h
+    ExampleGames/tennis/token.h \
+    DahliaBroadcast/dahliabroadcast.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
