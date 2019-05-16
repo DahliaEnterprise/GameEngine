@@ -6,7 +6,7 @@ OGLEWindow::OGLEWindow(QOpenGLWindow::UpdateBehavior updateBehavior, QOpenGLWind
     ogleContext = nullptr; oglePaintDevice = nullptr;
 
     //Configure
-    this->setSurfaceType(QWindow::OpenGLSurface);format.setSamples(0); format.setSwapBehavior(QSurfaceFormat::DoubleBuffer);this->setFormat(format);this->create();this->setPosition(100,100); this->resize(1280,720);
+    this->setSurfaceType(QWindow::OpenGLSurface);format.setSamples(8); format.setSwapBehavior(QSurfaceFormat::DoubleBuffer);this->setFormat(format);this->create();this->setPosition(100,100); this->resize(1280,720);
     framesTimestamp = QDateTime::currentMSecsSinceEpoch(); frames = 0; framesPerSecond = 0;
 
 }
