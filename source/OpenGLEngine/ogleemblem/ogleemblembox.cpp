@@ -2,7 +2,7 @@
 
 ogleEmblemBox::ogleEmblemBox(QObject *parent) : QObject(parent)
 {
-
+    prerendered_available = false;
 }
 
 void ogleEmblemBox::defineEveryCharacteristic(QColor setborder, QColor setfill, int settop, int setleft, int setwidth, int setheight){border=setborder;fill=setfill;top=settop;left=setleft;width=setwidth;height=setheight;}
@@ -25,3 +25,9 @@ QVariant ogleEmblemBox::getCharacteristic(characteristic property)
 
 QColor ogleEmblemBox::getBorderColor(){return border;}
 QColor ogleEmblemBox::getFillColor(){return fill;}
+
+//
+void ogleEmblemBox::incomingPrerender(QImage updatedPrerender){prerendered_available=true;
+                                                               prendered=updatedPrerender.copy(0,0,updatedPrerender.width(), updatedPrerender.height());}
+QImage ogleEmblemBox::getPrerendered(){ return prendered;}
+bool ogleEmblemBox::prerenderedAvailable(){return prerendered_available;}

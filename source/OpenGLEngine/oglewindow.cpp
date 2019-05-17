@@ -6,7 +6,7 @@ OGLEWindow::OGLEWindow(QOpenGLWindow::UpdateBehavior updateBehavior, QOpenGLWind
     ogleContext = nullptr; oglePaintDevice = nullptr;
 
     //Configure
-    this->setSurfaceType(QWindow::OpenGLSurface);format.setSamples(8); format.setSwapBehavior(QSurfaceFormat::DoubleBuffer);this->setFormat(format);this->create();this->setPosition(100,100); this->resize(1280,720);
+    this->setSurfaceType(QWindow::OpenGLSurface);format.setSamples(24);format.setVersion(4,0); format.setSwapBehavior(QSurfaceFormat::DoubleBuffer);this->setFormat(format);this->create();this->setPosition(100,100); this->resize(1280,720);
     framesTimestamp = QDateTime::currentMSecsSinceEpoch(); frames = 0; framesPerSecond = 0;
 
 }
@@ -37,12 +37,14 @@ void OGLEWindow::renderNow()
         ///(Initialize if nessecary and) Make context current
         bool initOGLF=false;if(ogleContext == nullptr){ogleContext=new QOpenGLContext(this);ogleContext->setFormat(format);ogleContext->create();initOGLF=true;}ogleContext->makeCurrent(this);if(initOGLF==true){initializeOpenGLFunctions();initialize();}this->initalizeOglePaintDevice();
 
+
+
         ///Draw to screen according to emblem specification
         QPainter painter(oglePaintDevice);
         painter.setRenderHint(QPainter::Antialiasing, false);
         painter.setCompositionMode(QPainter::CompositionMode_DestinationOver);
-        QVector<ogleEmblem*>::const_iterator emblemIterator = frameAEmblems.constBegin();
-        while(emblemIterator != frameAEmblems.constEnd())
+        QVector<ogleEmblem*>::iterator emblemIterator = frameAEmblems.begin();
+        while(emblemIterator != frameAEmblems.end())
         {
             //Determine drawing instructions assertained by emblem datatype
             ogleEmblem* emblem = *emblemIterator;
@@ -53,33 +55,29 @@ void OGLEWindow::renderNow()
                 int left = box->getCharacteristic(ogleEmblemBox::CharacteristicLeft).toInt();
                 int width = box->getCharacteristic(ogleEmblemBox::CharacteristicWidth).toInt();
                 int height = box->getCharacteristic(ogleEmblemBox::CharacteristicHeight).toInt();
-                QColor border = box->getBorderColor();
                 QColor fill = box->getFillColor();
                 painter.fillRect(QRect(left,top,width,height),fill);
+
+                //
+                if(box->prerenderedAvailable() == true)
+                {
+
+                    //painter.drawImage(QRect(left,top,width,height), box->getPrerendered());
+                    //box->getPrerendered();
+                }else if(box->prerenderedAvailable() == false){
+                    QImage boxImage = QImage(width,height, QImage::Format_ARGB32);
+                    QPainter boxImagePainter(&boxImage);
+
+                    boxImagePainter.fillRect(QRect(left,top,width,height),fill);
+                    box->incomingPrerender(boxImage);
+                }
             }
 
             //Next emblem
             emblemIterator++;
         }
-
-        /// Draw operations
-        /*
-        QPainter painter(oglePaintDevice);
-        painter.setRenderHint(QPainter::Antialiasing, true);
-        painter.setCompositionMode(QPainter::CompositionMode_DestinationOver);
-        QPen pen;
-
-        pen.setColor(QColor(25, 255, 200, 255));
-        pen.setWidth(1);
-        painter.setPen(pen);
-        painter.setFont(QFont(QString("Arial"), 15, 1, false));
-        QRandomGenerator random = QRandomGenerator::securelySeeded();
-        double d = random.bounded(1000);
-        painter.drawText(QPointF(d,100), QString("TEST"));
-        */
-
         //calling (base-class) render after drawing here
-        render(&painter);
+        //render(&painter);
         ogleContext->swapBuffers(this);
         emit frameRenderFinished();
     }

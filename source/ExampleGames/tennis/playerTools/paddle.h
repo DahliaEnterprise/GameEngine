@@ -15,6 +15,7 @@ public:
     void start(int setScreenWidth, int setScreenHeight);
     ogleEmblem* determine_frame();
     void updatedMousePosition(ogleWindowMousePosition* newMousePosition);
+    int determineSmoothedCoordinate();
 
 private:
     ogleEmblem* emblem;
@@ -32,6 +33,13 @@ private:
     int paddleHeight;
     int paddleX;
     int paddleY;
+
+    int paddleXSmoothed;
+    int paddleXAttack;
+    int paddleXSustain;
+    int paddleXDecay;
+    int paddleXRelease;
+    int determineSmoothedCoordinate(int currentValueOverPlane, int destinationValueOverPlane, int velocity);
 
 signals:
 

@@ -18,6 +18,9 @@ private:
     ogleEmblem* emblem;
     ogleEmblemBox* emblemBox;
 
+    int screenWidth;
+    int screenHeight;
+
     int currentX;
     int currentY;
 

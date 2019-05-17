@@ -6,6 +6,7 @@
 #include <QOpenGLFunctions>
 #include <QOpenGLContext>
 #include <QOpenGLPaintDevice>
+#include <QOpenGLExtraFunctions>
 #include <QPainter>
 #include <QDateTime>
 #include <QDebug>

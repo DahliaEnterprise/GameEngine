@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QColor>
 #include <QVariant>
+#include <QImage>
 class ogleEmblemBox : public QObject
 {
     Q_OBJECT
@@ -15,6 +16,9 @@ public:
     QVariant getCharacteristic(characteristic property);
     QColor getBorderColor();
     QColor getFillColor();
+    void incomingPrerender(QImage updatedPrerender);
+    QImage getPrerendered();
+    bool prerenderedAvailable();
 
 private:
     QColor border;
@@ -23,6 +27,8 @@ private:
     int left;
     int width;
     int height;
+    bool prerendered_available;
+    QImage prendered;
 
 signals:
 
