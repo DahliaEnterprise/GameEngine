@@ -11,7 +11,7 @@ void ogleMasterController::start()
     QObject::connect(mousePositionUpdateTimer, SIGNAL(timeout()), this, SLOT(updatedMousePosition()));
     mousePositionUpdateTimer->start(15);
 }
-OGLEWindow* ogleMasterController::getWindow(){return window;}
+//OGLEWindow* ogleMasterController::getWindow(){return window;}
 void ogleMasterController::frameRenderFinished()
 {
     window->nextFrame(t->determine_frame());

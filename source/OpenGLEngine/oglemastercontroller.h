@@ -12,7 +12,7 @@ class ogleMasterController : public QObject
 public:
     explicit ogleMasterController(QObject *parent = nullptr);
     void start();
-    OGLEWindow* getWindow();
+    //OGLEWindow* getWindow();
 
 private:
     tennis* t;

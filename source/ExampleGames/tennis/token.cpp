@@ -12,6 +12,7 @@ void token::initialize(int setScreenWidth, int setScreenHeight)
     velocityX += 2;velocityY += 2;
     emblemBox = new ogleEmblemBox();emblemBox->defineEveryCharacteristic(QColor(100,100,100,255), QColor(100,100,100,255), 10,100,20,20);
     emblem = new ogleEmblem();emblem->start(emblemBox);
+    emblemVelocity = new ogleEmblemVelocity();emblemVelocity->start(currentX, currentY, 2, 2);
     timer = new QTimer();
     QObject::connect(timer, SIGNAL(timeout()), this, SLOT(cyclePhysics()));
     timer->start(5);
@@ -57,4 +58,8 @@ void token::cyclePhysics()
         velocityX = 2;
         currentX += velocityX;
     }
+
+    int direction = emblemVelocity->direction();
 }
+
+ogleEmblemVelocity* token::getVelocity(){return emblemVelocity;}

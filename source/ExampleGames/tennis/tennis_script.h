@@ -20,7 +20,6 @@ public:
 private:
     QTimer* scriptKeepalive;
 
-    bool objectsInitialized;
 
     paddle* playerOnePaddle;
     aiPaddle* playerAiPaddle;

@@ -9,6 +9,9 @@ void tennis_script::start()
     playerAiPaddle=new aiPaddle();playerAiPaddle->initialize(1280,720);
     ball=new token();ball->initialize(1280,720);
 
+    ///Register awareness of game objects
+    playerAiPaddle->tokenAwareness(ball->getVelocity());
+
     ///Signals and Slot Connections
     QObject::connect(scriptKeepalive, SIGNAL(timeout()), this, SLOT(wakeupScript()));
 
