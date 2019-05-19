@@ -22,7 +22,6 @@ private:
 
     bool objectsInitialized;
 
-    ogleEmblem* playerOneEmblem;
     paddle* playerOnePaddle;
     aiPaddle* playerAiPaddle;
     token* ball;

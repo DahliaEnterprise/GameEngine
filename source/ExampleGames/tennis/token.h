@@ -10,7 +10,7 @@ class token : public QObject
     Q_OBJECT
 public:
     explicit token(QObject *parent = nullptr);
-    void start(int setScreenWidth, int setScreenHeight);
+    void initialize(int setScreenWidth, int setScreenHeight);
     ogleEmblem* determine_frame();
 
 private:

@@ -12,7 +12,7 @@ class paddle : public QObject
     Q_OBJECT
 public:
     explicit paddle(QObject *parent = nullptr);
-    void start(int setScreenWidth, int setScreenHeight);
+    void initialize(int setScreenWidth, int setScreenHeight);
     ogleEmblem* determine_frame();
     void updatedMousePosition(ogleWindowMousePosition* newMousePosition);
     int determineSmoothedCoordinate();

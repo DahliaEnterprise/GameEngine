@@ -5,7 +5,7 @@ token::token(QObject *parent) : QObject(parent)
 
 }
 
-void token::start(int setScreenWidth, int setScreenHeight)
+void token::initialize(int setScreenWidth, int setScreenHeight)
 {
     screenWidth = setScreenWidth;screenHeight = setScreenHeight;
     currentX = setScreenWidth/2;currentY = setScreenHeight/2;

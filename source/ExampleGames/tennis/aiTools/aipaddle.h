@@ -10,7 +10,7 @@ class aiPaddle : public QObject
     Q_OBJECT
 public:
     explicit aiPaddle(QObject *parent = nullptr);
-    void start(int setScreenWidth, int setScreenHeight);
+    void initialize(int setScreenWidth, int setScreenHeight);
     ogleEmblem* determine_frame();
 
 private:

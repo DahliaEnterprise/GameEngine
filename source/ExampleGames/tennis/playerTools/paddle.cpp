@@ -4,7 +4,7 @@ paddle::paddle(QObject *parent) : QObject(parent)
 {
 }
 
-void paddle::start(int setScreenWidth, int setScreenHeight)
+void paddle::initialize(int setScreenWidth, int setScreenHeight)
 {
     paddleX = 0;paddleY = 0;paddleWidth=100;paddleHeight=10;
     paddleXSmoothed = 0;

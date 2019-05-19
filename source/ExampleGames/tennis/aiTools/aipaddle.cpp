@@ -5,7 +5,7 @@ aiPaddle::aiPaddle(QObject *parent) : QObject(parent)
 
 }
 
-void aiPaddle::start(int setScreenWidth, int setScreenHeight)
+void aiPaddle::initialize(int setScreenWidth, int setScreenHeight)
 {
     paddleX = 0;paddleY = 0;paddleWidth=100;paddleHeight=10;
     screenWidth=setScreenWidth;screenHeight=setScreenHeight;
@@ -25,4 +25,5 @@ void aiPaddle::cycleAI()
 {
     //todo: hand-eye-coordination experience
     //todo: move paddle according to awareness determined by hand eye coordination
+    emblemBox->selectiveCharacteristicUpdate(ogleEmblemBox::CharacteristicLeft, )
 }
