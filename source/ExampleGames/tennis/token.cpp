@@ -12,7 +12,7 @@ void token::initialize(int setScreenWidth, int setScreenHeight)
     velocityX += 2;velocityY += 2;
     emblemBox = new ogleEmblemBox();emblemBox->defineEveryCharacteristic(QColor(100,100,100,255), QColor(100,100,100,255), 10,100,20,20);
     emblem = new ogleEmblem();emblem->start(emblemBox);
-    emblemVelocity = new ogleEmblemVelocity();emblemVelocity->start(currentX, currentY, 2, 2);
+    emblemVelocity = new ogleEmblemVelocity();emblemVelocity->start(QPoint(currentX, currentY), QPoint(currentX+2, currentY+2));
     timer = new QTimer();
     QObject::connect(timer, SIGNAL(timeout()), this, SLOT(cyclePhysics()));
     timer->start(5);
@@ -34,11 +34,14 @@ void token::cyclePhysics()
     //TODO:"register" paddles
     //TODO:"register" ability to rotate and aim toward token
     //TODO:"register" token to slide like a hocky puck
+
     //bounce off edges of screen
+    qreal direction = emblemVelocity->direction();
     if(currentX >= screenWidth)
     {
         velocityX = -2;
         currentX += velocityX;
+        //TODO: determine new direction using velocity
     }
 
     if(currentY >= screenHeight)
@@ -59,7 +62,7 @@ void token::cyclePhysics()
         currentX += velocityX;
     }
 
-    int direction = emblemVelocity->direction();
+
 }
 
 ogleEmblemVelocity* token::getVelocity(){return emblemVelocity;}

@@ -2,15 +2,20 @@
 #define OGLEEMBLEMVELOCITY_H
 
 #include <QObject>
-
+#include <QLine>
+#include <QPoint>
 class ogleEmblemVelocity : public QObject
 {
     Q_OBJECT
 public:
     explicit ogleEmblemVelocity(QObject *parent = nullptr);
-    void start(int currentX, int currentY, int velocityX, int velocityY);
+    void start(QPoint point1, QPoint point2);
     int currentX();
-    int direction();
+    qreal direction();
+    qreal speed();
+
+private:
+    QLineF angle;
 
 signals:
 
