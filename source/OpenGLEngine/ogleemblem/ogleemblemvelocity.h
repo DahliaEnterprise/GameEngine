@@ -10,9 +10,10 @@ class ogleEmblemVelocity : public QObject
 public:
     explicit ogleEmblemVelocity(QObject *parent = nullptr);
     void start(QPoint point1, QPoint point2);
-    int currentX();
     qreal direction();
     qreal speed();
+    QPointF currentPosition();
+    void setVelocity(QPoint point1, QPoint point2);
 
 private:
     QLineF angle;

@@ -27,21 +27,20 @@ ogleEmblem* token::determine_frame()
 
 void token::cyclePhysics()
 {
+    QPoint point1 = QPoint(currentX, currentY);
     currentX += velocityX;
     currentY += velocityY;
 
-    //TODO:create "register" based physics as opposed to hardcoded
-    //TODO:"register" paddles
     //TODO:"register" ability to rotate and aim toward token
-    //TODO:"register" token to slide like a hocky puck
 
     //bounce off edges of screen
-    qreal direction = emblemVelocity->direction();
+
     if(currentX >= screenWidth)
     {
         velocityX = -2;
         currentX += velocityX;
         //TODO: determine new direction using velocity
+        //emblemVelocity->surfaceAngle(QPointF(screenWidth,0), QPointF(screenWidth,screenHeight));
     }
 
     if(currentY >= screenHeight)
@@ -61,8 +60,8 @@ void token::cyclePhysics()
         velocityX = 2;
         currentX += velocityX;
     }
-
-
+    QPoint point2 = QPoint(currentX, currentY);
+    emblemVelocity->setVelocity(point1, point2);
 }
 
 ogleEmblemVelocity* token::getVelocity(){return emblemVelocity;}

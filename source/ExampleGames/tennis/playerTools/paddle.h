@@ -16,6 +16,7 @@ public:
     ogleEmblem* determine_frame();
     void updatedMousePosition(ogleWindowMousePosition* newMousePosition);
     int determineSmoothedCoordinate();
+    void cycleLogic();
 
 private:
     ogleEmblem* emblem;
@@ -34,11 +35,6 @@ private:
     int paddleX;
     int paddleY;
 
-    int paddleXSmoothed;
-    int paddleXAttack;
-    int paddleXSustain;
-    int paddleXDecay;
-    int paddleXRelease;
     int determineSmoothedCoordinate(int currentValueOverPlane, int destinationValueOverPlane, int velocity);
 
 signals:

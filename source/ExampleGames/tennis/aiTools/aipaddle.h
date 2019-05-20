@@ -15,6 +15,7 @@ public:
     void initialize(int setScreenWidth, int setScreenHeight);
     ogleEmblem* determine_frame();
     void tokenAwareness(ogleEmblemVelocity* setTokenVelocity);
+    void cycleLogic();
 
 private:
     QTimer* timer;
@@ -35,7 +36,6 @@ private:
 signals:
 
 public slots:
-    void cycleAI();
 };
 
 #endif // AIPADDLE_H

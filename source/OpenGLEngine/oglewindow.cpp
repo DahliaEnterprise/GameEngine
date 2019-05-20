@@ -6,14 +6,14 @@ OGLEWindow::OGLEWindow(QOpenGLWindow::UpdateBehavior updateBehavior, QOpenGLWind
     ogleContext = nullptr; oglePaintDevice = nullptr;
 
     //Configure
-    this->setSurfaceType(QWindow::OpenGLSurface);format.setSamples(24);format.setVersion(4,0); format.setSwapBehavior(QSurfaceFormat::DoubleBuffer);this->setFormat(format);this->create();this->setPosition(100,100); this->resize(1280,720);
+    this->setSurfaceType(QWindow::OpenGLSurface);format.setSamples(4);format.setVersion(4,0); format.setSwapBehavior(QSurfaceFormat::SingleBuffer);this->setFormat(format);this->create();this->setPosition(100,100); this->resize(1280,720);
     framesTimestamp = QDateTime::currentMSecsSinceEpoch(); frames = 0; framesPerSecond = 0;
 
 }
 
 OGLEWindow::~OGLEWindow(){}
 
-void OGLEWindow::start(){this->setTitle(QString("Dahlias OpenGL Engine - Dogle"));OGLEMousePosition = new ogleWindowMousePosition();mouseUpdatedTimestamp=0;renderTimer = new QTimer();renderTimer->start(10);QObject::connect(renderTimer, SIGNAL(timeout()), this, SLOT(requestRenderUpdate()));}
+void OGLEWindow::start(){this->setTitle(QString("Dahlias OpenGL Engine - Dogle"));OGLEMousePosition = new ogleWindowMousePosition();mouseUpdatedTimestamp=0;renderTimer = new QTimer();renderTimer->start(2);QObject::connect(renderTimer, SIGNAL(timeout()), this, SLOT(requestRenderUpdate()));}
 void OGLEWindow::render(QPainter* painter){ Q_UNUSED(painter); }
 void OGLEWindow::initialize(){}
 void OGLEWindow::render(){}
@@ -37,12 +37,10 @@ void OGLEWindow::renderNow()
         ///(Initialize if nessecary and) Make context current
         bool initOGLF=false;if(ogleContext == nullptr){ogleContext=new QOpenGLContext(this);ogleContext->setFormat(format);ogleContext->create();initOGLF=true;}ogleContext->makeCurrent(this);if(initOGLF==true){initializeOpenGLFunctions();initialize();}this->initalizeOglePaintDevice();
 
-
-
         ///Draw to screen according to emblem specification
         QPainter painter(oglePaintDevice);
         painter.setRenderHint(QPainter::Antialiasing, false);
-        painter.setCompositionMode(QPainter::CompositionMode_DestinationOver);
+        painter.setCompositionMode(QPainter::CompositionMode_Source);
         QVector<ogleEmblem*>::iterator emblemIterator = frameAEmblems.begin();
         while(emblemIterator != frameAEmblems.end())
         {

@@ -22,7 +22,8 @@ void tennis_script::wakeupScript(){QTimer::singleShot(6, this, SLOT(cycleLogic()
 
 void tennis_script::cycleLogic()
 {
-    //TODO:track score
+    playerOnePaddle->cycleLogic();
+    playerAiPaddle->cycleLogic();
 
     QTimer::singleShot(5, //5 ms or higher for resource cool down time
                        this, SLOT(cycleLogic()));
