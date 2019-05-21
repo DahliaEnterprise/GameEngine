@@ -20,16 +20,13 @@ public:
 private:
     QTimer* scriptKeepalive;
 
-
     paddle* playerOnePaddle;
     aiPaddle* playerAiPaddle;
     token* ball;
 
-
 signals:
 
 public slots:
-    void wakeupScript();
     void cycleLogic();
 
 };

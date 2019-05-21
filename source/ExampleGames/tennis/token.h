@@ -6,6 +6,7 @@
 #include "OpenGLEngine/ogleemblem/ogleemblembox.h"
 #include <QTimer>
 #include "OpenGLEngine/ogleemblem/ogleemblemvelocity.h"
+#include <QDebug>
 class token : public QObject
 {
     Q_OBJECT
@@ -14,7 +15,7 @@ public:
     void initialize(int setScreenWidth, int setScreenHeight);
     ogleEmblem* determine_frame();
     ogleEmblemVelocity* getVelocity();
-
+    void cycleLogic();
 
 private:
     QTimer* timer;
@@ -36,7 +37,6 @@ signals:
 public slots:
 
 private slots:
-    void cyclePhysics();
 };
 
 #endif // TOKEN_H

@@ -4,9 +4,9 @@ OGLEWindow::OGLEWindow(QOpenGLWindow::UpdateBehavior updateBehavior, QOpenGLWind
 {
     //Initalize variables intended to begin nullptr or zero'ed.
     ogleContext = nullptr; oglePaintDevice = nullptr;
-
+    this->updateBehavior();
     //Configure
-    this->setSurfaceType(QWindow::OpenGLSurface);format.setSamples(4);format.setVersion(4,0); format.setSwapBehavior(QSurfaceFormat::SingleBuffer);this->setFormat(format);this->create();this->setPosition(100,100); this->resize(1280,720);
+    this->setSurfaceType(QWindow::OpenGLSurface);format.setSamples(24);format.setVersion(4,0); format.setSwapBehavior(QSurfaceFormat::DoubleBuffer);this->setFormat(format);this->create();this->setPosition(100,100); this->resize(1280,720);
     framesTimestamp = QDateTime::currentMSecsSinceEpoch(); frames = 0; framesPerSecond = 0;
 
 }
@@ -83,5 +83,5 @@ void OGLEWindow::renderNow()
 
 
 void OGLEWindow::fpsCounterOfDisplay(){frames++; qint64 sinceLastFrame = QDateTime::currentMSecsSinceEpoch() - framesTimestamp; if(sinceLastFrame > 1000){qWarning() << frames;framesTimestamp = QDateTime::currentMSecsSinceEpoch();frames = 0;}}
-void OGLEWindow::requestRenderUpdate(){this->requestUpdate();}
+void OGLEWindow::requestRenderUpdate(){this->update();/*this->requestUpdate();*/}
 void OGLEWindow::initalizeOglePaintDevice(){if(oglePaintDevice == nullptr){oglePaintDevice = new QOpenGLPaintDevice();}glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);oglePaintDevice->setSize(size() * devicePixelRatio());oglePaintDevice->setDevicePixelRatio(devicePixelRatio());}

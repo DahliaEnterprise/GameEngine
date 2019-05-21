@@ -13,20 +13,17 @@ void tennis_script::start()
     playerAiPaddle->tokenAwareness(ball->getVelocity());
 
     ///Signals and Slot Connections
-    QObject::connect(scriptKeepalive, SIGNAL(timeout()), this, SLOT(wakeupScript()));
+    QObject::connect(scriptKeepalive, SIGNAL(timeout()), this, SLOT(cycleLogic()));
 
     ///Begin keep alive timer
-    scriptKeepalive->start(100);
+    scriptKeepalive->start(5);
 }
-void tennis_script::wakeupScript(){QTimer::singleShot(6, this, SLOT(cycleLogic()));}
 
 void tennis_script::cycleLogic()
 {
     playerOnePaddle->cycleLogic();
     playerAiPaddle->cycleLogic();
-
-    QTimer::singleShot(5, //5 ms or higher for resource cool down time
-                       this, SLOT(cycleLogic()));
+    ball->cycleLogic();
 }
 
 
